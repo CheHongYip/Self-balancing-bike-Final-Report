@@ -170,7 +170,39 @@
             <sl-tree-item>
               <a href="#anchor-5-4-2-sensor-integration">5.4.2 Sensor Integration</a>
             </sl-tree-item>
+          </sl-tree-item>
+          <sl-tree-item expanded>
+            <a href="#sub-section-5-header-2">5.3 Electrical System</a>
             <sl-tree-item>
+              <a href="#sub-section-5-2-1">5.3.1 Motor Controller Selection</a>
+            </sl-tree-item>
+            <sl-tree-item>
+              <a href="#sub-section-5-2-2">5.3.2 Power System Design</a>
+            </sl-tree-item>
+          </sl-tree-item>
+          <sl-tree-item expanded>
+            <a href="#sub-section-5-header-2">5.4 Embedded System Development</a>
+            <sl-tree-item>
+              <a href="#sub-section-5-2-1">5.4.1 Microcontroller (MCU) Selection</a>
+            </sl-tree-item>
+            <sl-tree-item>
+              <a href="#sub-section-5-2-2">5.4.2 Sensor Integration</a>
+            </sl-tree-item>
+            <sl-tree-item>
+              <a href="#sub-section-5-2-2">5.4.2 Firmware Development</a>
+            </sl-tree-item>
+          </sl-tree-item>
+          <sl-tree-item expanded>
+            <a href="#sub-section-5-header-2">5.5 Software and Code Architecture</a>
+            <sl-tree-item>
+              <a href="#sub-section-5-2-1">5.5.1 LQR Computation</a>
+            </sl-tree-item>
+            <sl-tree-item>
+              <a href="#sub-section-5-2-2">5.5.2 Code Architecture</a>
+            </sl-tree-item>
+          </sl-tree-item>
+          <sl-tree-item expanded>
+            <a href="#sub-section-5-header-2">5.6 Iterative Prototype Development</a>
               <a href="#anchor-5-4-3-firmware-development">5.4.3 Firmware Development</a>
             </sl-tree-item>
           </sl-tree-item>
@@ -206,6 +238,9 @@
             <sl-tree-item>
               <a href="#anchor-6-2-4-testing-environment">6.2.4 Testing Environment</a>
             </sl-tree-item>
+          </sl-tree-item>
+          <sl-tree-item expanded>
+            <a href="#sub-section-6-header-3">6.3 Testing Methodology</a>
           </sl-tree-item>
           <sl-tree-item>
             <a href="#anchor-6-3-testing-methodology">6.3 Testing Methodology</a>
@@ -598,109 +633,377 @@
         <br />
         <sl-divider></sl-divider>
 
-        <!-- === SECTION 4: DESIGN STATEMENT / METHODOLOGY === -->
-        <div id="section-header-4">
-          <h2>4. Design Methodology and Concept Development.</h2>
-        </div>
+      <!-- === SECTION 5: CONCEPT SELECTION AND DESIGN SOLUTION === -->
+      <div id="section-header-5">
+        <h2>5. Prototyping</h2>
+        <p>
+          This chapter presents the design and development of the final prototype, describes its key subsystems and documents the prototyping workflow undertaken.
+        </p>
+      </div>
 
-        <!-- 4.1 Design Statement -->
-        <div id="sub-section-4-header-1">
-          <h3>4.1 Design Statement</h3>
-          <p>
-            To identify stakeholder requirements, we conducted interviews with bike users and Red Dot Mobility which
-            lead us to 3 main points.
-          </p>
+      <!-- 5.1 Concept Selection -->
+      <div id="sub-section-5-header-1">
+        <h3>5.1 Prototype Design Overview</h3>
+        <p>
+          The final prototype scales the RC-bike’s flywheel-based self-balancing principles onto a full-sized bicycle system. Research revealed 1 previous student project to have successfully utilised this mechanism to achieve a similar objective, providing reassurance about system feasibility. [5] When the bicycle frame experiences lateral tilt forces, a reaction-wheel mechanism mounted perpendicular to the bike's length axis counters these forces by spinning rapidly in the opposing direction, generating a corrective torque moment that drives the frame back toward vertical equilibrium. Sustained operation of this mechanism constitutes the system's self-balancing functionality.
+        </p>
+      </div>
+
+      <!-- 5.1.1 Selection Criteria -->
+      <div id="sub-section-5-1-1">
+        <h4>5.1.1 Technical Requirements and System Objectives</h4>
+        <p>
+          To function effectively within the operating range of ±1 to 20 degrees of lateral tilt, the flywheel must generate sufficient torque to overcome the frame's lateral tilt forces. Preliminary torque calculations (see Appendix A) established a gross motor torque requirement of 12.35 Nm, which informed all subsequent component selection decisions.
+        </p>
+      </div>
+
+      <div id="sub-section-5-2-1">
+        <h4>5.1.2 Bill-of-Materials (BOM)</h4>
+        <p>
+          Extensive market research was conducted prior to prototyping to source and select the necessary components for constructing an effective, functional prototype.         
+        </p>
+        
+        <image-component 
+          tag="FinalFig7"
+          source="images/FinalFig7.png"
+          subtitle="Table 1: Bill-of-Materials"
+        ></image-component>
+        
+
+      </div>
+     
+      <!-- 5.2 Design Solution -->
+      <div id="sub-section-5-header-2">
+        <h3>5.2 Mechanical System</h3>
+        <p>
+          The prototype’s mechanical subsystem comprises the bike frame and reaction wheel module.  
+        </p>
+      </div>
+
+      <!-- 5.2.1 Inverted Pendulum Model -->
+      <div id="sub-section-5-2-1">
+        <h4>5.2.1 Frame and Structural Components</h4>
+        <p>
+          The prototype is built around a robust full-scale bicycle frame measuring 1.09 × 0.97 m (L × H), weighing 12 kg with a centre of gravity at 0.52 m. These specifications were used to derive the torque requirements detailed in Appendix A.
+        </p>
+
+        
+        <image-component 
+          tag="FinalFig8"
+          source="images/FinalFig8.png"
+          subtitle="Figure 7: Original Bike Frame [5]</sup>"
+         
+        ></image-component>
+        
+      </div>
+
+      <!-- 5.2.2 DC motor model -->
+      <div id="sub-section-5-2-2">
+        <h4>5.2.2 Reaction Wheel Module (Assembly and Components)</h4>
+        <p><b>
+          Motor Type:
+          </b>
+        </p>
+        
+        <p>
+          Market research identified Hub motors as the optimal motor type for this project. [7] Their integrated rotor, stator, and built-in Hall sensors eliminate the need for external gearboxes or shaft alignment, reduce failure points, and offer a favourable torque-to-size and cost profile relative to alternative types.
+        </p>
+        
+        <image-component 
+          tag="FinalTable2"
+          source="images/FinalTable2.png"
+          subtitle="Table 2: Comparison of Motor Types<sup>[36]</sup>"
+        ></image-component>
+        
+      <br />
+
+        <p><b>
+          Motor Model:
+        </b>
+        </p>
+        
+        <p>
+          The HL6SD hub motor was selected following substantial research, supervisor recommendation and immediate availability, with datasheet specifications confirming it met the initial torque requirements.  Component testing validated effective bidirectional programmability, adequate rated torque output, compact dimensions, and straightforward system integration, confirming the HL6SD for the final prototype.
+        </p>
+        
+        <image-component 
+          tag="FinalFig9"
+          source="images/FinalFig9.png"
+          subtitle="Figure 9: HL6SD Motor [9]"
+        ></image-component>
+        
+        <image-component 
+          tag="FinalTable3"
+          source="images/FinalTable3.png"
+          subtitle="Comparison of Hub-Motor Options [10]"
+        ></image-component>
+      </div>
 
 
-          <image-component tag="image50" source="assets/image50.png"
-            subtitle="Figure 3: Stakeholder needs, requirements and metrics"></image-component>
+      <p><b>
+          Motor Mount:
+        </b>
+        </p>
+        
+        <p>
+          The motor mount was designed and 3D-printed (ABS) with supervisor assistance following frame procurement and centre-of-gravity analysis, then assembled and affixed to the frame.
+        </p>
 
-        </div>
+      <p><b>
+          Reaction-Wheel Assembly:
+        </b>
+        </p>
+        
+        <p>
+          Subsequent testing on the assembled prototype revealed that the unmodified HL6SD produced insufficient torque to overcome the bicycle frame's lateral tilt forces. Following discussion with the project supervisor, the most viable corrective path (given limited physical space on the frame) was to increase the flywheel's effective mass. 64 metal bolts (28.667 g each) were arranged uniformly along the motor's circumference and secured with tape and zip-ties, adding 1.83 kg to the flywheel assembly. This modification increases the flywheel's rotational inertia, thereby increasing the reaction torque available for a given angular acceleration.
+        </p>
+
+        <image-component 
+          tag="FinalFig10"
+          source="images/FinalFig10.png"
+          subtitle="Weighted Reaction-Wheel Assembly"
+        ></image-component>
+      
+      <br />
+
+      <!-- 5.3 Electrical System Implementation -->
+      <div id="sub-section-5-header-3">
+        <h3>5.3 Electrical System Implementation</h3>
+        <p>
+          The electrical architecture of the final prototype mainly concerns motor control and power systems. 
+        </p>
+      </div>
+      
+      <!-- 5.3.1 Motor Controller Selection -->
+      <div id="sub-section-5-3-1">
+        <h4>5.3.1 Motor Controller Selection</h4>
+        <p>
+          The initial motor controller used was an MX25-DC, selected based on prior integration with the HL6SD by the project supervisor. While it interfaced adequately at low voltages, testing at higher voltages revealed erratic motor control: voltage spikes during direction changes produced jerky motion and insufficient acceleration. The root cause was identified as its duty-cycle-based architecture that was using an open-loop approach that maps PWM input directly to motor voltage and is inherently sensitive to supply voltage fluctuations.        
+        </p>
+        
+        <image-component 
+          tag="FinalFig11"
+          source="images/FinalFig11.png"
+          subtitle="Figure 11: MX25-DC Motor Controller [11]"
+        ></image-component>
+        
+        <p>
+          This prompted a switch to a torque-mode controller. Torque-mode controllers operate in a closed loop by mapping input commands to motor current, which is directly proportional to torque, and regulate current internally to ensure stable output regardless of voltage variation. Sourcing research identified the AQMD6020BLS-E2F as a suitable option, and was thus procured and configured to replace the MX25-DC. Empirical testing confirmed improved motion precision: directional changes were sharper, PWM ramping was smoother, and the motor response was more consistent, even in open-loop duty-cycle mode. This validates the AQMD for the final prototype and enables subsequent exploration of its torque-control mode.
+        </p>
+       
+        <image-component 
+          tag="FinalFig12"
+          source="images/FinalFig12.png"
+          subtitle="Figure 12: AQMD6020BLS-E2F Motor Controller <sup>[36]</sup>"
+        ></image-component>
+
+        
+        <image-component 
+          tag="FinalTable4"
+          source="images/FinalTable4.png"
+          subtitle="Table 4: Comparison of Motor Controllers"
+        ></image-component>
+        
+    
+      </div>
+      
+      <br />
+      
+      <!-- 5.3.2 Power System Design -->
+      <div id="sub-section-5-3-2">
+        <h4>5.3.1 Power System Design</h4>
+        <p>
+          A variable 30V power supply was employed during initial prototyping and later replaced with a fixed 40V supply for the final prototype. 
+        </p>
+      </div>
+
+      <!-- 5.4 Embedded System Development -->
+      <div id="sub-section-5-header-4">
+        <h3>5.4 Embedded System Development</h3>
+        <p>
+          The embedded system incorporated in the final prototype links together the prototype’s mechanical, electrical and firmware sub-systems.        
+        </p>
+      </div>
+
+      <!-- 5.4.1 Microcontroller (MCU) Selection -->
+      <div id="sub-section-5-4-1">
+        <h4>5.4.1 Microcontroller (MCU) Selection</h4>
+        <p>
+          Three microcontrollers were evaluated iteratively. The Arduino Uno was used initially for basic command testing, then replaced by the Arduino Mega 2560 for its expanded pin count. The Mega supported early PID proof-of-concept testing and motor stress validation; however, its limited processing power caused frequent crashes under the algorithm's computational load. 
+        </p>
+      
+        <image-component 
+          tag="FinalFig13"
+          source="images/FinalFig13.png"
+          subtitle="Figure 13: Arduino Mega 2560 [13]"
+        ></image-component>
+
+        <p>
+          The STM32F407VGT6 was selected next for its high processing capability. However, it proved impractical in practice: STLink debugging was unreliable due to firmware compatibility issues, and porting the codebase across two IDEs (STM32CubeIDE and Arduino IDE) proved excessively time-consuming with negligible progress. Given time constraints, the STM32 was abandoned.
+        </p>
+        
+        <image-component 
+          tag="FinalFig14"
+          source="images/FinalFig14.png"
+          subtitle="Figure 14: STM32F407VGT6 [14]"
+        ></image-component>
+        
+
+        <p>
+          The ESP32-S3 DevKitC-1 was selected as the final microcontroller. It offered substantially greater processing power than the Mega while remaining straightforwardly programmable in Arduino IDE, unlike the STM32, and provided sufficient multi-purpose GPIO pins for the AQMD controller, MPU6050, and Hall sensor inputs. This combination of performance, usability, and I/O availability made it the optimal choice for the final prototype.
+        </p>
+                
+        <image-component 
+          tag="FinalFig15"
+          source="images/FinalFig15.png"
+          subtitle="Figure 15: ESP32-S3 DevKitC-1 [15]"
+        ></image-component>
+
+        <image-component 
+          tag="FinalTable5"
+          source="images/FinalTable5.png"
+          subtitle="Table 5: Comparison of Microcontrollers"
+        ></image-component>
+      </div>
+
+      <!-- 5.4.2 Sensor Integration -->
+      <div id="sub-section-5-4-2">
+        <h4>5.4.2 Sensor Integration</h4>
+        <p>
+          The MPU6050 6-axis IMU was retained from the previous semester's RC-Bike prototype, where its performance had already been validated. [16] It provides the lean angle (θ, rad) and angular rate (θ’, rad/s) measurements that serve as primary state inputs to the LQR controller.       
+        </p>
+      
+        <image-component 
+          tag="FinalTable6"
+          source="images/FinalTable6.png"
+          subtitle="Table 6: Comparison of IMU Sensors [17]"
+        ></image-component>
+      </div>
+      
+      <!-- 5.4.3 Firmware Development -->
+      <div id="sub-section-5-4-3">
+        <h4>5.4.3 Firmware Development</h4>
+        <p>
+          Firmware development followed an iterative progression aligned with hardware upgrades. Early iterations on the Arduino platforms established basic bidirectional motor control and identified operational constraints, including a minimum direction-change interval to prevent the AQMD from dropping commands. PID control was implemented and validated on the Mega before the codebase was migrated to the ESP32-S3, where the control algorithm was upgraded to LQR with complementary-filter-based IMU fusion. Subsequent iterations incorporated Hall-sensor speed feedback, torque-mode output mapping, I²C fault recovery, and empirical PWM and gain tuning to address motor-induced electrical interference.
+        </p>
+      </div>
+
+      <br/>
+      
+      <!-- 5.5 Software and Code Architecture -->
+      <div id="sub-section-5-header-5">
+        <h3>5.5 Software and Code Architecture</h3>
+        <p>
+          The final prototype relies primarily on an LQR control algorithm to control the motor and output the desired motion necessary for achieving self-balancing functionality. Hence, its software architecture can be delineated into 2 sections focusing on the computation of the LQR parameter values utilised in the control code, and the actual code program for the overall system.
+        </p>
+      </div>
+
+      <!-- 5.5.1 LQR Computation -->
+      <div id="sub-section-5-5-1">
+        <h4>5.4.1 Microcontroller (MCU) Selection</h4>
+        <p>
+          The LQR computation process is implemented through a Python script that generates the optimal feedback gain matrix for the controller. The script translates physical system parameters into a mathematical model, validates system properties, computes the optimal gains, and verifies stability.
+        </p>
+        
+        <br/>
+        
+        <p>
+          For full explanation refer to Appendix B.
+        </p>
+      </div>
 
 
-        <br />
-        <!-- 4.2 Design Solution -->
-        <div id="sub-section-4-header-2">
-          <h3>4.2 Design Solution</h3>
-        </div>
+      <!-- 5.5.2 Code Architecture -->
+      <div id="sub-section-5-5-2">
+        <h4>5.5.2 Code Architecture</h4>
+        <p>
+          This system’s code architecture is a layered closed-loop balancing controller for a flywheel-stabilized bicycle. It uses the MPU6050 to estimate bicycle lean angle and lean rate, hall sensors to estimate flywheel speed, and an LQR-based controller to compute the motor effort required to oppose the fall. That command is then converted into PWM, direction, and braking actions for the AQMD motor driver, with additional safety cutoffs and I²C recovery logic to preserve stability under noise and aggressive reversals. Collectively, these sections allow the flywheel to generate reaction torque in the required direction and magnitude to help the bicycle recover toward upright equilibrium. The code is implemented via Arduino IDE and is delineated into 6 core sections. For further details, refer to Appendix C. 
+        </p>
 
+        <image-component 
+          tag="FinalFig16"
+          source="images/FinalFig16.png"
+          subtitle="Figure 16: Code Workflow"
+        ></image-component>
+        
+        <br/>
+      </div>
 
-        <!-- 4.2.1 IWP model -->
-        <div id="sub-section-4-2-1">
-          <h4>4.2.1 IWP Model</h4>
-          <p>
-            The IWP (Figure&nbsp;9) is chosen due to its relative simplicity to understand, low application complexity
-            and a widely researched topic, making it an ideal starting point for us. The bike model consists of a
-            pendulum and an inertia wheel, both rotating about the x-axis. When the pendulum falls to the side (θ ≠ 0),
-            the angular velocity of the inertia wheel ϕ′ is increased or decreased in the opposite direction to generate
-            a reactionary torque τ to self-balance the system.
-          </p>
+       <!-- 5.6 Iterative Prototype Development -->
+      <div id="sub-section-5-header-6">
+        <h3>5.6 Iterative Prototype Development</h3>
+        <p>
+          This section documents the prototype development workflow and timeline. For detailed timeline, refer to Appendix F. 
+        </p>
+      </div>
 
+        <p><u>Stage 1:</u></p>
+        <p>
+          Focus was to connect the core components of the system and ascertain viable motor control. Components used were the HL6SD, MX25-DC, Arduino Mega, MPU6050. 
+        </p>
 
-          <image-component tag="figure9" source="images/figure 9(1).png"
-            subtitle="Figure 9: IWP model[36]"></image-component>
+        <image-component 
+          tag="FinalFig17"
+          source="images/FinalFig17.png"
+          subtitle="Figure 17: Prototyping Stage 1"
+        ></image-component>
 
-          <br />
+        <p><u>Stage 2:</u></p>
+        <p>
+          Procurement of Bike Frame and conceptualisation of mounting attachment. 
+        </p>
 
+        <image-component 
+          tag="FinalFig18"
+          source="images/FinalFig18.png"
+          subtitle="Figure 18: Prototyping Stage 2"
+        ></image-component>
 
-          <image-component tag="imageTABLE4" source="images/imageTABLE4.png"
-            subtitle="Table 4: IWP parameters<sup>[36]</sup>"></image-component>
+        <p><u>Stage 3:</u></p>
+        <p>
+          Design and assembly of mounting attachment and reaction-wheel assembly. 
+        </p>
 
-          <br />
+        <image-component 
+          tag="FinalFig19"
+          source="images/FinalFig19.png"
+          subtitle="Figure 19: Prototyping Stage 3"
+        ></image-component>
 
+        <p><u>Stage 4:</u></p>
+        <p>
+          Replaced MX25-DC with AQMD6020BLS-E2F. 
+        </p>
 
-          <image-component tag="eqn2" source="images/sysmodel.png"
-            subtitle="Equation 2: Mathematical model of system"></image-component>
+        <image-component 
+          tag="FinalFig20"
+          source="images/FinalFig20.png"
+          subtitle="Figure 20: Prototyping Stage 4"
+        ></image-component>
 
-          <br />
-          <p>
-            All derivations can be found in Appendix B.
-          </p>
-        </div>
-        <br />
+        <p><u>Stage 5:</u></p>
+        <p>
+          Replaced Arduino Mega with STM32F407VGT6.
+        </p>
 
-        <!-- 4.2.2 Linear Quadratic Regulator -->
-        <div id="sub-section-4-2-2">
-          <h4>4.2.2 Linear Quadratic Regulator</h4>
-          <p>
-            The Linear Quadratic Regulator (LQR) is an optimal state-feedback control strategy applicable to systems
-            expressed in linear state-space form. Given a system of the form x' = Ax + Bu, LQR computes a feedback gain
-            matrix K<sub>LQR</sub> such that the control law
-          </p>
-          <p style="text-align: center;">
-            u = −K<sub>LQR</sub>x<br />
-            Equation 2: LQR control law [3]
-          </p>
+        <image-component 
+          tag="FinalFig21"
+          source="images/FinalFig21.png"
+          subtitle="Figure 21: Prototyping Stage 5"
+        ></image-component>
 
-          <p>
-            drives the system states to zero while minimising a trade-off between control effort and state deviation.
-            The gain is derived analytically rather than tuned heuristically, which makes LQR well-suited to multi-state
-            systems where manual gain selection would be impractical.
-          </p>
-
-          <image-component tag="image1" source="images/image1.png"
-            subtitle="Figure 5: Closed-loop system with LQR"></image-component>
-
-          <p>
-            For full explanation refer to Appendix B.
-          </p>
-        </div>
-        <br />
-
-
-        <br />
-        <br />
-        <sl-divider></sl-divider>
-
-        <div>
-          <!-- 6. Prototyping -->
-          <div id="section-header-6">
-            <h2>6. Prototyping</h2>
-          </div>
-
-          <!-- 6.1 Prototype Overview -->
-          <div id="sub-section-6-header-1">
-            <h3>6.1 Prototype Overview</h3>
+        <p><u>Stage 6:</u></p>
+        <p>
+          Replaced STM32 with ESP32-S3. 
+        </p>
+                
+        <image-component 
+          tag="FinalFig22"
+          source="images/FinalFig22.png"
+          subtitle="Figure 22: Prototyping Stage 6"
+        ></image-component>
+        
+    </div>
 
             <p>
               The prototype we chose was carefully selected with the following considerations:

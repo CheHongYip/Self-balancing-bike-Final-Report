@@ -633,6 +633,114 @@
         <br />
         <sl-divider></sl-divider>
 
+        
+      <!-- === SECTION 4: Design Methdology and Concept Development === -->
+      <div id="section-header-5">
+        <h2>4. Design Methdology and Concept Development</h2>
+      </div>
+
+        
+      <!-- 4.1 Design Statement -->
+      <div id="sub-section-4-header-1">
+        <h3>4.1 Design Statement</h3>
+        <p>
+          To identify stakeholder requirements, we conducted interviews with bike users and RedDot Mobility which leads us to 3 main points.    
+        </p>
+
+        <image-component 
+          tag="FinalFig3"
+          source="images/FinalFig3.png"
+          subtitle=Figure 3: Stakeholder needs, requirements and metrics"
+        ></image-component>
+      </div>
+
+      
+      <!-- 4.2 Design Solution -->
+      <div id="sub-section-4-header-2">
+        <h3>4.2 Design Solution</h3>
+        <p>
+          For all models used, refer to appendix A.
+        </p>
+      </div>
+        
+      <!-- 4.2.1 IWP Model -->
+      <div id="sub-section-4-2-1">
+        <h4>4.2.1 IWP Model</h4>
+        <p>
+          The IWP is chosen due to its relative simplicity to understand, low application complexity and a widely researched topic, making it an ideal starting point for us. The bike model consists of a pendulum and an inertia wheel, both rotating about the x-axis. When the pendulum falls to the side (θ ≠ 0), the angular velocity of the inertia wheel 𝜑’ is increased or decreased in the opposite direction to generate a reactionary torque 𝜏 to self-balance the system. 
+        </p>
+
+        <image-component 
+          tag="FinalFig4"
+          source="images/FinalFig4.png"
+          subtitle=Figure 4: IWP Model [2]"
+        ></image-component>
+
+        <image-component 
+          tag="FinalTable1"
+          source="images/FinalTable1.png"
+          subtitle="Table 1: IWP Parameters [2]"
+        ></image-component>
+
+        <image-component 
+          tag="FinalEqn1"
+          source="images/FinalEqn1.png"
+          subtitle="Equation 1: Mathematical model of system"
+        ></image-component>
+
+      </div>
+      
+      <!-- 4.2.2 Linear Quadratic Regulator -->
+      <div id="sub-section-4-2-2">
+        <h4>4.2.1 Linear Quadratic Regulator</h4>
+        <p>
+          The Linear Quadratic Regulator (LQR) is an optimal state-feedback control strategy applicable to systems expressed in linear state-space form. Given a system of the form x'=Ax+Bu, LQR computes a feedback gain matrix KLQR​ such that the control law
+        </p>
+
+        <image-component 
+          tag="FinalEqn2"
+          source="images/FinalEqn2.png"
+          subtitle="Equation 2: LQR control law [3]"
+        ></image-component>
+
+        <p>
+          drives the system states to zero while minimising a trade-off between control effort and state deviation. The gain is derived analytically rather than tuned heuristically, which makes LQR well-suited to multi-state systems where manual gain selection would be impractical.
+        </p>
+
+        <image-component 
+          tag="FinalFig5"
+          source="images/FinalFig5.png"
+          subtitle="Figure 5: Closed-loop system with LQR"
+        ></image-component>
+
+        <p>
+          For full explanation refer to appendix A.
+        </p>
+      </div>
+
+      <!-- 4.2.3 1st Prototype (RC-Bike) -->
+      <div id="sub-section-4-2-3">
+        <h4>4.2.3 1st Prototype (RC-Bike)</h4>
+        <p>
+          The aforementioned design concepts informed our decision to procure an RC-Bike prototype in the 1st-half of this project. This initial prototype was intended to serve as a POC (Proof-of-Concept) to evaluate the viability of said concepts in a physical application, and facilitate greater understanding of real-world implementation. [4]      
+        </p>
+
+        <image-component 
+          tag="FinalFig6"
+          source="images/FinalFig6.png"
+          subtitle="Figure 6: RC-Bike Prototype"
+        ></image-component>
+
+        <p>
+          This RC-bike prototype utilised a reaction-wheel mechanism and a PID control algorithm to achieve self-balancing functionality at low speeds and during turning. Rigorous analysis of its system revealed a highly convoluted code architecture handling numerous non-core balancing operations. With limited resources, relevant expertise and time constraints, effectively scaling such a system to full-size would be overambitious. Hence, only the core self-balancing feature was brought over to the full-scale prototype. 
+        </p>
+      </div>
+
+         <br />
+        <br />
+        <sl-divider></sl-divider>
+        
+
       <!-- === SECTION 5: CONCEPT SELECTION AND DESIGN SOLUTION === -->
       <div id="section-header-5">
         <h2>5. Prototyping</h2>
@@ -935,7 +1043,6 @@
         <p>
           This section documents the prototype development workflow and timeline. For detailed timeline, refer to Appendix F. 
         </p>
-      </div>
 
         <p><u>Stage 1:</u></p>
         <p>
@@ -1001,661 +1108,797 @@
           tag="FinalFig22"
           source="images/FinalFig22.png"
           subtitle="Figure 22: Prototyping Stage 6"
+        ></image-component>  
+      </div>
+
+      <!-- === SECTION 6: TESTING AND EXPERIMENTAL SETUP === -->
+      <div id="section-header-5">
+        <h2>6. Testing and Experimental Setup</h2>
+        <p>
+          This chapter presents the sequential testing procedures and experimental setup utilized for calibrating the final prototype as described in Section 5.
+        </p>
+      </div>
+
+      <!-- 6.1 Objectives and Scope of Testing -->
+      <div id="sub-section-6-header-1">
+        <h3>6.1 Objectives and Scope of Testing</h3>
+        <p>
+          The testing process was structured to validate whether the system can achieve stable self-balancing on a stationary bicycle frame. The scope focuses on both control capability and electrical reliability, as both are necessary for successful operation.
+        </p>
+        <br/>
+        
+        <p>
+          The following testing objectives were defined:
+        </p>
+        <ol>
+          <li>Motor Strength: Verify that the motor can generate sufficient torque through rapid acceleration of the flywheel to correct tilt disturbances.</li>
+          <li>Motor Response: Ensure the motor can decelerate, brake, and reverse direction quickly, enabling timely corrective action during dynamic tilting. </li>
+          <li>Mode of Motion (Flywheel Dynamics): Confirm that active braking during direction changes produces the required impulsive torque (jerk), which is critical for stabilisation.</li>
+          <li>System Reliability: Ensure consistent operation under repeated dynamic conditions without triggering overcurrent faults or I2C bus failures.</li>
+        </ol>
+        
+        <p>
+          Scope Limitations:
+        </p>
+        <ol>
+          <li>Testing is conducted on a stationary bicycle frame (no forward motion).</li>
+          <li>Rider effects are excluded, in line with the project objective. </li>
+          <li>The system is evaluated primarily under controlled tilt disturbances (5-10 degree, up to 10 degree limit).</li>
+        </ol>
+        
+      </div>
+
+      <!-- 6.2 Experimental Setup -->
+      <div id="sub-section-6-header-2">
+        <h3>6.2 Experimental Setup</h3>
+        <p>
+          Figure 23 illustrates the experimental setup used for testing, calibration, and troubleshooting. The configuration replicates the final prototype while allowing controlled and repeatable testing.
+        </p>
+
+        <image-component 
+          tag="FinalFig23"
+          source="images/FinalFig23.png"
+          subtitle="Figure 23: Experimental Setup"
+        ></image-component>
+
+        <image-component 
+          tag="FinalFig24"
+          source="images/FinalFig24.png"
+          subtitle="Figure 24: Experimental Setup (front)"
+        ></image-component>
+
+        <image-component 
+          tag="FinalFig25"
+          source="images/FinalFig25.png"
+          subtitle="Figure 25: Experimental Setup (rear)"
+        ></image-component>
+
+        <image-component 
+          tag="FinalFig26"
+          source="images/FinalFig26.png"
+          subtitle="Figure 26: Experimental Setup"
+        ></image-component>
+
+      <!-- 6.2.1 Mechanical Configuration -->
+      <div id="sub-section-6-2-1">
+        <h4>6.2.1 Mechanical Configuration</h4>
+        
+        <image-component 
+          tag="mech_config"
+          source="images/mech_config.png"
+          subtitle="Figure 26: Experimental Setup"
         ></image-component>
         
-    </div>
+      </div>
 
-            <p>
-              The prototype we chose was carefully selected with the following considerations:
-            </p>
-            <ol>
-              <li>Bike model capable of simple movement controls</li>
-              <li>IWP-enabled self-balancing</li>
-              <li>Open-source code</li>
-            </ol>
+      <!-- 6.2.2 Electronics and Integration -->
+      <div id="sub-section-6-2-2">
+        <h4>6.2.2 Electronics and Integration</h4>
+        
+        <image-component 
+          tag="EandI"
+          source="images/EandI.png"
+          subtitle="Figure 26: Experimental Setup"
+        ></image-component>
+        
+      </div>
+
+      <!-- 6.2.3 Stabilisation and Safety Measures -->
+      <div id="sub-section-6-2-3">
+        <h4>6.2.3 Stabilisation and Safety Measures</h4>
+        
+        <image-component 
+          tag="FinalFig26"
+          source="images/FinalFig26.png"
+          subtitle="Figure 26: Experimental Setup"
+        ></image-component>
+        
+      </div>
+
+      <!-- 6.2.4 Testing Environment -->
+      <div id="sub-section-6-2-4">
+        <h4>6.2.4 Testing Environment/h4>
+        
+        <image-component 
+          tag="FinalFig26"
+          source="images/FinalFig26.png"
+          subtitle="Figure 26: Experimental Setup"
+        ></image-component>
+
+        <p>
+          This setup ensures that the system operates under realistic electrical and mechanical conditions, while maintaining sufficient control over external variables to enable repeatable and reliable testing.
+        </p>     
+      </div>
+
+      <!-- 6.3 Testing Methodology -->
+      <div id="sub-section-6-header-3">
+        <h3>6.3 Testing Methodology</h3>
+        <p>
+          The testing methodology was designed to identify the maximum achievable control performance while ensuring electrical reliability of the prototype. A structured, single-variable approach was used. Only one parameter was adjusted at a time while others were held constant, allowing direct attribution of observed effects to that parameter.
+        </p>
+
+        <p>
+          Two evaluation criteria were defined:
+        </p>
+        <ol>
+          <li>Electrical safety (primary constraint): No overcurrent warnings, no I2C bus crashes, and operation within driver limits.</li>
+          <li>Control performance (secondary): Responsiveness to tilt, whether interruptions were present (I2C crash and overcurrent), and sufficient reaction wheel torque.</li>
+        </ol>
+        
+        <p>
+          Testing was performed by manually applying controlled tilt disturbances (5-10 degrees). Rapid alternating tilts were used to force direction reversals, as these produce the highest current transients and EMI. This approach ensured that the final parameters represent the highest performance achievable without violating electrical constraints, resulting in a controller that is both effective and robust in real-world operation.
+        </p>
+      </div>
+  
+
+      <!-- 6.4 Prototype Testing Procedures -->
+      <div id="sub-section-6-header-4">
+        <h3>6.4 Prototype Testing Procedures</h3>
+      </div>
+
+          <!-- 6.4.1 Phase 1: K-matrix Gains Test -->
+          <div id="sub-section-6-4-1">
+            <h4>6.4.1 Phase 1: K-matrix Gains Test</h4>
           </div>
 
           <br />
 
-          <!-- 6.2 Hardware Design Specifications and Features -->
-          <div id="sub-section-6-header-2">
-            <h3>6.2 Hardware Design Specifications and Features</h3>
+        <!-- 6.4.2 Phase 1: K-matrix Gains Test -->
+          <div id="sub-section-6-4-1">
+            <h4>6.4.1 Phase 1: K-matrix Gains Test</h4>
           </div>
 
-          <!-- 6.2.1 RC Model Specifications -->
-          <div id="sub-section-6-2-1">
-            <h4>6.2.1 RC Model Specifications</h4>
-
-
-            <image-component tag="image25" source="images/image25.png"
-              subtitle="Figure 11: Model IWP bike"></image-component>
-
+        <!-- 6.4.3 Phase 1: K-matrix Gains Test -->
+          <div id="sub-section-6-4-1">
+            <h4>6.4.1 Phase 1: K-matrix Gains Test</h4>
           </div>
 
-          <br />
-          <!-- 6.2.2 Hardware -->
-          <div id="sub-section-6-2-2">
-            <h4>6.2.2 Hardware</h4>
+        <!-- 6.4.4 Phase 1: K-matrix Gains Test -->
+          <div id="sub-section-6-4-1">
+            <h4>6.4.1 Phase 1: K-matrix Gains Test</h4>
+          </div>
 
-
-            <image-component tag="imageFIG12" source="images/imageFIG12.png"
-              subtitle="Figure 12: Hardware architecture"></image-component>
-
-
+        <!-- 6.4.5 Phase 1: K-matrix Gains Test -->
+          <div id="sub-section-6-4-1">
+            <h4>6.4.1 Phase 1: K-matrix Gains Test</h4>
             <p><u>Overview</u></p>
-            <p>
-              The control stack is built around an STM32 MCU, a 6-axis IMU for tilt sensing, and a rotary encoder on the
-              reaction wheel for inner-loop torque control. Actuation comprises a BLDC reaction-wheel motor with ESC for
-              roll stabilisation, a steering servo, and a small N20 geared DC motor for forward and reverse. A
-              multi-rail
-              power system feeds logic and power loads. Bluetooth and USB-UART provide data, tuning and control. Refer
-              to
-              Appendix D for further details.
-            </p>
           </div>
 
-          <br />
+      <br />
+      <br />
+      <sl-divider></sl-divider>
+        
 
-          <!-- 6.3 Software Design Specifications and Features -->
-          <div id="sub-section-6-header-3">
-            <h3>6.3 Software Design Specifications and Features</h3>
-          </div>
+      <!-- === SECTION 7: RESULTS AND ANALYSIS === -->
+      <div id="section-header-7">
+        <h2>7. Results and Analysis</h2>
+      </div>
 
-          <!-- 6.3.1 Code Analysis -->
-          <div id="sub-section-6-3-1">
-            <h4>6.3.1 Code Analysis</h4>
+      <!-- 7.1 Data Collection and Processing -->
+      <div id="sub-section-7-header-1">
+        <h3>7.1 Data Collection and Processing</h3>
 
-            <p>
-              Analysis of the RC-bike’s provided code architecture was conducted to understand how its key functions and
-              self-balancing mechanism were programmed. We identified and distilled its core workflow into 5 stages.
-              Detailed explanations are in Appendix D.
-            </p>
-            <br />
-            <p><u>Stage 1: Boot and Firmware Start-up (main.c)</u></p>
-            <p>
-              This stage configures the RC-bike’s firmware at startup, namely sensing (IMU), actuation (PWM/servo), and
-              timing (FreeRTOS + timers). At reset, the MCU initializes the HAL, clocks, peripherals and motor drivers,
-              then starts the PWM channels, Soft-I2C and the sensing/control stack before moving into FreeRTOS.
-            </p>
+        <p>
+          Data were collected through direct physical observation and qualitative scoring during each tuning phase, supplemented by the monitoring of embedded system diagnostics. Performance metrics were assessed using a standardised five-point Likert-type scale across three dimensions:
+        </p>
+        <ol>
+          <li>Responsiveness (change in direction): the speed and accuracy with which the reaction wheel reverses to counteract a change in lean direction.</li>
+          <li>Interruptions: the presence of warning messages that indicates faults (I2C warning, MPU6050 zero data warning), with a score of 5 indicating no warnings in serial output.</li>
+          <li>Reaction Wheel (RW) Strength: the effective torque output available to resist gravitational disturbances.</li>
+        </ol>
+
+        <p>
+          This scoring methodology was selected because continuous sensor logging of torque, angular velocity, and bus timing was not available in the current hardware configuration. The qualitative scores therefore serve as the primary performance indicators. Binary outcomes, namely I2C bus crashes and overcurrent faults, were treated as hard failure conditions and used to define absolute operating boundaries rather than points on a continuous scale.
+        </p>
+      </div>
+
+      <br/>
+
+      <!-- 7.2 System Performance Analysis and Evaluation -->
+      <div id="sub-section-7-header-2">
+        <h3>7.2 System Performance Analysis and Evaluation</h3>
+
+      <!-- 7.2.1 Tuned Parameter Summary -->
+      <div id="sub-section-6-4-1">
+        <h4>7.1.1 Rationale of Equipment</h4>
+        
+        <image-component 
+          tag="FinalFig26"
+          source="images/FinalFig26.png"
+          subtitle="Figure 26: Experimental Setup"
+        ></image-component>
+      </div>
+      <br />
+        
+      <!-- 7.2.2  Phase 1: LQR Gain Matrix (K-Matrix) Selection -->
+      <div id="sub-section-7-2-2">
+        <h4>7.2.2  Phase 1: LQR Gain Matrix (K-Matrix) Selection</h4>
+        <p>
+          The LQR gain matrix K was computed offline using a LQR Gain Computation solver on python, with the resulting feedback gains qp, qp_d, qr, and qr_d derived analytically from the bicycle’s physical parameters and the chosen Q and R weighting matrices. These computed gains are reported directly as generated by the solver without further post-processing.
+        </p>
+        <p>
+          Combination 1 (Rejected): Gains are large in magnitude. At LQR_SCALE_FACTOR = 0.1 even at minor angles the motor frequently exceeded the continuous rating and produced inductive current spikes that crashed the I2C bus.
+        </p>
+        <p>
+          Combination 2 (Rejected): Aggressive penalisation of input voltage reduces gains substantially. Balancing torque was insufficient to hold the bicycle upright against even minor tilts.
+        </p>
+        <p>
+          Combination 3 (Rejected): Marginal improvement in control authority over Combination 2. Torque output remained borderline under real-world perturbations. Conditionally accepted for further tuning.
+        </p>
+        <p>
+          Combination 4 (Accepted): Gains provide noticeably stronger and more responsive correction, while remaining below the threshold that produced EMI failures in Combination 1.
+        </p>
+        <p>
+          The absolute wheel angle state qr was bypassed during testing by substituting a constant zero in place of the tracked value. This was a deliberate simplification: independently tracking qr with a washout filter would break the mathematical relationship d/dt qr = ω assumed by the LQR derivation, risking an unstable coupling. Since the associated gain K02 is small in magnitude relative to K00 and K01, the omission has a negligible practical effect on balancing performance.
+        </p>
+      </div>
+      <br />
+      
+      <!-- 7.2.3  Phase 2: Motor Deadband Elimination (PWM_MIN_RUN) -->
+      <div id="sub-section-7-2-3">
+        <h4>7.2.3  Phase 2: Motor Deadband Elimination (PWM_MIN_RUN)</h4>
+        <p>
+          The objective of this phase was to identify the minimum PWM duty cycle at which the motor transitions from a stalled state to smooth rotation by sweeping PWM_MIN_RUN from 20 down to 0.001, thereby eliminating the static friction deadband. The motor rotated freely at every tested duty cycle, including values as low as 0.001, indicating that the AQMD driver exhibits no measurable stiction threshold at the configured 2 kHz PWM frequency. 
+        </p>
+        <p>
+          Consequently, PWM_MIN_RUN has negligible influence on motor behaviour in this configuration and the phase did not yield actionable tuning data. The value of 0.001 was retained as a near-zero default.
+        </p>
+      </div>
+      <br />
+        
+      <!-- 7.2.4 Phase 3: EMI Threshold Identification (PWM_STEP) -->
+      <div id="sub-section-7-2-4">
+        <h4>7.2.4 Phase 3: EMI Threshold Identification (PWM_STEP)</h4>
+        <image-component 
+          tag="FinalFig27"
+          source="images/FinalFig27.png"
+          subtitle="Figure 27: PWM_STEP chart"
+        ></image-component>
+        
+        <p>
+          The experimental results demonstrate a clear trade-off between actuator responsiveness and electrical system stability. Increasing PWM_STEP improves motor torque response and overall system reactivity; however, it also amplifies inductive current transients, leading to increased electromagnetic interference. This interference exhibits a nonlinear escalation, culminating in a complete I2C communication failure at PWM_STEP = 8.
+        </p>
+        <p>
+          Although PWM_STEP = 7 yields the highest performance scores, it operates too close to the identified EMI failure boundary, making it unsuitable for reliable operation. PWM_STEP = 6 provides an optimal compromise, delivering strong responsiveness and torque output while maintaining a safe margin from instability. This selection ensures robust operation under varying real-world conditions, where electrical noise susceptibility may fluctuate.
+        </p>
+      </div>
+      <br />  
+
+      <!-- 7.2.5 Phase 4: Controller Authority (LQR_SCALE_FACTOR) -->
+      <div id="sub-section-7-2-5">
+        <h4>7.2.5 Phase 4: Controller Authority (LQR_SCALE_FACTOR)</h4>
+        <image-component 
+          tag="FinalFig28"
+          source="images/FinalFig28.png"
+          subtitle="Figure 28: LQR_SCALE_FACTOR chart"
+        ></image-component>
+        
+        <p>
+          The experimental results demonstrate that increasing the LQR_SCALE_FACTOR enhances controller authority, resulting in improved responsiveness and stronger corrective torque. However, this increase also amplifies current demand and high-frequency system dynamics, leading to reduced stability and eventual overcurrent failure.
+        </p>
+        <p>
+          At low scale factors (0.1 to 0.15), the controller lacks sufficient authority to stabilize the bicycle. As the scale factor increases to 0.2 to 0.3, the system enters an effective operating region where the controller can successfully counter disturbances while maintaining stable operation. Beyond this point, further increases yield minimal improvements in responsiveness but significantly degrade stability, with oscillatory behavior observed prior to complete failure at 0.6.
+        </p>
+        <p>
+          The selected value of 0.3 represents the optimal balance, providing the highest achievable control authority without inducing instability or exceeding hardware limits. This aligns with the validation criterion of selecting the maximum gain just below the onset of oscillatory behavior, ensuring both effective balancing performance and robust operation.
+        </p> 
+      </div>
+      <br />
+        
+      <!-- 7.2.6  Phase 5: Reversal Braking Timing (REVERSE_BRAKE_HOLD_MS) -->
+      <div id="sub-section-7-2-6">
+        <h4>7.2.4 Phase 5: Reversal Braking Timing (REVERSE_BRAKE_HOLD_MS)</h4>
+        <image-component 
+          tag="FinalFig29"
+          source="images/FinalFig29.png"
+          subtitle="Figure 29: REVERSE_BRAKE_HOLD_MS chart"
+        ></image-component>
+        
+        <p>
+          The results demonstrate a clear trade-off between electrical safety during motor direction reversals and overall control responsiveness. Short brake hold durations (100-150 ms) result in high responsiveness but insufficient deceleration of the motor rotor, leading to significant current spikes, overcurrent risk, and I2C instability. Increasing the hold duration improves system stability by allowing the rotor to slow sufficiently before reverse torque is applied.
+        </p>
+        <p>
+          A transition region is observed at 200-250 ms, where partial improvement in stability is achieved but consistent safe operation is not guaranteed. At 300 ms, the system reaches the minimum hold duration that ensures reliable braking across repeated reversals without triggering overcurrent or communication failures. Further increases beyond this point yield minimal additional stability benefits while unnecessarily degrading responsiveness due to increased control dead time.
+        </p>
+        <p>
+          Therefore, 300 ms is selected as the optimal value, as it represents the lowest duration that satisfies the safety requirement while preserving as much responsiveness as possible. This aligns directly with the objective of minimizing reversal delay without compromising electrical and system stability.
+        </p>
+      </div>
+      <br />
+
+      <!-- 7.3 Discussion of Observed Trends -->
+      <div id="sub-section-7-header-3">
+        <h3>7.3 Discussion of Observed Trends</h3>
+        <p>
+          Across all tuning phases, system performance was consistently limited by electrical interactions between the motor drive and sensing subsystems rather than by the LQR control law itself. Parameters such as gain selection, PWM slew rate, and brake timing were constrained by the onset of electromagnetic interference (EMI) and transient current effects. This indicates that the control architecture is fundamentally sound, with performance bounded by hardware limitations (see Section 9.2).
+        </p>
+      </div>
+
+      <!-- 7.3.1 Trend 1: Overcurrent during rapid reversals -->
+      <div id="sub-section-7-3-1">
+        <h4>7.3.1 Trend 1: Overcurrent during rapid reversals</h4>
+        
+        <p><u>Stage 6:</u></p>
+        <p>
+          Replaced STM32 with ESP32-S3. 
+        </p>
+        
+        <p><u>Stage 6:</u></p>
+        <p>
+          Replaced STM32 with ESP32-S3. 
+        </p>
+        
+        <p><u>Stage 6:</u></p>
+        <p>
+          Replaced STM32 with ESP32-S3. 
+        </p>
+      </div>    
+      <br />
+
+      <!-- 7.3.2 Trend 2: I2C bus crash due to EMI overload -->
+      <div id="sub-section-7-3-2">
+        <h4>7.3.2 Trend 2: I2C bus crash due to EMI overload</h4>
+        
+        <p><u>Stage 6:</u></p>
+        <p>
+          Replaced STM32 with ESP32-S3. 
+        </p>
+        
+        <p><u>Stage 6:</u></p>
+        <p>
+          Replaced STM32 with ESP32-S3. 
+        </p>
+        
+        <p><u>Stage 6:</u></p>
+        <p>
+          Replaced STM32 with ESP32-S3. 
+        </p>
+      </div>    
+      <br />
+
+      <!-- 7.3.3 Trend 3: IMU and I2C Bus Lag Under Motor Excitation -->
+      <div id="sub-section-7-3-2">
+        <h4>7.3.3 Trend 3: IMU and I2C Bus Lag Under Motor Excitation</h4>
+        
+        <p><u>Stage 6:</u></p>
+        <p>
+          Replaced STM32 with ESP32-S3. 
+        </p>
+        
+        <p><u>Stage 6:</u></p>
+        <p>
+          Replaced STM32 with ESP32-S3. 
+        </p>
+        
+        <p><u>Stage 6:</u></p>
+        <p>
+          Replaced STM32 with ESP32-S3. 
+        </p>
+      </div>    
+      <br />
+          
+      <!-- 7.4 Comparison with Theoretical Predictions  -->
+      <div id="sub-section-7-header-4">
+        <h3>7.4 Comparison with Theoretical Predictions</h3>
+        <p>
+          The LQR design was derived from a linearised state-space model of the bicycle reaction wheel system under the assumptions of small-angle operation, a rigid frame, and unconstrained actuator authority. The following deviations from theoretical predictions were observed in practice.
+        </p>
+        
+        <image-component 
+          tag="FinalFig29"
+          source="images/FinalFig29.png"
+          subtitle="Figure 29: REVERSE_BRAKE_HOLD_MS chart"
+        ></image-component>
+      </div>
+        
+      <br />
+      <br />
+      <sl-divider></sl-divider>
+
+        
+      <!-- SECTION 8. Fulfilment of Deliverables -->
+      <div id="section-header-8">
+        <h2>8. Fulfilment of Deliverables</h2>
+        <p>
+          This chapter identifies the key project deliverables to evaluate the overall success of the project. 
+        </p>
+      </div>
+        
+      <br />
+
+      <!-- 8.1 Intended Project Deliverables -->
+      <div id="sub-section-8-header-1">
+        <h3>8.1 Intended Project Deliverables/h3>
+        <p>
+          The intended project deliverable was to develop a full-scale prototype by implementing a flywheel mechanism on a bicycle frame to achieve self-balancing functionality at stationary. This involved the following milestones: 
+        </p>
+          
+        <ol>
+          <li>Design a working physical prototype for effectual testing of balancing flywheel mechanism.</li>
+          <li>Programming a HL6SD motor to achieve motion control necessary for self-balancing.</li>
+          <li>Determine the viability of a LQR control algorithm for implementing self-balancing firmware.</li>
+        </ol>
+      </div>
+      <br />
+
+      <!-- 8.2 Achieved Outcomes -->
+      <div id="sub-section-8-header-2">
+        <h3>8.2 Achieved Outcomes</h3>
+        
+        <p>
+          As of the time of writing this report, the following project milestones have been achieved:
+        </p>
+        <ol>
+          <li>Successful design and implementation of a physical self-balancing prototype</li>
+          <li>Successful testing and POC of LQR control algorithm suitability for self-balancing projects. </li>
+        </ol>
+
+        <p>
+          Project objectives that have yet to be achieved are: 
+        </p>
+        <ol>
+          <li>Effective self-balancing functionality that is consistent and unsupervised. </li>
+        </ol>
+      </div>
+      <br />
+
+      <!-- 8.3 Evaluation of Project Success -->
+      <div id="sub-section-8-header-3">
+        <h3>8.3 Evaluation of Project Success</h3>
+        <p>
+          Overall, the culmination of 12 weeks of designing, prototyping, troubleshooting and testing has yielded mixed results. Although the final prototype was ultimately deemed unable to achieve effective self-balancing capability, present efforts have successfully validated the POC for the premise of a flywheel-based self-balancing module for improving the stability of existing bicycle frames, presenting a potential opportunity for future improvements. 
+        </p>
+      </div>
+
+      <br />
+      <br />
+      <sl-divider></sl-divider>
+
+        
+      <!-- 9. Limitations and Recommendations for Future Work -->
+      <div id="section-header-9">
+        <h2>9. Limitations and Recommendations for Future Work</h2>
+        <p>
+          This chapter identifies the principal limitations of the current prototype and experimental methodology, documents the technical challenges encountered during development and testing, and outlines recommendations for addressing these limitations in future improvements.
+        </p>
+      </div>
+
+      <!-- 9.1 Identified Limitations and Justifications -->
+      <div id="sub-section-9-header-1">
+        <h3>9.1 Identified Limitations and Justifications</h3>
+
+        <!-- 9.1.1 Absence of Quantitative Data Logging -->
+        <div id="sub-section-9-1-1">
+          <h4>9.1.1 Absence of Quantitative Data Logging</h4>
+          <p>
+            Throughout the five tuning phases described in Section 6, performance assessment relied exclusively on qualitative Likert-type scores and binary fault indicators (I2C bus crashes and overcurrent warnings) read from the microcontroller’s serial output. No automated logging of the system’s continuous state variables (lean angle, angular rate, reaction wheel speed, control output, or PWM duty) was implemented.
+          </p>
+
+          <p><u>Consequences:</u></p>
+          <ol>
+            <li>Limited resolution in optimisation:
+              Performance metrics such as Responsiveness and Reaction Wheel Strength saturated across key parameter ranges (e.g. LQR_SCALE_FACTOR = 0.2–0.4), reducing optimisation to identifying failure thresholds rather than enabling data-driven tuning.
+            </li>
+            <li>Inability to analyse transient behaviour:
+              Critical events such as rotor speed at reversal, current spike magnitude, and correlation between PWM commands and I2C faults could not be directly measured, limiting analysis of EMI and overcurrent phenomena.
+            </li>
+            <li>Reduced reproducibility and validation capability:
+              The absence of time-series data prevents direct comparison with simulation results and limits reuse of experimental data for parameter identification.
+            </li>
+          </ol>
+
+          <p><u>Justification:</u></p>
+          <p>
+            Implementing a reliable high-rate logging system (USB, SD card, or wireless) would have required additional development effort for buffering, synchronisation, and post-processing. Given that the primary objective was POC stabilisation rather than full system characterisation, qualitative evaluation was deemed sufficient to identify safe operating regions.
+          </p>  
+        </div>
+        <br />
+
+        <!-- 9.1.2 Simplified Dynamic Model -->
+        <div id="sub-section-9-1-2">
+          <h4>9.1.2 Simplified Dynamic Model</h4>
+          <p>
+            The LQR controller was designed using a linearised reaction wheel inverted pendulum (RWIP) model with simplifying assumptions: point-mass approximation, small-angle linearisation, and ideal actuator behaviour.
+          </p>
+
+          <p><u>Consequences:</u></p>
+          <ol>
+            <li>Parameter mismatch with the physical system:
+              The distributed mass of the bicycle introduces deviations in centre-of-mass location and inertia, resulting in steady-state lean bias and requiring empirical correction.
+            </li>
+            <li>Reduced accuracy under large disturbances:
+              For tilt angles of 5–10 degrees, the small-angle approximation introduces non-negligible error, leading to underestimation of gravitational torque and discrepancies in required control effort.
+            </li>
+            <li>Implicit compensation through gain scaling:
+              The experimentally determined LQR_SCALE_FACTOR = 0.3 compensates not only for actuator limits but also for modelling inaccuracies, effectively acting as a lumped correction factor.
+            </li>
+          </ol>
+
+          <p><u>Justification:</u></p>
+          <p>
+            A simplified point-mass model was adopted because full physical characterisation of the bicycle including experimental determination of the centre-of-mass location and rotational inertia tensor via pendulum swing tests or force-plate measurement was outside the project scope. The linearised RWIP formulation is well-established in the literature as a tractable starting point for reaction wheel balance control, and its gains are known to provide adequate closed-loop stability within reasonable margins even when the physical parameters are only approximately known. The results confirm that stability is ultimately constrained by electrical and actuator limits, not solely by model fidelity.
+          </p>
+        </div>
+        <br />      
+
+        <!-- 9.1.3 Reaction Wheel Moment of Inertia -->
+        <div id="sub-section-9-1-3">
+          <h4>9.1.3 Reaction Wheel Moment of Inertia</h4>
+          <p>
+            The reaction wheel used for this prototype has limited radius and mass, resulting in a relatively low moment of inertia.
+          </p>
+
+          <p><u>Consequences:</u></p>
+          <ol>
+            <li>Rapid saturation under closed-loop control:
+              Under closed-loop control, the controller frequently commands high torque even for moderate tilt angles. With low inertia, the wheel accelerates rapidly towards its mechanical speed limit, beyond which no additional corrective torque can be generated. This saturation mechanism directly explains the instability observed at LQR_SCALE_FACTOR ≥ 0.4 (Section 7.3.3): at this gain level, the control demands exceed the angular momentum budget available before the next reversal event is required, leading to a rapid succession of saturations and reversals that destabilise the system.
+            </li>
+            <li>Increased sensitivity to tuning parameters:
+              The limited inertia necessitates careful tuning of LQR_SCALE_FACTOR and PWM_STEP to avoid excessive torque commands that accelerate the wheel unnecessarily, as the overcurrent onset at PWM_STEP ≥ 8 (Section 7.3.1) is partly a consequence of the high slew rates demanded under low-inertia conditions.
+            </li>
+          </ol>
+
+          <p><u>Justification:</u></p>
+          <p>
+            The reaction wheel dimensions were selected based on availability and weight constraints imposed by the bicycle frame geometry. Additionally, the limitation was not fully captured in the design phase, as theoretical calculations did not account for sustained high-torque demand under LQR control. Despite this, proof-of-concept was achieved within a constrained operating envelope through parameter tuning.
+          </p>
+         </div>
+      </div> 
+        
+      <br />
+
+      <!-- 9.2 Technical Challenges Encountered -->
+      <div id="sub-section-9-header-2">
+        <h3>9.2 Technical Challenges Encountered</h3>
+
+        <!-- 9.2.1  I2C Bus Disruption from Motor EMI -->
+        <div id="sub-section-9-2-1">
+          <h4>9.2.1 I2C Bus Disruption from Motor EMI</h4>
+          <p>
+            The most persistent technical challenge throughout development was EMI from the BLDC motor corrupting communication on the I2C bus shared by the MPU6050. As documented in detail in Section 7.3, inductive kickback transients generated during motor current switching coupled onto the SDA and SCL signal lines through the shared power ground and parasitic capacitance in the wiring harness.
+          </p>
+
+          <p>The disruption manifested as:</p>
+          <ol>
+            <li>Hard failure:
+              Complete I2C bus lock-up, immediately detectable from serial output.
+            </li>
+            <li>Soft failure:
+              The complementary filter accumulated corrupted gyroscope frames before a hardware fault was detectable, causing theta_deg to drift from the physical lean angle. The resulting erroneous corrective command further excited the motor, creating a positive feedback loop between sensor corruption and motor excitation.
+            </li>
+          </ol>
+
+          <p>
+            Possible mitigation via hardware electromagnetic measures including decoupling capacitors and physical signal isolation, was not implemented as implementing and verifying these changes required additional PCB rework and wiring modifications that were deferred to avoid disrupting a partially functional prototype during the testing window. Software-level mitigations (reduced I2C clock speed, bus timeout, extended fault tolerances) were applied instead and proved sufficient to maintain operation within the tuned parameter boundaries, at the cost of a constrained operating envelope.
+          </p>  
+        </div>
+        <br />
+
+        <!-- 9.2.2 Motor Overcurrent During Rapid Direction Changes -->
+        <div id="sub-section-9-2-2">
+          <h4>9.2.2 Motor Overcurrent During Rapid Direction Changes</h4>
+          <p>
+            The combination of a high back-EMF at elevated rotor speeds and a sudden demand for current in the opposing direction during reversal caused the back-EMF and applied voltage to momentarily add rather than oppose, driving a transient spike that can significantly exceed the continuous rating. The empirical finding that the I2C bus failed before the motor at PWM_STEP = 8 suggests the sensor subsystem was the more sensitive component, and that overcurrent protection was activating concurrently with the I2C disruptions. 
+          </p>
+
+          <p>The practical consequences were:</p>
+          <ol>
+            <li>Overcurrent faults at the motor controller were observed during every test session involving rapid direction reversals, most acutely during Phase 1 (R = 10 gains) and Phase 3 (PWM_STEP ≥8). The motor, selected for a rated current exceeding values reported in online implementations, nonetheless produced transient current spikes during high-dI/dt switching events that exceeded the driver’s protection threshold.</li>
+            <li>The 300 ms brake hold introduced in Phase 5 partially addresses this by allowing the rotor to decelerate below REVERSE_ZERO_OMEGA before the opposing drive is applied, reducing back-EMF at the moment of current reversal. However this introduces a corresponding control dead time that degrades balancing performance under large disturbances.</li>
+          </ol>
+
+          <p>
+            A motor with a higher inductance or a driver with configurable current-ramp limiting would have mitigated the transient amplitude without requiring a long brake hold. Such hardware was not available within the project budget and procurement timeline. The brake hold approach was adopted as the most immediately implementable solution given the available components.
+          </p>
+        </div>
+        <br />      
+
+        <!-- 9.2.3  ESP32-S3 Firmware Upload Failures -->
+        <div id="sub-section-9-2-3">
+          <h4>9.2.3  ESP32-S3 Firmware Upload Failures</h4>
+          <p>
+            Firmware uploads to the ESP32-S3 failed when the motor driver power supply remained energised. The suspected mechanism is residual current flow through the PWM signal line (GPIO14 to the AQMD IN1 input), which back-biases the GPIO pin during the USB bootloader’s control of the boot strapping pins. Because the motor driver supply shares a ground reference with the ESP32-S3, the driver’s input stage can source or sink small currents through signal lines even with no active PWM command.
+          </p>
+          <p>
+            This required powering down the motor driver before every firmware flash, then re-powering and re-executing the IMU calibration sequence. In practice this added several minutes to each development iteration. Ultimately, the failure mode was intermittent and only reproducible when the motor supply was connected during upload, making it straightforward to work around procedurally.
+          </p>
+        </div>
+        <br />
+
+        <!-- 9.2.4 Incomplete Motor Characterisation -->
+        <div id="sub-section-9-2-4">
+          <h4>9.2.4 Incomplete Motor Characterisation</h4>
+          <p>
+            The motor was procured based on rated current and approximate KV specifications from the manufacturer’s product listing. A full datasheet was unavailable, and the torque constant Kt, back-EMF constant Ke, winding resistance R, and winding inductance L were estimated from these limited parameters rather than measured directly.
+          </p>
+
+          <p>The practical consequences were:</p>
+          <ol>
+            <li>EMI threshold is uncertain as an underestimate of L (governs the amplitude and duration of inductive kickback transients) would predict a higher safe PWM_STEP than the hardware sustains, consistent with I2C failure at the modest slew rate of PWM_STEP = 8 (Section 7.3.2). Without a measured value, it is not possible to determine whether the PWM_STEP = 7–8 failure transition is intrinsic to the motor or could be shifted by hardware EMC improvements alone.</li>
+            <li>Without measured values of Kt and Ke, it is also not possible to accurately relate the LQR’s computed Vin output to actual shaft torque, introducing a scaling uncertainty between the designed and implemented control law. This was absorbed by the LQR_SCALE_FACTOR parameter, which effectively became a lumped correction factor for the combined uncertainty in motor constants, model parameters, and driver characteristics.</li>
+          </ol>
+
+          <p>
+            Direct motor characterisation via locked-rotor current measurement and back-EMF sweep testing requires a controlled test rig with a calibrated torque sensor or precision current source, which was not available in the project laboratory. The motor was instead characterised empirically through the tuning procedure itself, which produced a functional system but limits the transferability of results to a revised hardware configuration.
+          </p>
+        </div>    
+      </div> 
 
 
-            <image-component tag="image11" source="images/image11.png"
-              subtitle="Figure 13: Main.c workflow"></image-component>
+      <!-- 9.3 Recommended Improvements -->
+      <div id="sub-section-9-header-3">
+        <h3>9.3 Recommended Improvements</h3>
 
-            <br />
-            <p><u>Stage 2: Real-time Loop Orchestration (FreeRTOS.c/.h)</u></p>
-            <p>
-              FreeRTOS refers to the RC-bike’s real-time operating system, which executes a series of 6 tasks in a
-              5&nbsp;ms loop (200&nbsp;Hz). Specifically, StartSensorSampleTask handles the self-balancing pipeline,
-              which
-              performs:
-              data acquisition → filtering → state estimation → feedback readout → cascade PID control → actuation →
-              calibration.
-            </p>
+        <!-- 9.3.1 Dedicated serial data logger -->
+        <div id="sub-section-9-3-1">
+          <h4>9.3.1 Dedicated serial data logger</h4>
+          <p>
+            Implement a real-time logging pipeline (e.g. via USB CDC or SD card) that records theta_deg, omega_motor, u, pwm, brake state, and I2C fault flags at every control tick (10 ms). This enables quantitative analysis of transient response, stable-region mapping, and reproducible comparison across tuning iterations.
+          </p> 
+        </div>
+        
+        <br />
 
+        <!-- 9.3.2 Hardware EMC mitigation -->
+        <div id="sub-section-9-3-2">
+          <h4>9.3.2 Hardware EMC mitigation</h4>
+          <p>
+            Methods:
+          </p>
+          <ol>
+            <li>Install bulk decoupling capacitors (100 μF + 100 nF) at motor driver supply terminals.</li>
+            <li>Add ferrite beads on motor phase leads</li>
+            <li>Route I2C harness ≥50 mm from power wiring and use shielded twisted-pair for SDA/SCL.</li>
+          </ol>
+          <p>
+            Eliminates the inductive coupling failure mode that capped LQR_SCALE_FACTOR at 0.3 and necessitated the 300 ms brake hold, directly improving achievable balancing performance.
+          </p>
+        </div>
+        
+        <br />     
 
-            <image-component tag="image49" source="images/image49.png"
-              subtitle="Figure 14: FreeRTOS.c workflow"></image-component>
-
-            <br />
-            <p><u>Stage 3: Sensing and State Estimation (IMU, MPU6050, IMATH, Filter)</u></p>
-            <p>
-              This stage encompasses data sensing and preliminary processing. The MPU6050 sensor reads raw data every
-              tick
-              (5&nbsp;ms) for three parameters: roll angle, speed (linear velocity), and angular velocity. These three
-              raw
-              data categories undergo processing in IMU.c (unit conversion, filtering) and are then held in vector
-              structures (matrices) for historical reference for feedback control. It uses IMATH.c and Filter.c as
-              program
-              libraries.
-            </p>
-
-
-            <image-component tag="image5" source="images/image5.png"
-              subtitle="Figure 15: IMU, MPU6050 workflow"></image-component>
-
-            <br />
-            <p><u>Stage 4: Wheel Motion Feedback and Timing</u></p>
-            <p>
-              A quadrature encoder is a rotary sensor wired to a time counter that measures flywheel motor position,
-              speed
-              and direction each 5&nbsp;ms loop via generating two 90° out-of-phase square waves (A and B). Edge
-              transitions determine direction and displacement.
-            </p>
-
-
-            <image-component tag="image20" source="images/image20.png"
-              subtitle="Figure 16: Quadrature Encoder [37]"></image-component>
-
-
-            <p>
-              The encoder (TIM2) and timer data/endpoints feed into the controller and act as feedback for the flywheel
-              to
-              optimise its spin rate and direction to keep the bike upright. The remaining timers handle actuation (TIM3
-              —
-              servo actuation; CH1 PWM → flywheel, CH2 PWM → N20 motor; TIM1 — steering servo CH1 PWM). Timers start in
-              main() before FreeRTOS, so PWM/encoder are ready before tasks run.
-            </p>
-
-
-            <image-component tag="image44" source="images/image44.png"
-              subtitle="Figure 17: Encoder.c and Tim.c workflow"></image-component>
-
-            <br />
-            <p><u>Stage 5: Control and Actuation</u></p>
-            <p>
-              The last stage handles cascade PID, motor control and safety. The 3-loop controller performs corrective
-              actions sequentially every 5&nbsp;ms (velocity → angle → rate). In each loop, PID coefficients are applied
-              to transform the input data. The controller maps the final reaction torque command (sets correct direction
-              and magnitude) to the PWM timers to update the servo motors’ outputs to balance the bike.
-            </p>
-            <p>
-              The controller uses functions declared in the <code>PID.c</code> library. For safety, a fall guard is
-              declared so that if the bike tilts too far, the guard function will zero outputs and disable motors to
-              stop
-              the bike.
-            </p>
-
-
-            <image-component tag="image9" source="images/image9.png"
-              subtitle="Figure 18: Controller.c workflow"></image-component>
-
-          </div>
-          <br />
-          <!-- 6.3.2 Software Techniques -->
-          <div id="sub-section-6-3-2">
-            <h4>6.3.2 Software Techniques</h4>
-
-            <p>
-              Several software tools were used in programming the RC bike, as outlined below:
-            </p>
-            <br />
-            <p><u>Mahony Filter</u></p>
-            <p>
-              A nonlinear complementary filter<sup>[38]</sup> for estimating orientation using IMU data. It fuses
-              gyroscope (angular velocity) and accelerometer (gravity/acceleration). The algorithm outputs orientation
-              as
-              a quaternion, correcting gyroscope bias (difference between predicted vs expected values) via a
-              proportional–integral (PI) control law.
-            </p>
-
-
-            <image-component tag="image45" source="images/image45.png"
-              subtitle="Figure 19: Illustration of Mahony Filter [39]"></image-component>
-
-            <br />
-            <p><u>DCM and DCM_T (Direction Cosine Matrix)</u></p>
-            <p>
-              DCM is a 3×3 orthogonal matrix<sup>[40]</sup> representing rotation between coordinate frames. Derived
-              from
-              the Mahony quaternion, it transforms angular rate and gravity vectors (x, y, z) from the bike’s frame to
-              the
-              earth (world) frame. DCM_T, its transpose matrix, maps world-frame data back to the body frame, used here
-              for predicted vs gravity adjustments and sensor correction.
-            </p>
-
-
-            <image-component tag="image4" source="images/image4.png"
-              subtitle="Figure 20: Illustration of DCM [41]"></image-component>
-
-            <br />
-            <p><u>Butterworth Low-Pass Filters (IIR)</u></p>
-            <p>
-              Butterworth LPFs attenuate high-frequency noise while preserving low-frequency signals with minimal
-              distortion.<sup>[42]</sup> As IIR filters, they use feedback and past inputs/outputs, defined by
-              parameters
-              like order and cutoff frequency. They are applied to sensor data, including encoder outputs, for signal
-              smoothing.
-            </p>
-
-
-            <image-component tag="image12" source="images/image12.png"
-              subtitle="Figure 21: Illustration of Butterworth filter [43]"></image-component>
-
-            <br />
-            <p><u>Cascade PID Control</u></p>
-            <p>
-              Typically a 2/3-loop PID system: velocity → angle → rate loops. Each loop applies proportional
-              (K<sub>p</sub>), integral (K<sub>i</sub>) and derivative (K<sub>d</sub>) control laws to improve data
-              accuracy<sup>[44]</sup>.
-            </p>
-
-
-            <image-component tag="image30" source="images/image30.png"
-              subtitle="Figure 22: PID parameters for prototype"></image-component>
-
-          </div>
-
-          <br />
-
-          <!-- 6.4 Development Process -->
-          <div id="sub-section-6-header-4">
-            <h3>6.4 Development Process</h3>
-
-            <p>
-              The development process was to consolidate all the individual component analyses (mathematical principles,
-              physical hardware and design, code) and integrate them into a cohesive, coherent system architecture
-              analysis.
-            </p>
-
-
-            <image-component tag="image32" source="images/image32(1).png"
-              subtitle="Figure 23: Software architecture"></image-component>
-
-          </div>
-
+        <!-- 9.3.3 Refined system identification -->
+        <div id="sub-section-9-3-3">
+          <h4>9.3.3 Refined system identification</h4>
+          <p>
+            Methods:
+          </p>
+          <ol>
+            <li>Measure motor Kt, Ke, R, and L directly via locked-rotor and back-EMF tests.</li>
+            <li>Characterise actual mass distribution and centre-of-mass of bicycle.</li>
+          </ol>
+          <p>
+            Reduces parametric uncertainty in the state-space model and allows the LQR solver to produce gains that match the physical system rather than an approximated model.
+          </p>
         </div>
 
-        <div>
-
-          <br />
-          <br />
-          <sl-divider></sl-divider>
-
-          <!-- 7. Testing -->
-          <div id="section-header-7">
-            <h2>7. Testing</h2>
-          </div>
-
-          <!-- 7.1 Objectives of Testing -->
-          <div id="sub-section-7-header-1">
-            <h3>7.1 Objectives of Testing</h3>
-
-            <p>
-              Testing was conducted to evaluate the limits of the self-balancing mechanism and determine:
-            </p>
-            <ol>
-              <li>Disturbance responsiveness</li>
-              <li>Disturbance neutralisation performance</li>
-              <li>Scalability of system</li>
-            </ol>
-
-            <p>
-              Tests were designed to identify certain key parameters and limit thresholds of the bike’s self-balancing
-              mechanism:
-            </p>
-            <p>
-              Test 1: Find CG of bike<br>
-              Test 2: Find acceptable limits to applied weight, weight distribution and lateral forces
-            </p>
-          </div>
-
-          <br />
-
-          <!-- 7.1.1 Rationale of Equipment -->
-          <div id="sub-section-7-header-2">
-            <h4>7.1.1 Rationale of Equipment</h4>
-
-
-            <image-component tag="image47" source="images/image47.png"
-              subtitle="Figure 24: ANO_TC measurement interface"></image-component>
-
-
-            <p>
-              We used the ANO_TC Anonymous Tech Ground Station, an open-source drone control and monitoring tool, for
-              its
-              precision in plotting sensor data like roll angle, ensuring we have an accurate analysis of the IWP’s
-              performance in various set-ups.
-            </p>
-            <p>
-              M8 and M10 nuts were used as weights due to their compact size and uniform mass.
-            </p>
-          </div>
-
-          <br />
-
-          <!-- 7.2 Test Setup and Results Analysis -->
-          <div id="sub-section-7-header-3">
-            <h3>7.2 Test Setup and Results Analysis</h3>
-          </div>
-
-          <!-- 7.2.1 Test 1: Bike CG -->
-          <div id="sub-section-7-2-1">
-            <h4>7.2.1 Test 1: Bike CG</h4>
-
-            <p>
-              The CG of an object can be measured using a string. When an object is suspended freely, its CG will always
-              lie directly below the point of suspension.
-            </p>
-
-
-            <image-component tag="image13" source="images/image13.png"
-              subtitle="Figure 25: Finding CG of bike"></image-component>
-
-            <br />
-
-            <image-component tag="image43" source="images/image43.png" subtitle=""></image-component>
-
-
-            <h5>Results</h5>
-            <p>
-              CG height from ground/mm: 55 (45% of bike’s height)
-            </p>
-            <p>
-              CG point from front of bike/mm: 120 (51% of bike’s length)
-            </p>
-
-            <h5>Analysis</h5>
-            <p>
-              The results indicate that the RC bike’s CG distribution is comparable to that of a full-scale bike. The
-              horizontal CG position is approximately mid-length (50/50 front–rear), while the vertical CG position lies
-              around 55/45 top–bottom, reflecting a realistic mass distribution typical of actual bikes. This similarity
-              in CG proportions suggests that the RC model exhibits representative dynamic behaviour, allowing its
-              subsequent test results to be considered indicative of real-life performance<sup>[54]</sup>.
-            </p>
-          </div>
-          <br />
-          <!-- 7.2.2 Test 2: Weight -->
-          <div id="sub-section-7-2-2">
-            <h4>7.2.2 Test 2: Weight</h4>
-
-            <h4>Test 2A: Weight Limit</h4>
-            <p>
-              This test simulates real-world weight variations from the rider and cargo to evaluate the self-balancing
-              system’s robustness under different load conditions.
-            </p>
-
-
-            <image-component tag="fig26" source="images/fig26.png"
-              subtitle="Figure 26: Set-up for Test 2A"></image-component>
-
-
-
-            <image-component tag="image24" source="images/image24.png"
-              subtitle="Figure 27: Physical set-up for Test 2A"></image-component>
-
-            <br />
-
-            <image-component tag="image17" source="images/image17.png" subtitle=""></image-component>
-
-
-            <h5>Results</h5>
-
-
-            <image-component tag="image31" source="images/image31.png"
-              subtitle="Figure 28: Test 2A results"></image-component>
-
-
-            <h5>Analysis</h5>
-            <p>
-              The results show that the RC bike remains stable as symmetric load increases, with the steady-state roll
-              angle staying relatively consistent. Settling time rises gradually with heavier mass, indicating slower
-              damping but no loss of stability. Max overshoot also increases slightly, though it remains small across
-              all
-              tested weights. Overall, the system handles added symmetrical loads well, maintaining control performance
-              without significant drift or oscillatory behaviour.
-            </p>
-
-            <br />
-            <h4>Test 2B: Unilateral Weight</h4>
-            <p>
-              This test simulates uneven road conditions and rider lean to assess the self-balancing system’s robustness
-              against non-uniform weight distribution.
-            </p>
-
-
-            <image-component tag="fig29" source="images/fig29.png"
-              subtitle="Figure 29: Set-up for Test 2B"></image-component>
-
-
-
-            <image-component tag="image27" source="images/image27.png"
-              subtitle="Figure 30: Physical set-up for Test 2B"></image-component>
-
-            <br />
-
-            <image-component tag="image16" source="images/image16.png" subtitle=""></image-component>
-
-
-            <h5>Results</h5>
-
-
-            <image-component tag="image36" source="images/image36.png"
-              subtitle="Figure 31: Test 2B results"></image-component>
-
-
-            <h5>Analysis</h5>
-            <p>
-              The results show that the RC bike remains stable under unilateral loads, consistently returning to a new
-              equilibrium with only a small steady-state lean (&lt;4°). Uneven mass increases settling time and
-              overshoot,
-              but the bike continues to stabilise even at the heaviest load tested. The sharp rise in overshoot at
-              32.4&nbsp;g suggests the system is approaching its control limits, indicating a practical
-              unilateral-weight
-              tolerance of roughly 20–30&nbsp;g before performance degradation becomes significant.
-            </p>
-          </div>
-
-          <br />
-          <!-- 7.2.3 Test 2C: Lateral Force -->
-          <div id="sub-section-7-2-3">
-            <h4>Test 2C: Lateral Force</h4>
-
-            <p>
-              This test simulates sudden real-world disturbances such as brief rider inattention or unexpected weight
-              shifts by using a pendulum at varying angles to apply torque on the bike and evaluate its recovery
-              response.
-            </p>
-
-
-            <image-component tag="fig32" source="images/fig32.png"
-              subtitle="Figure 32: Set-up for Test 2C"></image-component>
-
-            <br />
-
-            <image-component tag="image33" source="images/image33.png"
-              subtitle="Figure 33: Physical set-up for Test 2C"></image-component>
-
-            <br />
-
-            <image-component tag="image38" source="images/image38.png" subtitle=""></image-component>
-
-
-            <h5>Results</h5>
-
-
-            <image-component tag="image31" source="images/image31.png"
-              subtitle="Figure 34: Test 2C results"></image-component>
-
-
-            <h5>Analysis</h5>
-            <p>
-              The results show that the bike remains stable under sudden lateral disturbances, with the steady-state
-              roll
-              angle staying nearly constant across all applied torques. As the impact torque increases, settling time
-              rises moderately and max overshoot grows more noticeably, indicating stronger initial displacement before
-              the controller brings the bike back to equilibrium. Despite the higher overshoot at the largest torque,
-              the
-              system consistently recovers without divergence, demonstrating effective disturbance rejection and
-              adequate
-              control authority to handle sudden
-              real-world shocks.
-            </p>
-          </div>
-          <br />
-          <!-- 7.3 Evaluation of Testing Methods -->
-          <div id="sub-section-7-header-4">
-            <h3>7.3 Evaluation of Testing Methods</h3>
-
-            <p>
-              Our tests were conducted using basic setups and materials. While functional, certain setups lacked
-              refinement which may have affected empirical data obtained. Each test was repeated multiple times to
-              mitigate such effects. Owing to the complexity of simulating dynamic rider behaviour on the RC-bike
-              prototype and resource constraints, further testing will be conducted over AY25/26 Winter Break. More
-              details are included in Appendix F.
-            </p>
-          </div>
-
+        <!-- 9.3.4 Higher-fidelity dynamic model -->
+        <div id="sub-section-9-3-4">
+          <h4>9.3.4 Higher-fidelity dynamic model</h4>
+          <p>
+            Extend the linearised RWIP model to include wheel gyroscopic precession, frame flexibility (or verify rigidity assumption), and actuator dynamics (motor electrical time constant, driver dead time). This closes the gap between theoretical LQR predictions and observed closed-loop behaviour, particularly the unmodelled 300 ms reversal dead time and the gain authority reduction.
+          </p>
+        </div>
+        
+        <!-- 9.3.5 Full-state observer (Kalman filter) -->
+        <div id="sub-section-9-3-5">
+          <h4>9.2.4 Incomplete Motor Characterisation</h4>
+          <p>
+            Replace the complementary filter with a discrete-time Kalman filter incorporating the motor current as a measurement input to detect and reject EMI-induced outliers.
+          </p>
+          <p>
+            Provides statistically optimal state estimation, suppresses corrupted IMU frames at the filter level rather than through conservative fault tolerances, and allows a higher LQR_SCALE_FACTOR to be used safely.
+          </p>
         </div>
 
-        <div>
+        <!-- 9.3.6 ESP32 upload reliability fix -->
+        <div id="sub-section-9-3-6">
+          <h4>9.3.6 ESP32 upload reliability fix</h4>
+          <p>
+            Add a power isolation switch or MOSFET on the motor driver supply that can be de-energised before firmware uploads, or use the ESP32-S3’s USB-OTG port with the motor supply disconnected. Removes the upload failure mode caused by residual PWM line current during programming, reducing development iteration time.
+          </p>
+        </div>  
 
-          <br />
-          <br />
-          <sl-divider></sl-divider>
+        <!-- 9.3.7 Reaction wheel redesign -->
+        <div id="sub-section-9-3-7">
+          <h4>9.3.7 Reaction wheel redesign</h4>
+          <p>
+            Replace the current wheel with one of larger radius and higher rim mass to increase the moment of inertia. Concentrate mass at the periphery (e.g. a heavy rim with lightweight spokes) to maximise I for a given total weight. Re-validate the RWIP model parameters after the change.
+          </p>
+          <p>
+            Reduces the rate of wheel speed accumulation for a given corrective torque, extending the time window before saturation and allowing the LQR to operate at higher scale factors without immediately exhausting angular momentum authority.
+          </p>
+        </div>   
+      </div>
 
-          <!-- 8. Fulfilment of Deliverables -->
-          <div id="section-header-8">
-            <h2>8. Fulfilment of Deliverables</h2>
-          </div>
+      <br />     
+        
+      <!-- 9.4 Future Development Opportunities -->
+      <div id="sub-section-9-header-4">
+        <h3>9.4 Future Development Opportunities</h3>
 
-          <!-- 8.1 Summary of Intended Deliverables -->
-          <div id="sub-section-8-header-1">
-            <h3>8.1 Summary of Intended Deliverables</h3>
-
-            <p>
-              In accordance with the objectives and scope outlined at the start of this project, we have generally
-              fulfilled the deliverables we set for the first half of this project, which were to conduct sufficient
-              research to understand a functioning self-balancing prototype. This knowledge (principles, practices,
-              components and techniques) would enable us to proceed with the second half of the project.
-            </p>
-          </div>
-
-          <br />
-
-          <!-- 8.2 Achieved Outcomes to Date -->
-          <div id="sub-section-8-header-2">
-            <h3>8.2 Achieved Outcomes to Date</h3>
-
-            <ol>
-              <li>Determined the optimal design parameters for constructing a self-balancing bike.</li>
-              <li>Procured, analysed, tested and evaluated a working self-balancing prototype.</li>
-              <li>Validated the functional application of self-balancing theories and developed understanding of how a
-                self-balancing bike works.</li>
-            </ol>
-          </div>
-
-          <br />
-
-          <!-- 8.3 Assessment of Progress -->
-          <div id="sub-section-8-header-3">
-            <h3>8.3 Assessment of Progress</h3>
-
-            <p>
-              Progress in achieving project deliverables has been consistent thus far. However, some further testing
-              will
-              be conducted before the second half of the project commences in Semester 2.
-            </p>
-          </div>
-
-          <br />
-
-          <!-- 8.4 Potential to Meet Final Deliverables -->
-          <div id="sub-section-8-header-4">
-            <h3>8.4 Potential to Meet Final Deliverables</h3>
-
-            <p>
-              Our final deliverable for this project will be a working prototype of a full-size, self-balancing bicycle.
-              We believe that we are on track to achieve this, however, the expected workload in Semester 2 is
-              substantial. The final deliverable may be refined or toned down in future under advisement from our
-              supervisor. More details are included in Section 10.
-            </p>
-          </div>
-
+        <!-- 9.4.1 Lateral Steering and Forward Propulsion -->
+        <div id="sub-section-9-4-1">
+          <h4>9.4.1 Lateral Steering and Forward Propulsion</h4>
+          <p>
+            The current prototype operates exclusively in the lateral balancing plane, with no mechanism for controlled forward motion or steering. A practical self-balancing bicycle needs to account for forward velocity and directional changes which introduces other variables such as yaw. Re-deriving the state-space model to include forward velocity as a state variable and extending the LQR to a full lateral-longitudinal control law would be the logical next step.
+          </p> 
         </div>
+        <br />
 
-        <div>
+        <!-- 9.4.2  Nonlinear and Adaptive Control -->
+        <div id="sub-section-9-4-2">
+          <h3>9.4.2 Nonlinear and Adaptive Control</h3>
+          <p>
+            The current LQR design is valid only in a small margin about the vertical equilibrium. For operation at larger lean angles, a nonlinear control strategy would provide more robust stability guarantees. Candidate approaches include linear parameter-varying (LPV) control, in which a family of LQR controllers is synthesised at different operating points and interpolated online, or model predictive control (MPC), which explicitly handles actuator constraints, including the reversal dead time and current limits, within the optimisation. An adaptive variant that updates model parameters in real time as system characteristics change with sustained load and battery state of charge would also further improve performance consistency.
+          </p>
+        </div>
+      </div>
 
-          <br />
-          <br />
-          <sl-divider></sl-divider>
+        
+      <br />
+      <br />
+      <sl-divider></sl-divider>
 
-          <!-- 9. Limitations, Shortcomings, and Improvements -->
-          <div id="section-header-9">
-            <h2>9. Limitations, Shortcomings, and Improvements</h2>
-          </div>
+        
+      <!-- 10. Impact and Visibility. -->
+      <div id="section-header-10">
+        <h2>10. Impact and Visibility.</h2>
+        <p>
+          This chapter concludes this report and gives a final review of the overall project. 
+        </p>
+      </div>
 
-          <!-- 9.1 Identified Shortcomings and Gaps -->
-          <div id="sub-section-9-header-1">
-            <h3>9.1 Identified Shortcomings and Gaps</h3>
+      <!-- 10.1 Potential Applications for Real-World Implementation -->
+      <div id="sub-section-10-header-1">
+        <h3>10.1 Potential Applications for Real-World Implementation</h3>
+        <p>
+          We believe that there are considerable takeaways from this project that hold promise for implementation in real-world applications. Self-balancing functionality sees great potential in fields like urban commuting, autonomous mobility solutions, assistive cycling and fall prevention, making this a field worthy of further study and development. 
+        </p>
+      </div>
+      <br />
 
-            <p>
-              In the first half of this project, we encountered certain limitations which we will address in the second
-              half.
-            </p>
+      <!-- 10.2 Contribution to Engineering Knowledge -->
+      <div id="sub-section-10-header-2">
+        <h3>10.2 Contribution to Engineering Knowledge</h3>
+        <p>
+          As the latest entry to the list of rare university engineering projects focusing on self-balancing bikes, our project has successfully showcased the viability of using control algorithms like PID and LQR for such engineering projects and systems that involve extremely precise control and handling. Our prototype also epitomises simplicity by utilising minimal components to achieve considerable performance, which may well serve as inspiration for future student-led research and design projects. 
+        </p>
+      </div>
+      <br />
 
-            <image-component tag="limitations" source="assets/limitations.png"
-              subtitle="Table 6: Limitations"></image-component>
+      <!-- 10.3 Opportunities for Further Research and Development -->
+      <div id="sub-section-10-header-3">
+        <h3>10.3 Opportunities for Further Research and Development</h3>
+        <p>
+          Looking ahead, there are significant areas for improvement to the existing prototype, including modifying the flywheel setup to further increase its mass and diameter, to improve the performance of the system to achieve reliable self-balancing functionality as per the initial objectives. 
+        </p>
+      </div>            
 
-            <br />
-
-            <!-- 9.2 Proposed Solutions and Workarounds -->
-            <div id="sub-section-9-header-2">
-              <h3>9.2 Proposed Solutions and Workarounds</h3>
-
-              <p>
-                Moving forward, a more coordinated approach will be adopted to maximise the use of available resources,
-                including guidance from professors, our supervisor, and the industry partner. Additional time will be
-                dedicated to hands-on design, programming, integration, and testing to ensure steady progress and early
-                resolution of potential technical issues.
-              </p>
-
-
-              <image-component tag="proposedsoln" source="assets/proposedsoln.png"
-                subtitle="Table 7: Proposed solutions"></image-component>
-
-
-              <p>
-                These steps collectively aim to support the effective implementation of the self-balancing mechanism on
-                a
-                full-scale bicycle. See Appendix F for test details.
-              </p>
-            </div>
-
-          </div>
-
-          <div>
-
-            <br />
-            <br />
-            <sl-divider></sl-divider>
-
-            <!-- 10. Project Plan -->
-            <div id="section-header-10">
-              <h2>10. Project Plan</h2>
-            </div>
-
-            <!-- 10.1 Remaining Tasks and Work Packages -->
-            <div id="sub-section-10-header-1">
-              <h3>10.1 Remaining Tasks and Work Packages</h3>
-
-              <p>
-                Looking ahead to the next phase of our project in AY25/26 Semester 2, our final goal is to deliver a
-                functioning, full-scale, self-balancing bicycle prototype. This will necessitate sourcing, procurement,
-                designing, fabrication, assembling, programming, integration and testing.
-              </p>
-
-              <p>
-                In the immediate term (during Winter Break), additional testing on the RC bike prototype will be
-                conducted
-                to ascertain the self-balancing mechanism’s performance when accounting for rider (dynamic) behaviour.
-                More details are included in Appendix E.
-              </p>
-            </div>
-
-            <br />
-
-            <!-- 10.2 Timeline and Milestones -->
-            <div id="sub-section-10-header-2">
-              <h3>10.2 Timeline and Milestones</h3>
-
-              <p>
-                Below is a preliminary timeline of how and when we plan to execute the aforementioned tasks in order to
-                achieve our final deliverable. Further refinement of this timeline (and final objective) will be done
-                under advisement from our supervisor and industry partner if necessary.
-              </p>
-
-
-              <image-component tag="image41" source="images/image41.png"
-                subtitle="Figure 35: Timeline for Semester 2"></image-component>
-
-            </div>
-
-          </div>
-
-          <br />
-          <br />
-          <sl-divider></sl-divider>
+        
+      <br />
+      <br />
+      <sl-divider></sl-divider>
 
           <div id="appendix-a">
             <h2>Appendix A: Problem, Value proposition and concept selection</h2>

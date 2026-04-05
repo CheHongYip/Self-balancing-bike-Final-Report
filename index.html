@@ -463,7 +463,6 @@
 
 
     <div>
-
       <div>
 
         <div id="acknowledgements">
@@ -620,15 +619,11 @@
             Target audience: OEMs and E2W riders
           </p>
 
-
           <image-component tag="image14" source="images/image14.png"
-            subtitle="Figure 4: Value Proposition Canvas"></image-component>
-
+            subtitle="Figure 3: Value Proposition Canvas"></image-component>
         </div>
 
         <br />
-
-
         <br />
         <br />
         <sl-divider></sl-divider>
@@ -650,7 +645,7 @@
         <image-component 
           tag="FinalFig3"
           source="images/FinalFig3.png"
-          subtitle=Figure 3: Stakeholder needs, requirements and metrics"
+          subtitle="Figure 4: Stakeholder needs, requirements and metrics"
         ></image-component>
       </div>
 
@@ -662,6 +657,7 @@
           For all models used, refer to appendix A.
         </p>
       </div>
+      <br/>
         
       <!-- 4.2.1 IWP Model -->
       <div id="sub-section-4-2-1">
@@ -673,13 +669,13 @@
         <image-component 
           tag="FinalFig4"
           source="images/FinalFig4.png"
-          subtitle=Figure 4: IWP Model [2]"
+          subtitle="Figure 4: IWP Model<sup>[2]</sup>"
         ></image-component>
 
         <image-component 
           tag="FinalTable1"
           source="images/FinalTable1.png"
-          subtitle="Table 1: IWP Parameters [2]"
+          subtitle="Table 1: IWP Parameters<sup>[2]</sup>"
         ></image-component>
 
         <image-component 
@@ -694,13 +690,13 @@
       <div id="sub-section-4-2-2">
         <h4>4.2.1 Linear Quadratic Regulator</h4>
         <p>
-          The Linear Quadratic Regulator (LQR) is an optimal state-feedback control strategy applicable to systems expressed in linear state-space form. Given a system of the form x'=Ax+Bu, LQR computes a feedback gain matrix KLQR​ such that the control law
+          The Linear Quadratic Regulator (LQR) is an optimal state-feedback control strategy applicable to systems expressed in linear state-space form. Given a system of the form x'=Ax+Bu, LQR computes a feedback gain matrix K<sub>LQR</sub> such that the control law
         </p>
 
         <image-component 
           tag="FinalEqn2"
           source="images/FinalEqn2.png"
-          subtitle="Equation 2: LQR control law [3]"
+          subtitle="Equation 2: LQR control law<sup>[3]</sup>"
         ></image-component>
 
         <p>
@@ -722,7 +718,7 @@
       <div id="sub-section-4-2-3">
         <h4>4.2.3 1st Prototype (RC-Bike)</h4>
         <p>
-          The aforementioned design concepts informed our decision to procure an RC-Bike prototype in the 1st-half of this project. This initial prototype was intended to serve as a POC (Proof-of-Concept) to evaluate the viability of said concepts in a physical application, and facilitate greater understanding of real-world implementation. [4]      
+          The aforementioned design concepts informed our decision to procure an RC-Bike prototype in the 1st-half of this project. This initial prototype was intended to serve as a POC (Proof-of-Concept) to evaluate the viability of said concepts in a physical application, and facilitate greater understanding of real-world implementation.<sup>[4]</sup> 
         </p>
 
         <image-component 
@@ -736,10 +732,14 @@
         </p>
       </div>
 
-         <br />
+        <br />
         <br />
         <sl-divider></sl-divider>
         
+
+      <!-------------------------------------------------------- SECTION 5 -------------------------------------------------------->  
+
+      <!-------------------------------------------------------- SECTION 5 -------------------------------------------------------->  
 
       <!-- === SECTION 5: CONCEPT SELECTION AND DESIGN SOLUTION === -->
       <div id="section-header-5">
@@ -748,14 +748,16 @@
           This chapter presents the design and development of the final prototype, describes its key subsystems and documents the prototyping workflow undertaken.
         </p>
       </div>
+        <br />
 
       <!-- 5.1 Concept Selection -->
       <div id="sub-section-5-header-1">
         <h3>5.1 Prototype Design Overview</h3>
         <p>
-          The final prototype scales the RC-bike’s flywheel-based self-balancing principles onto a full-sized bicycle system. Research revealed 1 previous student project to have successfully utilised this mechanism to achieve a similar objective, providing reassurance about system feasibility. [5] When the bicycle frame experiences lateral tilt forces, a reaction-wheel mechanism mounted perpendicular to the bike's length axis counters these forces by spinning rapidly in the opposing direction, generating a corrective torque moment that drives the frame back toward vertical equilibrium. Sustained operation of this mechanism constitutes the system's self-balancing functionality.
+          The final prototype scales the RC-bike’s flywheel-based self-balancing principles onto a full-sized bicycle system. Research revealed 1 previous student project to have successfully utilised this mechanism to achieve a similar objective, providing reassurance about system feasibility.<sup>[5]</sup> When the bicycle frame experiences lateral tilt forces, a reaction-wheel mechanism mounted perpendicular to the bike's length axis counters these forces by spinning rapidly in the opposing direction, generating a corrective torque moment that drives the frame back toward vertical equilibrium. Sustained operation of this mechanism constitutes the system's self-balancing functionality.
         </p>
       </div>
+      <br />
 
       <!-- 5.1.1 Selection Criteria -->
       <div id="sub-section-5-1-1">
@@ -764,7 +766,9 @@
           To function effectively within the operating range of ±1 to 20 degrees of lateral tilt, the flywheel must generate sufficient torque to overcome the frame's lateral tilt forces. Preliminary torque calculations (see Appendix A) established a gross motor torque requirement of 12.35 Nm, which informed all subsequent component selection decisions.
         </p>
       </div>
-
+      <br />
+        
+      <!-- 5.1.2 Bill-of-Materials -->
       <div id="sub-section-5-2-1">
         <h4>5.1.2 Bill-of-Materials (BOM)</h4>
         <p>
@@ -776,45 +780,40 @@
           source="images/FinalFig7.png"
           subtitle="Table 1: Bill-of-Materials"
         ></image-component>
-        
-
       </div>
-     
-      <!-- 5.2 Design Solution -->
+
+        
+      <!-- 5.2 Mechanical System -->
       <div id="sub-section-5-header-2">
         <h3>5.2 Mechanical System</h3>
         <p>
           The prototype’s mechanical subsystem comprises the bike frame and reaction wheel module.  
         </p>
       </div>
+      <br />        
 
-      <!-- 5.2.1 Inverted Pendulum Model -->
+        
+      <!-- 5.2.1 Frame and Structural Components -->
       <div id="sub-section-5-2-1">
         <h4>5.2.1 Frame and Structural Components</h4>
         <p>
           The prototype is built around a robust full-scale bicycle frame measuring 1.09 × 0.97 m (L × H), weighing 12 kg with a centre of gravity at 0.52 m. These specifications were used to derive the torque requirements detailed in Appendix A.
         </p>
 
-        
         <image-component 
           tag="FinalFig8"
           source="images/FinalFig8.png"
-          subtitle="Figure 7: Original Bike Frame [5]</sup>"
-         
+          subtitle="Figure 7: Original Bike Frame<sup>[5]</sup>"
         ></image-component>
-        
       </div>
-
-      <!-- 5.2.2 DC motor model -->
+      <br />        
+        
+      <!-- 5.2.2 Reaction Wheel Module (Assembly and Components) -->
       <div id="sub-section-5-2-2">
         <h4>5.2.2 Reaction Wheel Module (Assembly and Components)</h4>
-        <p><b>
-          Motor Type:
-          </b>
-        </p>
-        
+        <p><b>Motor Type:</b></p>
         <p>
-          Market research identified Hub motors as the optimal motor type for this project. [7] Their integrated rotor, stator, and built-in Hall sensors eliminate the need for external gearboxes or shaft alignment, reduce failure points, and offer a favourable torque-to-size and cost profile relative to alternative types.
+          Market research identified Hub motors as the optimal motor type for this project.<sup>[7]</sup> Their integrated rotor, stator, and built-in Hall sensors eliminate the need for external gearboxes or shaft alignment, reduce failure points, and offer a favourable torque-to-size and cost profile relative to alternative types.
         </p>
         
         <image-component 
@@ -822,46 +821,34 @@
           source="images/FinalTable2.png"
           subtitle="Table 2: Comparison of Motor Types<sup>[36]</sup>"
         ></image-component>
-        
-      <br />
+        <br />
 
-        <p><b>
-          Motor Model:
-        </b>
-        </p>
-        
+        <p><b>Motor Model:</b></p>
         <p>
-          The HL6SD hub motor was selected following substantial research, supervisor recommendation and immediate availability, with datasheet specifications confirming it met the initial torque requirements.  Component testing validated effective bidirectional programmability, adequate rated torque output, compact dimensions, and straightforward system integration, confirming the HL6SD for the final prototype.
+          The HL6SD hub motor was selected following substantial research, supervisor recommendation and immediate availability, with datasheet specifications confirming it met the initial torque requirements. Component testing validated effective bidirectional programmability, adequate rated torque output, compact dimensions, and straightforward system integration, confirming the HL6SD for the final prototype.
         </p>
         
         <image-component 
           tag="FinalFig9"
           source="images/FinalFig9.png"
-          subtitle="Figure 9: HL6SD Motor [9]"
+          subtitle="Figure 9: HL6SD Motor<sup>[9]</sup>"
         ></image-component>
-        
+        <br />
+      
         <image-component 
           tag="FinalTable3"
           source="images/FinalTable3.png"
-          subtitle="Comparison of Hub-Motor Options [10]"
+          subtitle="Comparison of Hub-Motor Options<sup>[10]</sup>"
         ></image-component>
-      </div>
+        <br />
 
-
-      <p><b>
-          Motor Mount:
-        </b>
-        </p>
-        
+        <p><b>Motor Mount:</b></p>
         <p>
           The motor mount was designed and 3D-printed (ABS) with supervisor assistance following frame procurement and centre-of-gravity analysis, then assembled and affixed to the frame.
         </p>
+        <br />
 
-      <p><b>
-          Reaction-Wheel Assembly:
-        </b>
-        </p>
-        
+        <p><b>Reaction-Wheel Assembly:</b></p>
         <p>
           Subsequent testing on the assembled prototype revealed that the unmodified HL6SD produced insufficient torque to overcome the bicycle frame's lateral tilt forces. Following discussion with the project supervisor, the most viable corrective path (given limited physical space on the frame) was to increase the flywheel's effective mass. 64 metal bolts (28.667 g each) were arranged uniformly along the motor's circumference and secured with tape and zip-ties, adding 1.83 kg to the flywheel assembly. This modification increases the flywheel's rotational inertia, thereby increasing the reaction torque available for a given angular acceleration.
         </p>
@@ -869,10 +856,10 @@
         <image-component 
           tag="FinalFig10"
           source="images/FinalFig10.png"
-          subtitle="Weighted Reaction-Wheel Assembly"
+          subtitle="Figure 10: Weighted Reaction-Wheel Assembly"
         ></image-component>
-      
-      <br />
+        <br />
+      </div> 
 
       <!-- 5.3 Electrical System Implementation -->
       <div id="sub-section-5-header-3">
@@ -892,7 +879,7 @@
         <image-component 
           tag="FinalFig11"
           source="images/FinalFig11.png"
-          subtitle="Figure 11: MX25-DC Motor Controller [11]"
+          subtitle="Figure 11: MX25-DC Motor Controller<sup>[11]</sup>"
         ></image-component>
         
         <p>
@@ -902,28 +889,25 @@
         <image-component 
           tag="FinalFig12"
           source="images/FinalFig12.png"
-          subtitle="Figure 12: AQMD6020BLS-E2F Motor Controller <sup>[36]</sup>"
+          subtitle="Figure 12: AQMD6020BLS-E2F Motor Controller <sup>[12]</sup>"
         ></image-component>
-
-        
+        <br />
         <image-component 
           tag="FinalTable4"
           source="images/FinalTable4.png"
           subtitle="Table 4: Comparison of Motor Controllers"
         ></image-component>
-        
-    
       </div>
-      
       <br />
       
       <!-- 5.3.2 Power System Design -->
       <div id="sub-section-5-3-2">
-        <h4>5.3.1 Power System Design</h4>
+        <h4>5.3.2 Power System Design</h4>
         <p>
           A variable 30V power supply was employed during initial prototyping and later replaced with a fixed 40V supply for the final prototype. 
         </p>
       </div>
+      <br />
 
       <!-- 5.4 Embedded System Development -->
       <div id="sub-section-5-header-4">
@@ -943,7 +927,7 @@
         <image-component 
           tag="FinalFig13"
           source="images/FinalFig13.png"
-          subtitle="Figure 13: Arduino Mega 2560 [13]"
+          subtitle="Figure 13: Arduino Mega 2560<sup>[13]</sup>"
         ></image-component>
 
         <p>
@@ -953,10 +937,9 @@
         <image-component 
           tag="FinalFig14"
           source="images/FinalFig14.png"
-          subtitle="Figure 14: STM32F407VGT6 [14]"
+          subtitle="Figure 14: STM32F407VGT6<sup>[14]</sup>"
         ></image-component>
         
-
         <p>
           The ESP32-S3 DevKitC-1 was selected as the final microcontroller. It offered substantially greater processing power than the Mega while remaining straightforwardly programmable in Arduino IDE, unlike the STM32, and provided sufficient multi-purpose GPIO pins for the AQMD controller, MPU6050, and Hall sensor inputs. This combination of performance, usability, and I/O availability made it the optimal choice for the final prototype.
         </p>
@@ -964,13 +947,13 @@
         <image-component 
           tag="FinalFig15"
           source="images/FinalFig15.png"
-          subtitle="Figure 15: ESP32-S3 DevKitC-1 [15]"
+          subtitle="Figure 15: ESP32-S3 DevKitC-1<sup>[15]</sup>"
         ></image-component>
 
         <image-component 
           tag="FinalTable5"
           source="images/FinalTable5.png"
-          subtitle="Table 5: Comparison of Microcontrollers"
+          subtitle="Table 5: Comparison of Microcontrollers (MCUs)"
         ></image-component>
       </div>
 
@@ -978,13 +961,13 @@
       <div id="sub-section-5-4-2">
         <h4>5.4.2 Sensor Integration</h4>
         <p>
-          The MPU6050 6-axis IMU was retained from the previous semester's RC-Bike prototype, where its performance had already been validated. [16] It provides the lean angle (θ, rad) and angular rate (θ’, rad/s) measurements that serve as primary state inputs to the LQR controller.       
+          The MPU6050 6-axis IMU was retained from the previous semester's RC-Bike prototype, where its performance had already been validated.<sup>[16]</sup> It provides the lean angle (θ, rad) and angular rate (θ’, rad/s) measurements that serve as primary state inputs to the LQR controller.       
         </p>
       
         <image-component 
           tag="FinalTable6"
           source="images/FinalTable6.png"
-          subtitle="Table 6: Comparison of IMU Sensors [17]"
+          subtitle="Table 6: Comparison of IMU Sensors<sup>[17]</sup>"
         ></image-component>
       </div>
       
@@ -995,7 +978,6 @@
           Firmware development followed an iterative progression aligned with hardware upgrades. Early iterations on the Arduino platforms established basic bidirectional motor control and identified operational constraints, including a minimum direction-change interval to prevent the AQMD from dropping commands. PID control was implemented and validated on the Mega before the codebase was migrated to the ESP32-S3, where the control algorithm was upgraded to LQR with complementary-filter-based IMU fusion. Subsequent iterations incorporated Hall-sensor speed feedback, torque-mode output mapping, I²C fault recovery, and empirical PWM and gain tuning to address motor-induced electrical interference.
         </p>
       </div>
-
       <br/>
       
       <!-- 5.5 Software and Code Architecture -->
@@ -1005,21 +987,19 @@
           The final prototype relies primarily on an LQR control algorithm to control the motor and output the desired motion necessary for achieving self-balancing functionality. Hence, its software architecture can be delineated into 2 sections focusing on the computation of the LQR parameter values utilised in the control code, and the actual code program for the overall system.
         </p>
       </div>
+      <br />
 
       <!-- 5.5.1 LQR Computation -->
       <div id="sub-section-5-5-1">
-        <h4>5.4.1 Microcontroller (MCU) Selection</h4>
+        <h4>5.5.1 LQR Computation</h4>
         <p>
           The LQR computation process is implemented through a Python script that generates the optimal feedback gain matrix for the controller. The script translates physical system parameters into a mathematical model, validates system properties, computes the optimal gains, and verifies stability.
         </p>
-        
-        <br/>
-        
         <p>
           For full explanation refer to Appendix B.
         </p>
       </div>
-
+      <br />
 
       <!-- 5.5.2 Code Architecture -->
       <div id="sub-section-5-5-2">
@@ -1054,6 +1034,7 @@
           source="images/FinalFig17.png"
           subtitle="Figure 17: Prototyping Stage 1"
         ></image-component>
+        <br/>
 
         <p><u>Stage 2:</u></p>
         <p>
@@ -1065,6 +1046,7 @@
           source="images/FinalFig18.png"
           subtitle="Figure 18: Prototyping Stage 2"
         ></image-component>
+        <br/>
 
         <p><u>Stage 3:</u></p>
         <p>
@@ -1076,6 +1058,7 @@
           source="images/FinalFig19.png"
           subtitle="Figure 19: Prototyping Stage 3"
         ></image-component>
+        <br/>
 
         <p><u>Stage 4:</u></p>
         <p>
@@ -1087,6 +1070,7 @@
           source="images/FinalFig20.png"
           subtitle="Figure 20: Prototyping Stage 4"
         ></image-component>
+        <br/>
 
         <p><u>Stage 5:</u></p>
         <p>
@@ -1098,6 +1082,7 @@
           source="images/FinalFig21.png"
           subtitle="Figure 21: Prototyping Stage 5"
         ></image-component>
+        <br/>
 
         <p><u>Stage 6:</u></p>
         <p>
@@ -1110,9 +1095,14 @@
           subtitle="Figure 22: Prototyping Stage 6"
         ></image-component>  
       </div>
+      <br/>
+
+      <!-------------------------------------------------------- SECTION 6 -------------------------------------------------------->  
+      
+      <!-------------------------------------------------------- SECTION 6 -------------------------------------------------------->  
 
       <!-- === SECTION 6: TESTING AND EXPERIMENTAL SETUP === -->
-      <div id="section-header-5">
+      <div id="section-header-6">
         <h2>6. Testing and Experimental Setup</h2>
         <p>
           This chapter presents the sequential testing procedures and experimental setup utilized for calibrating the final prototype as described in Section 5.
@@ -1124,9 +1114,7 @@
         <h3>6.1 Objectives and Scope of Testing</h3>
         <p>
           The testing process was structured to validate whether the system can achieve stable self-balancing on a stationary bicycle frame. The scope focuses on both control capability and electrical reliability, as both are necessary for successful operation.
-        </p>
-        <br/>
-        
+        </p>        
         <p>
           The following testing objectives were defined:
         </p>
@@ -1160,24 +1148,28 @@
           source="images/FinalFig23.png"
           subtitle="Figure 23: Experimental Setup"
         ></image-component>
+      <br/>
 
         <image-component 
           tag="FinalFig24"
           source="images/FinalFig24.png"
           subtitle="Figure 24: Experimental Setup (front)"
         ></image-component>
+      <br/>
 
         <image-component 
           tag="FinalFig25"
           source="images/FinalFig25.png"
           subtitle="Figure 25: Experimental Setup (rear)"
         ></image-component>
+      <br/>
 
         <image-component 
           tag="FinalFig26"
           source="images/FinalFig26.png"
           subtitle="Figure 26: Experimental Setup"
         ></image-component>
+      <br/>
 
       <!-- 6.2.1 Mechanical Configuration -->
       <div id="sub-section-6-2-1">
@@ -1187,9 +1179,9 @@
           tag="mech_config"
           source="images/mech_config.png"
           subtitle="Figure 26: Experimental Setup"
-        ></image-component>
-        
+        ></image-component>       
       </div>
+      <br/>
 
       <!-- 6.2.2 Electronics and Integration -->
       <div id="sub-section-6-2-2">
@@ -1199,9 +1191,9 @@
           tag="EandI"
           source="images/EandI.png"
           subtitle="Figure 26: Experimental Setup"
-        ></image-component>
-        
+        ></image-component>   
       </div>
+      <br/>
 
       <!-- 6.2.3 Stabilisation and Safety Measures -->
       <div id="sub-section-6-2-3">
@@ -1211,13 +1203,13 @@
           tag="FinalFig26"
           source="images/FinalFig26.png"
           subtitle="Figure 26: Experimental Setup"
-        ></image-component>
-        
+        ></image-component>      
       </div>
+      <br/>
 
       <!-- 6.2.4 Testing Environment -->
       <div id="sub-section-6-2-4">
-        <h4>6.2.4 Testing Environment/h4>
+        <h4>6.2.4 Testing Environment</h4>
         
         <image-component 
           tag="FinalFig26"
@@ -1229,14 +1221,16 @@
           This setup ensures that the system operates under realistic electrical and mechanical conditions, while maintaining sufficient control over external variables to enable repeatable and reliable testing.
         </p>     
       </div>
+      <br/>
 
+        
       <!-- 6.3 Testing Methodology -->
       <div id="sub-section-6-header-3">
         <h3>6.3 Testing Methodology</h3>
         <p>
           The testing methodology was designed to identify the maximum achievable control performance while ensuring electrical reliability of the prototype. A structured, single-variable approach was used. Only one parameter was adjusted at a time while others were held constant, allowing direct attribution of observed effects to that parameter.
         </p>
-
+        
         <p>
           Two evaluation criteria were defined:
         </p>
@@ -1249,6 +1243,7 @@
           Testing was performed by manually applying controlled tilt disturbances (5-10 degrees). Rapid alternating tilts were used to force direction reversals, as these produce the highest current transients and EMI. This approach ensured that the final parameters represent the highest performance achievable without violating electrical constraints, resulting in a controller that is both effective and robust in real-world operation.
         </p>
       </div>
+      <br/>
   
 
       <!-- 6.4 Prototype Testing Procedures -->
@@ -1260,7 +1255,6 @@
           <div id="sub-section-6-4-1">
             <h4>6.4.1 Phase 1: K-matrix Gains Test</h4>
           </div>
-
           <br />
 
         <!-- 6.4.2 Phase 1: K-matrix Gains Test -->
@@ -1288,6 +1282,10 @@
       <br />
       <sl-divider></sl-divider>
         
+        
+      <!-------------------------------------------------------- SECTION 7 -------------------------------------------------------->  
+
+      <!-------------------------------------------------------- SECTION 7 -------------------------------------------------------->  
 
       <!-- === SECTION 7: RESULTS AND ANALYSIS === -->
       <div id="section-header-7">
@@ -1311,7 +1309,6 @@
           This scoring methodology was selected because continuous sensor logging of torque, angular velocity, and bus timing was not available in the current hardware configuration. The qualitative scores therefore serve as the primary performance indicators. Binary outcomes, namely I2C bus crashes and overcurrent faults, were treated as hard failure conditions and used to define absolute operating boundaries rather than points on a continuous scale.
         </p>
       </div>
-
       <br/>
 
       <!-- 7.2 System Performance Analysis and Evaluation -->
@@ -1438,17 +1435,17 @@
       <div id="sub-section-7-3-1">
         <h4>7.3.1 Trend 1: Overcurrent during rapid reversals</h4>
         
-        <p><u>Stage 6:</u></p>
+        <p><u>Observation:</u></p>
         <p>
           Replaced STM32 with ESP32-S3. 
         </p>
         
-        <p><u>Stage 6:</u></p>
+        <p><u>Threshold:</u></p>
         <p>
           Replaced STM32 with ESP32-S3. 
         </p>
         
-        <p><u>Stage 6:</u></p>
+        <p><u>Implication:</u></p>
         <p>
           Replaced STM32 with ESP32-S3. 
         </p>
@@ -1459,17 +1456,17 @@
       <div id="sub-section-7-3-2">
         <h4>7.3.2 Trend 2: I2C bus crash due to EMI overload</h4>
         
-        <p><u>Stage 6:</u></p>
+        <p><u>Observation:</u></p>
         <p>
           Replaced STM32 with ESP32-S3. 
         </p>
         
-        <p><u>Stage 6:</u></p>
+        <p><u>Threshold:</u></p>
         <p>
           Replaced STM32 with ESP32-S3. 
         </p>
         
-        <p><u>Stage 6:</u></p>
+        <p><u>Implication:</u></p>
         <p>
           Replaced STM32 with ESP32-S3. 
         </p>
@@ -1477,20 +1474,20 @@
       <br />
 
       <!-- 7.3.3 Trend 3: IMU and I2C Bus Lag Under Motor Excitation -->
-      <div id="sub-section-7-3-2">
+      <div id="sub-section-7-3-3">
         <h4>7.3.3 Trend 3: IMU and I2C Bus Lag Under Motor Excitation</h4>
         
-        <p><u>Stage 6:</u></p>
+        <p><u>Observation:</u></p>
         <p>
           Replaced STM32 with ESP32-S3. 
         </p>
         
-        <p><u>Stage 6:</u></p>
+        <p><u>Threshold:</u></p>
         <p>
           Replaced STM32 with ESP32-S3. 
         </p>
         
-        <p><u>Stage 6:</u></p>
+        <p><u>Implication:</u></p>
         <p>
           Replaced STM32 with ESP32-S3. 
         </p>
@@ -1505,30 +1502,32 @@
         </p>
         
         <image-component 
-          tag="FinalFig29"
-          source="images/FinalFig29.png"
-          subtitle="Figure 29: REVERSE_BRAKE_HOLD_MS chart"
+          tag="7.4"
+          source="images/7.4.png"
+          subtitle="Table XX: Theory vs Practice"
         ></image-component>
       </div>
         
       <br />
       <br />
       <sl-divider></sl-divider>
-
         
+
+      <!-------------------------------------------------------- SECTION 8 -------------------------------------------------------->  
+
+      <!-------------------------------------------------------- SECTION 8 -------------------------------------------------------->    
+      
       <!-- SECTION 8. Fulfilment of Deliverables -->
       <div id="section-header-8">
         <h2>8. Fulfilment of Deliverables</h2>
         <p>
           This chapter identifies the key project deliverables to evaluate the overall success of the project. 
         </p>
-      </div>
-        
-      <br />
+      </div> 
 
       <!-- 8.1 Intended Project Deliverables -->
       <div id="sub-section-8-header-1">
-        <h3>8.1 Intended Project Deliverables/h3>
+        <h3>8.1 Intended Project Deliverables</h3>
         <p>
           The intended project deliverable was to develop a full-scale prototype by implementing a flywheel mechanism on a bicycle frame to achieve self-balancing functionality at stationary. This involved the following milestones: 
         </p>
@@ -1575,6 +1574,10 @@
       <sl-divider></sl-divider>
 
         
+      <!-------------------------------------------------------- SECTION 9 -------------------------------------------------------->  
+
+      <!-------------------------------------------------------- SECTION 9 -------------------------------------------------------->  
+
       <!-- 9. Limitations and Recommendations for Future Work -->
       <div id="section-header-9">
         <h2>9. Limitations and Recommendations for Future Work</h2>
@@ -1860,7 +1863,8 @@
       <br />
       <sl-divider></sl-divider>
 
-        
+      <!-------------------------------------------------------- SECTION 10 -------------------------------------------------------->
+      <!-------------------------------------------------------- SECTION 10 -------------------------------------------------------->  
       <!-- 10. Impact and Visibility. -->
       <div id="section-header-10">
         <h2>10. Impact and Visibility.</h2>
@@ -2484,15 +2488,15 @@
           <ol>
             <li>Simple movement commands on arduino to see what commands the controller responded to.</li>
             <li>Added more complex bidirectional commands to test motor and controller responsiveness and limits. Motor cut out when directional changes were too frequent (< 0.2s), prone to skipping the subsequent commands and restarting loops</li>
-            <li>a. Added in delays to try to fix the issue, limited effectiveness</li>
+            <li>Added in delays to try to fix the issue, limited effectiveness</li>
             <li>Upgraded controller, better responsiveness. Implemented simple PID on arduino mega</li>
             <li>Upgraded to stm32, implemented more complex pid</li>
             <li>stm32 ide was too complex to code on, changed to esp32 to not waste time on learning stm32</li>
             <li>Implemented LQR on esp32 with mahony and butterworth filter</li>
-            <li>a. Added hysteresis function to smoothen motor</li>
-            <li>b. Changed to current control instead of voltage control to access torque control</li>
+            <li>Added hysteresis function to smoothen motor</li>
+            <li>Changed to current control instead of voltage control to access torque control</li>
             <li>Calibrating LQR gains via python code</li>
-            <li>a. Calculated optimal K matrix gains by accounting for physical params and Q and R matricesr</li>
+            <li>Calculated optimal K matrix gains by accounting for physical params and Q and R matricesr</li>
           </ol>
         </div>
 
@@ -2524,11 +2528,6 @@
         <p><u>Section 5 & 6: Setup & Control Loop</u></p>
         <p>
           This section comprises system initialisation and the main control loop for the program. The control loop’s workflow is illustrated in Figure 16. 
-        </p>
-
-        <p><u>Section 1: System Configuration</u></p>
-        <p>
-          This stage configures the hardware connections, component parameters and system variables. These include the motor parameters and polarity (PWM, Brake, Reverse), PWM control, Brake control, control loop frequency, MPU6050 parameters, hall-sensor parameters, LQR gains, system thresholds and debugging variables. 
         </p>
 
         <p><u>Code Summary: </u></p>
@@ -2568,241 +2567,52 @@
             https://www.verifiedmarketresearch.com/product/asia-pacific-electric-two-wheeler-market/
           </li>
           <li>
-            [2] International Energy Agency. (2025). Trends in other light-duty electric vehicles. In Global EV
-            Outlook
-            2025. https://www.iea.org/reports/global-ev-outlook-2025/trends-in-other-light-duty-electric-vehicles
+            [2] Phan, The & Pham, Chau & Pham, Cong Bang. (2024). Study and Implementation of Self-Balancing Electric Motorcycle. https://www.researchgate.net/publication/387079285_Study_and_Implementation_of_Self-Balancing_Electric_Motorcycle
           </li>
           <li>
-            [3] Khanna, J., Heineke, K., & Gupta, N. (2024). A road map for revving up the Asian electric two-wheeler
-            market. McKinsey & Company.
-            https://www.mckinsey.com/industries/automotive-and-assembly/our-insights/a-road-map-for-revving-up-the-asian-electric-two-wheeler-market
+            [3] A. N. Hidayati and U. Wasiwitono, "Modeling and Control of Inertia Wheel Pendulum System with LQR and PID control," 2021 International Seminar on Intelligent Technology and Its Applications (ISITIA), Surabaya, Indonesia, 2021, pp. 135-140, doi: 10.1109/ISITIA52817.2021.9502267
           </li>
           <li>
-            [4] Red Dot Mobility. (n.d.). Red Dot Mobility. Retrieved November 8, 2025, from
-            https://reddotmobility.com/
+            [4] I. I. Siller-Alcalá, J. U. Liceaga-Castro, R. A. Alcántara-Ramírez, and S. Calzadilla-Ayala, “Using a Flywheel to Stabilize a Self-Balancing Bicycle,” WSEAS TRANSACTIONS ON SYSTEMS AND CONTROL, vol. 19, pp. 73–84, Apr. 2024, doi: https://doi.org/10.37394/23203.2024.19.8.
           </li>
           <li>
-            [5] Singhania, S., Kageyama, I., & Karanam, V. M. (2019). Study on low-speed stability of a motorcycle.
-            Applied Sciences, 9(11), 2278. https://doi.org/10.3390/app9112278
+             [5] Gunnar, “Inverted Pendulum + Reaction Wheel = Autonomous Stabilized Bicycle,” YouTube, Mar. 15, 2012. https://www.youtube.com/watch?v=EAhQyBLxgu4 (accessed Apr. 02, 2026).  
           </li>
           <li>
-            [6] TomTom. (2025). Traffic index ranking: TomTom traffic index.
-            https://www.tomtom.com/traffic-index/ranking/
+            [6] “Tonino Lamborghini 2724667071453 Folding Bicycle with 18-Speed Alloy V-Brake (20in): Buy Online at Best Price in Egypt - Souq is now Amazon.eg,” Amazon.eg, 2026. https://www.amazon.eg/-/en/Lamborghini-2724667071453-Folding-Bicycle-18-Speed/dp/B09BDNBSY6 (accessed Apr. 02, 2026).
           </li>
           <li>
-            [7] ACEM. (2009). In-depth investigation of motorcycle accidents. MAIDS. https://www.maids-study.eu/
+            [7] Engwe.com, 2026. https://engwe.com/blogs/news/comparison-of-e-bike-motors (accessed Apr. 02, 2026).
           </li>
           <li>
-            [8] Koylu, H., & Tural, E. (2021). Experimental study on braking and stability performance during low
-            speed
-            braking with ABS under critical road conditions. Engineering Science and Technology, an International
-            Journal, 24(5), 1224–1238. https://doi.org/10.1016/j.jestch.2021.02.001
+            [8] “Electric Bike Motors Explained: Types, Benefits & How to Choose the Right One,” Electronicsaviors, Oct. 23, 2025. https://electronicsaviors.com/electric-bike-motors/ (accessed Apr. 02, 2026).
           </li>
           <li>
-            [9] Driver Knowledge Tests. (n.d.). How does anti-lock braking (ABS) work? Retrieved November 8, 2025,
-            from
-            https://www.driverknowledgetests.com/resources/how-does-anti-lock-braking-abs-work/
+            [9] “6 inch hub motor disc brake geared slow speed,” uumotor, Oct. 25, 2019. https://www.uumotor.com/6-inch-hub-motor-disc-brake-geared-slow-speed.html (accessed Apr. 02, 2026).
           </li>
           <li>
-            [10] Sponziello, A., Frendo, F., & Guiggiani, M. (2008). Stability analysis of a three-wheeled motorcycle.
-            SAE International Journal of Engines, 1, 1396–1401. https://doi.org/10.4271/2008-32-0062
+            [10] “Mid-Drive vs. Hub: A Guide to Different E-Bike Motor Options,” Velotric, Jan. 25, 2023. https://www.velotricbike.com/blogs/story-landing/guide-to-e-bike-motors
           </li>
           <li>
-            [11] Yamaha Motor Co., Ltd. (2022, March 24). Yamaha Motor develops EPS steering support system for
-            motorcycles. https://global.yamaha-motor.com/news/2022/0324/corporate2.html
+            [11] “25A 24V-48V universal emb bldc motor controller,” uumotor, Nov. 18, 2018. https://www.uumotor.com/25a-24v-48v-universal-emb-bldc-motor-controller.html (accessed Apr. 02, 2026).
           </li>
           <li>
-            [12] Pedapati, P. R., & Chidambaram, R. K. (2025). A review on control momentum gyroscopic stabilization
-            for
-            intelligent balance assistance in electric two-wheeler. Results in Engineering, 26, 105069.
-            https://doi.org/10.1016/j.rineng.2025.105069
+            [12] “AQMD6020BLS-E2F直流无刷电机驱动器 - FOC系列 - 艾思控®成都爱控电子科技有限公司,” Akelc.com, 2021. http://www.akelc.com/Product/BLDC-Motor-Driver/FOC/a32.html (accessed Apr. 02, 2026).
           </li>
           <li>
-            [13] Lit Motors. (n.d.). Home. https://www.litmotors.com/
+            [13] “Arduino® MEGA 2560 Rev3.” Available: https://docs.arduino.cc/resources/datasheets/A000067-datasheet.pdf
           </li>
           <li>
-            [14] Sumioka, T., Akimoto, K., Tsujimura, T., Takayanagi, S., Fukushima, K., & Nose, T. (2024). Rider
-            cooperative control of rear-wheel-swing motorcycle based on divergent component of motion. IEEE Robotics
-            and
-            Automation Letters, 9(1), 223–230. https://doi.org/10.1109/LRA.2023.3331658
+            [14] “STM32F405xx STM32F407xx.” Available: https://www.st.com/resource/en/datasheet/dm00037051.pdf
           </li>
           <li>
-            [15] Coxworth, B. (2025, May 18). Lit Motors' self-balancing e-moto may enter production in four years.
-            New
-            Atlas. https://newatlas.com/motorcycles/lit-motors-c1-production-plan/
+            [15] “ESP32-S3-DevKitC-1 v1.1 - ESP32-S3 - — esp-dev-kits latest documentation,” Espressif.com, 2016. https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32s3/esp32-s3-devkitc-1/user_guide_v1.1.html
           </li>
           <li>
-            [16] Honda Motor Co., Ltd. (n.d.). Honda Riding Assist. Honda Global. Retrieved November 8, 2025, from
-            https://global.honda/en/tech/Honda_Riding_Assist/
+            [16] “MPU-6000 and MPU-6050 Register Map and Descriptions Revision 4.0 MPU-6000/MPU-6050 Register Map and Descriptions,” 2012. Available: https://cdn.sparkfun.com/datasheets/Sensors/Accelerometers/RM-MPU-6000A.pdf
           </li>
           <li>
-            [17] Piaggio & C. SpA. (n.d.). Piaggio MP3. Piaggio official website. Retrieved November 8, 2025, from
-            https://www.piaggio.com/en_EN/models/piaggio-mp3/
-          </li>
-          <li>
-            [18] Piaggio Group. (2022, June 9). The new Piaggio MP3 range. Piaggio Group press releases.
-            https://www.piaggiogroup.com/en/archive/press-releases/piaggio-mp3-range
-          </li>
-          <li>
-            [19] Vitali, A. (2021). Computing tilt measurement and tilt-compensated eCompass (Design Tip DT0058 Rev.
-            3).
-            STMicroelectronics.
-            https://www.st.com/resource/en/design_tip/dt0058-computing-tilt-measurement-and-tiltcompensated-ecompass-stmicroelectronics.pdf
-          </li>
-          <li>
-            [20] Renishaw plc. (2019, November 6). The accuracy of rotary encoders (White paper).
-            https://www.renishaw.com/en/white-paper-the-accuracy-of-rotary-encoders--45040
-          </li>
-          <li>
-            [21] Demir, D. (2024). Self-balancing bike with reaction wheel (Master’s thesis, KTH Royal Institute of
-            Technology). DiVA Portal. https://kth.diva-portal.org/smash/get/diva2:1906321/FULLTEXT01.pdf
-          </li>
-          <li>
-            [22] Advanced Motion Controls. (2025, May 30). What is servo bandwidth?
-            https://www.a-m-c.com/servo-bandwidth/
-          </li>
-          <li>
-            [23] Hofer, M., & Muehlebach, M. (2023). The One-Wheel Cubli: A 3D inverted pendulum that can balance with
-            a
-            single reaction wheel. Mechatronics, 91, 102965. https://doi.org/10.1016/j.mechatronics.2023.102965
-          </li>
-          <li>
-            [24] Fan, B., Li, Q., & Liu, T. (2018). How magnetic disturbance influences the attitude and heading in
-            magnetic and inertial sensor-based orientation estimation. Sensors, 18(1), 76.
-            https://doi.org/10.3390/s18010076
-          </li>
-          <li>
-            [25] Zaborniak, D., Patan, K., & Witczak, M. (2024). Design, Implementation, and Control of a Wheel-Based
-            Inverted Pendulum. Electronics, 13(3), 514. https://doi.org/10.3390/electronics13030514
-          </li>
-          <li>
-            [26] Murray, R. M. (2006). Linear quadratic regulator (LQR) notes. Caltech Control and Dynamical Systems.
-          </li>
-          <li>
-            [27] Prasad, L. B., Tyagi, B., Gupta, H. O., & Gupta, S. P. (2014). Optimal control of nonlinear inverted
-            pendulum system using PID and LQR: Performance analysis with/without disturbance. International Journal of
-            Automation and Computing, 11(6), 661–670. https://doi.org/10.1007/s11633-014-0818-1
-          </li>
-          <li>
-            [28] Schödel, S. (2024). Model predictive control on resource-constrained systems (Master’s thesis, CMU).
-            https://www.ri.cmu.edu/app/uploads/2024/08/Sam_Schoedel_MSR_Thesis.pdf
-          </li>
-          <li>
-            [29] Yedamale, P. (2003). Brushless DC (BLDC) motor fundamentals (AN885). Microchip Technology Inc.
-            https://ww1.microchip.com/downloads/en/appnotes/00885a.pdf
-          </li>
-          <li>
-            [30] Allied Motion. (2018). Choosing between brush and brushless DC motors (White paper).
-            https://www.alliedmotion.com/wp-content/uploads/whitepapers/Choosing-Between-Brush-Brushless-Motors-201801-2.pdf
-          </li>
-          <li>
-            [31] Flex Power Modules. (2021, November 8). Isolated vs non-isolated power converters—An overview.
-            https://flexpowermodules.com/isolated-vs-non-isolated-power-converters-an-overview
-          </li>
-          <li>
-            [32] Renesas. (2022). Achieve up to 99% efficiency in a robust battery backup system using a true
-            bidirectional buck-boost controller (White paper).
-            https://www.renesas.com/en/document/whp/achieve-99-efficiency-robust-battery-backup-system-using-true-bidirectional-buck-boost-controller
-          </li>
-          <li>
-            [33] Zhang, H., & Zhang, Y. (2023, November 1). Recent advances in DC-DC converters for electric vehicles.
-            MATEC Web of Conferences. https://doi.org/10.1051/matecconf/202338602008
-
-          </li>
-          <li>
-            [34] Zheng, X., Zhu, X., Chen, Z., Sun, Y., Liang, B., & Wang, T. (2022). Dynamic modeling of an unmanned
-            motorcycle and combined balance control with both steering and double CMGs. Mechanism and Machine Theory,
-            169, 104643. https://doi.org/10.1016/j.mechmachtheory.2021.104643
-          </li>
-          <li>
-            [35] Ho, Q. K., & Pham, C. B. (2018). Study on inertia wheel pendulum applied to self-balancing electric
-            motorcycle. In 2018 4th International Conference on Green Technology and Sustainable Development (GTSD)
-            (pp.
-            687–692). IEEE. https://doi.org/10.1109/GTSD.2018.8595698
-          </li>
-          <li>
-            [36] Phan, The & Pham, Chau & Pham, Cong Bang. (2024). Study and Implementation of Self-Balancing Electric
-            Motorcycle.
-            https://www.researchgate.net/publication/387079285_Study_and_Implementation_of_Self-Balancing_Electric_Motorcycle
-          </li>
-          <li>
-            [37] Five Flute. (2024). Understanding quadrature encoders: A comprehensive guide for mechanical
-            engineers.
-            Fiveflute.com.
-            https://www.fiveflute.com/guide/understanding-quadrature-encoders-a-comprehensive-guide-for-mechanical-engineers/
-          </li>
-          <li>
-            [38] Çoçoli, K., & Badia, L. (2023). A comparative analysis of sensor fusion algorithms for miniature IMU
-            measurements. In 2023 International Symposium on Instrumentation and Measurement, Sensor Network and
-            Automation (pp. 1–6). https://doi.org/10.1109/ISITIA59021.2023.10220994
-          </li>
-          <li>
-            [39] Rasteiro, M., Costelha, H., Barata, M., Assunção, P., & Bento, L. C. (2015). Low-complexity MARG
-            algorithms for increased accuracy in space pointing devices. IEEE 1st International Workshop on Consumer
-            Electronics—Novi Sad. https://doi.org/10.13140/RG.2.1.2913.4963
-          </li>
-          <li>
-            [40] Meirhaeghe, A., Boutellier, J., & Collin, J. (2019). The direction cosine matrix algorithm in
-            fixed-point: Implementation and analysis. In 2019 IEEE International Conference on Acoustics, Speech and
-            Signal Processing (ICASSP) (pp. 1542–1546). https://doi.org/10.1109/ICASSP.2019.8683644
-          </li>
-          <li>
-            [41] Dong, Y. (2013). MEMS inertial navigation systems for aircraft. In MEMS for Automotive and Aerospace
-            Applications (pp. 177–219). Elsevier. https://doi.org/10.1533/9780857096487.2.177
-          </li>
-          <li>
-            [42] Ali, Syed Hassan & Jamshiad, Ayesha & Muhammad, Danish. (2025). Design and Implementation of Digital
-            Butterworth IIR Filter Using Xilinx System Generator on FPGA.
-            https://www.researchgate.net/publication/394624847_Design_and_Implementation_of_Digital_Butterworth_IIR_Filter_Using_Xilinx_System_Generator_on_FPGA/references
-          </li>
-          <li>
-            [43] Electronics Tutorials. (2013, August 14). Butterworth filter design and low pass Butterworth filters.
-            https://www.electronics-tutorials.ws/filter/filter_8.html
-          </li>
-          <li>
-            [44] Tan, W., Liu, J., Chen, T., & Marquez, H. J. (2005). Robust analysis and PID tuning of cascade
-            control
-            systems. Chemical Engineering Communications, 192(9), 1204–1220. https://doi.org/10.1080/009864490515667
-          </li>
-          <li>
-            [45] Ufine Battery. (2025, October 26). What is a 3S LiPo battery? Best 3S battery guide 2025.
-            https://www.ufinebattery.com/blog/an-ultimate-guide-about-3s-lipo-batteries/
-          </li>
-          <li>
-            [46] MPS. (n.d.). MP1584 3A, 1.5MHz, 28V step-down converter (Rev. 1.0).
-            https://content.instructables.com/FT8/0X4N/J9SVVWSX/FT80X4NJ9SVVWSX.pdf
-          </li>
-          <li>
-            [47] Richtek. (2022). RT9193-18: 300mA low noise LDO regulator (DS9193-18).
-            https://www.richtek.com/assets/product_file/RT9193/DS9193-18.pdf
-          </li>
-          <li>
-            [48] STMicroelectronics. (n.d.). STM32F103x8 STM32F103xB datasheet: Medium-density performance line
-            Arm®-based 32-bit MCU with 64 or 128 KB Flash, USB, CAN, 7 timers, 2 ADCs, 9 com. interfaces.
-            https://www.st.com/resource/en/datasheet/stm32f103c8.pdf
-          </li>
-          <li>
-            [49] STMicroelectronics. (n.d.). UM1850: Description of STM32F1 HAL and low-layer drivers.
-            https://www.st.com/resource/en/user_manual/um1850-description-of-stm32f1-hal-and-lowlayer-drivers-stmicroelectronics.pdf
-          </li>
-          <li>
-            [50] TDK InvenSense. (2024, March 13). MPU-6050: 6-axis motion tracking device.
-            https://invensense.tdk.com/products/motion-tracking/6-axis/mpu-6050/
-          </li>
-          <li>
-            [51] Adafruit. (n.d.). Micro servo – TowerPro SG92R. https://www.adafruit.com/product/169
-          </li>
-          <li>
-            [52] SparkFun Electronics. (n.d.). N20 motor with encoder and cable (pair).
-            https://www.sparkfun.com/n20-motor-with-encoder-and-cable-pair.html
-          </li>
-          <li>
-            [53] NXP. (n.d.). BLDC motor with quadrature encoder and speed closed loop, driven by eTPU on MCF523x
-            (AN2957). https://www.nxp.com/docs/en/application-note/AN2957.pdf
-          </li>
-          <li>
-            [54] Mass, weight and center of gravity -. Data For Motorcycles. (2019, January 21).
-            https://www.datamc.org/data-acquisition/gps-data-analysis/mass-weight-and-center-of-gravity/
+            [17] “IMU Comparison - SlimeVR Docs,” Slimevr.dev, 2025. https://docs.slimevr.dev/diy/imu-comparison.html
           </li>
         </ul>
       </div>

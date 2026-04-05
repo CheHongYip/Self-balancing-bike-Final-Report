@@ -1176,9 +1176,8 @@
         <h4>6.2.1 Mechanical Configuration</h4>
         
         <image-component 
-          tag="mech_config"
-          source="images/mech_config.png"
-          subtitle="Figure 26: Experimental Setup"
+          tag="6.2.1"
+          source="images/6.2.1.png"
         ></image-component>       
       </div>
       <br/>
@@ -1188,9 +1187,8 @@
         <h4>6.2.2 Electronics and Integration</h4>
         
         <image-component 
-          tag="EandI"
-          source="images/EandI.png"
-          subtitle="Figure 26: Experimental Setup"
+          tag="6.2.2"
+          source="images/6.2.2.png"
         ></image-component>   
       </div>
       <br/>
@@ -1200,9 +1198,8 @@
         <h4>6.2.3 Stabilisation and Safety Measures</h4>
         
         <image-component 
-          tag="FinalFig26"
-          source="images/FinalFig26.png"
-          subtitle="Figure 26: Experimental Setup"
+          tag="6.2.3"
+          source="images/6.2.3.png"
         ></image-component>      
       </div>
       <br/>
@@ -1212,9 +1209,8 @@
         <h4>6.2.4 Testing Environment</h4>
         
         <image-component 
-          tag="FinalFig26"
-          source="images/FinalFig26.png"
-          subtitle="Figure 26: Experimental Setup"
+          tag="6.2.4"
+          source="images/6.2.4.png"
         ></image-component>
 
         <p>
@@ -2548,6 +2544,133 @@
       <!-- Appendix G: Project Timeline-->
       <div id="appendix-g">
         <h2>Appendix G: Project Timeline</h2>
+        <p><u>Prototyping Timeline: AY25/26 Semester 2 (12 Jan 26 - 17 Apr 26)</u></p>
+        
+        <p>
+          Week 1: Meeting with supervisor
+        </p>
+        <ol>
+          <li>Recap of Project details (objectives, evaluation of work done in sem 1)</li>
+          <li>Preliminary Ideation of Design Mechanism (Reaction-Wheel)</li>
+          <li>Preliminary Sourcing of Design Components</li>
+          <li>Aim to minimise costs by utilising materials immediately available to us (HL6SD Motor, MX25 Motor Controller, Arduino Uno/Mega)</li>
+          <li>Organised Research topics and chart project direction </li>
+        </ol>
+
+        <p>
+          Week 2: Familiarising ourselves with components 
+        </p>
+        <ol>
+          <li>Attempted to connect 1st motor setup (motor + controller + Uno + Power supply) to ascertain motor performance </li>
+          <li>Programmed/Reset MX25 Controller parameter values via MX25-DC configuration software.</li>
+          <li>Preliminary Observations: Motor was slow but managed to move</li>
+        </ol>
+
+        <p>
+          Week 3: Identifying aspects of setup to modify/replace to enhance self-balancing module performance
+        </p>
+        <ol>
+          <li>Secondary Sourcing of different motors + controllers </li>
+          <li>Motor: Sourced for alternative hub motors (motors with external drive shafts or gearboxes would be inadequate for the rate of directional-change we require for this balancing module)</li>
+          <li>Controller: Sourced for alternative torque-based motor controllers for higher performance</li>
+          <li>Code Development and Integration of IMU Sensor (MPU6050) into system </li>
+        </ol>
+
+        <p>
+          Week 4: 1st Proof-of-Concept (POC) of System Functionality 
+        </p>
+        <ol>
+          <li>Ascertained that motor was able to perform direction-change according to tilt angle measured by MPU6050.  </li>
+          <li>Established fundamental logic, control algorithm (PID) and skeleton structure of system code </li>
+          <li>Evaluated system performance and determined need for further sourcing for more capable component alternatives </li>
+        </ol>
+
+        <p>
+          Week 5: Improving System Performance
+        </p>
+        <ol>
+          <li>Substituted Arduino Uno with Mega 2560 (more GPIO pin connections available) </li>
+          <li>Added Mahony and Butterworth Filters to code (as used in our RC-bike prototype in Sem 1)  </li>
+          <li>Added Resistor Dividers for Hall Sensor Wires (Step-Down 5V to 3.3V) </li>
+          <li>Submitted claim for new motor controller (AQMD6020BLS) </li>
+          <li>Enhanced PID control algorithm (refined coefficient-values) </li>
+        </ol>
+
+        <p>
+          Week 6: Improving System Performance
+        </p>
+        <ol>
+          <li>Received AQMD Controller and conducted preliminary setup (parameter values) </li>
+          <li>Replaced MX25 with AQMD controller in setup </li>
+          <li>Procured STM32F407VGT6 MCU from IDP Workshop for enhanced processing power</li>
+          <li>Substituted LQR for PID in code program for greater reaction speed and more precise control </li>
+          <li>Procured full-size bicycle frame for final prototype </li>
+          <li>Tested AQMD Controller in Duty-Cycle mode (with Mega first, then STM32)  </li>
+        </ol>
+
+        <p>
+          Recess Week: Improving System Performance
+        </p>
+        <ol>
+          <li>Attempted to setup and integrate STM32 into existing setup </li>
+          <li>Due to time constraints amid difficulty of configuring and integrating STM32 into setup via STM32CubeIDE, which necessitated significant reformatting changes to the existing code structure, we decided to forego STM32 and select ESP32 as the optimal MCU (strike balance between processing power and ease of programming/use) </li>
+          <li>Designed and 3D-printed motor mount to bicycle (with help from Supervisor)</li>
+          <li>Tested AQMD Controller in Torque-mode with ESP32 </li>
+        </ol>
+
+        <p>
+          Week 7: Refining code 
+        </p>
+        <ol>
+          <li>Added torque/tilt hysteresis functionality to code to minimise jitters during testing </li>
+          <li>Confirmed 1st draft of final code program for system </li>
+        </ol>
+
+        <p>
+          Week 8: Troubleshooting and Reaction-wheel Assembly 
+        </p>
+        <ol>
+          <li>Attempted to tune parameter values to adjust the motor’s reaction speed (for directional-change), torque (i.e. acceleration; rate of PWM ramping) and jitters (via hysteresis) </li>
+          <li>However, during testing on Tuesday, the physical test setup (electronics section) was accidentally dropped from a height, causing some wiring to fall out of the controller and esp32 and causing the system to fail. After this incident, our test code no longer worked and the motor no longer functioned properly, leading us to perform urgent troubleshooting and relook the entire setup (choice of MCU; choice of AQMD operating mode; wiring and signal integrity, code logic; hardware vs software failure nodes) </li>
+          <li>On Friday, troubleshooting was still unsuccessful, so due to time constraints, we chose to modify the physical motor setup by affixing weights (bolts) to the motor to enhance torque.  </li>
+        </ol>
+
+        <p>
+          Week 9: Debugging and Troubleshooting 1
+        </p>
+        <ol>
+          <li>Mon: Stripped system down to bare basics to determine causes of failure with each component. Swapped out ESP32 with Arduino Mega and ran old code. System did not work; but identified that MPU6050 was operating erratically, so went to IDP Workshop to procure new MPU6050, breadboard and jumper cables.  </li>
+          <li>Wed: Continued troubleshooting diagnosis; Ran 6 different codes for different stages of the prototyping process. NOTE: Non-core features like filters and hysteresis were removed to facilitate error identification in firmware.  </li>
+          <li>Fri: Finalise Physical Prototype Setup (load everything onto bicycle); Attempted adding brake functions to code.  </li>
+          <li>Started writing draft for final report </li>
+        </ol>
+
+        <p>
+          Week 10: Debugging and Troubleshooting 2, Testing 1
+        </p>
+        <ol>
+          <li>Tues: Modified code to prevent corruption of IMU due to parameter values and system initialisation. Aim to test key parameter values (LQR_SCALE_FACTOR) and effect on system </li>
+          <li>Wed: Validated final code template. Tuned 3 main parameters to assess their effects on the system and identify optimal values for each.  </li>
+          <li>Fri: Completed refining and parameter-tuning process. Code finalised for existing iteration of physical setup.  </li>
+        </ol>
+
+        <p>
+          Week 11: Testing 2
+        </p>
+        <ol>
+          <li>Report writing </li>
+          <li>Wed: Validated final code template. Tuned 3 main parameters to assess their effects on the system and identify optimal values for each.  </li>
+          <li>Fri: Completed refining and parameter-tuning process. Code finalised for existing iteration of physical setup.  </li>
+        </ol>
+
+        <p>
+          Week 12: Report Submission
+        </p>
+    
+        <p>
+          Week 13: Presentation and Showcase
+        </p>
+        
       </div>
 
         

@@ -2650,7 +2650,250 @@ The experimentally determined LQR_SCALE_FACTOR = 1.0 indicates that full theoret
       <div id="appendix-f">
         <h2>Appendix F: Testing Data</h2>
         <p><u>Phase 1: K-matrix Gains test results</u></p>
+        <image-component 
+            tag="f1"
+            source="images/f1.png"
+            subtitle=""
+          ></image-component>
+        <image-component 
+            tag="ftest2"
+            source="images/ftest2.png"
+            subtitle="Figure 52: K-matrix gains test 1 (R = 1000)"
+          ></image-component>
+        <br/>
+        <image-component 
+            tag="ftest3"
+            source="images/ftest3.png"
+            subtitle=""
+          ></image-component>
+        <image-component 
+            tag="ftest4"
+            source="images/ftest4.png"
+            subtitle="Figure 52: K-matrix gains test 2 (R = 800)"
+          ></image-component>
+        <br/>
+        <image-component 
+            tag="ftest5"
+            source="images/ftest5.png"
+            subtitle=""
+          ></image-component>
+        <image-component 
+            tag="ftest6"
+            source="images/ftest6.png"
+            subtitle="Figure 53: K-matrix gains test 3 (R = 500)"
+          ></image-component>
+        <br/>
+        <image-component 
+            tag="ftest5"
+            source="images/ftest5.png"
+            subtitle=""
+          ></image-component>
+        <image-component 
+            tag="ftest6"
+            source="images/ftest6.png"
+            subtitle="Figure 53: K-matrix gains test 3 (R = 500)"
+          ></image-component>
+        <image-component 
+            tag="ftest7"
+            source="images/ftest7.png"
+            subtitle=""
+          ></image-component>
+        <image-component 
+            tag="ftest8"
+            source="images/ftest8.png"
+            subtitle="Figure 54: K-matrix gains test 4 (R = 100)"
+          ></image-component>
+        <br/>
+        <p><b>Phase 1: Additional K-matrix gains test (Vary Q[3,3])</b></p>
+        <p><u>Goal</u></p>
+        <p>Identify a set of LQR weighting matrices Q and R that yields K-matrix gains capable of stabilising the bicycle without saturating the motor driver or inducing I2C bus faults.</p>
+        <br/>
+        <p>Initial values:</p>
+        <ol>
+          <li>LQR_SCALE_FACTOR = 1.0</li>
+          <li>PWM_STEP = 2</li>
+          <li>PWM_MIN_RUN = 1</li>
+        </ol>
+        <br/>
+        <p>Steps:</p>
+        <ol>
+          <li>Set a conservative Q[3,3] value (100) and the chosen R matrix. Compute the K matrix offline in Python using the control library and flash the gains to firmware. </li>
+          <li>Hold the bicycle upright near equilibrium and release it.</li>
+          <li>If the system is stable: decrease Q[3,3] by one order of magnitude and repeat from Step 2.</li>
+          <li>If overcurrent warnings or I2C bus crashes occur: the gains are too aggressive for the current hardware limits. Revert to the previous Q[3,3] value and record it as the fault threshold.</li>
+          <li>Stop once the highest Q[3,3] that produces observable corrective action and the lowest Q[3,3] before faults occur have both been identified. Select the operating point with the best balance of responsiveness and stability as the candidate K matrix for Phase 2 onwards.</li>
+        </ol>
+        <br/>
+        
+        <image-component 
+            tag="FinalTable7"
+            source="images/FinalTable7.png"
+            subtitle="Table 16.5: K-matrix gains (Vary Q[3,3])"
+          ></image-component>
+        
+        <image-component 
+            tag="ftest9"
+            source="images/ftest9.png"
+            subtitle="Figure 55: K-matrix gains test 6 (Q[3,3] = 100)"
+          ></image-component>
+        <image-component 
+            tag="ftest10"
+            source="images/ftest10.png"
+            subtitle="Figure 56: K-matrix gains test 7 (Q[3,3] = 50)"
+          ></image-component>
+        <image-component 
+            tag="ftest11"
+            source="images/ftest11.png"
+            subtitle="Figure 57: K-matrix gains test 8 (Q[3,3] = 1)"
+          ></image-component>
+        
+        <image-component 
+            tag="FinalTable10"
+            source="images/FinalTable10.png"
+            subtitle="Table 17: Additional K-matrix test result"
+          ></image-component>
+        <br/>
+        <p><b>Phase 2: Tuning ‘PWM_MIN_RUN’</b></p>
+        <p><u>Goal</u></p>
+        <p>Determine the minimum PWM duty below which the motor stalls rather than rotates, and set PWM_MIN_RUN to eliminate this deadband.</p>
+        <br/>
+        <p>Initial values:</p>
+        <ol>
+          <li>LQR_SCALE_FACTOR = 0.1</li>
+          <li>PWM_STEP = 2</li>
+          <li>PWM_MIN_RUN = 10</li>
+        </ol>
+        <br/>
+        <p>Steps:</p>
+        <ol>
+          <li>Holding the bicycle upright, slowly lean it back and forth to trigger small LQR corrections. </li>
+          <li>Observe motor for Responsiveness during change in direction, Non-Jerkiness at equilibrium and  Strength.</li>
+          <li>Gradually increase PWM_MIN_RUN by 10.</li>
+          <li>Stop when the smallest tilt causes the motor to start rotating smoothly.</li>
+        </ol>
+        <br/>
+        <p><u>Goal</u></p>
+         <image-component 
+            tag="pwm_min_run"
+            source="images/pwm_min_run.png"
+            subtitle="Table 18: PWM_MIN_RUN test result"
+          ></image-component>
+        <br/>
+        <p><b>Phase 2: Tuning ‘PWM_MIN_RUN’</b></p>
+        <image-component 
+            tag="ftest12"
+            source="images/ftest12.png"
+            subtitle="Figure 58: PWM_STEP test 1 (PWM_STEP = 4)"
+          ></image-component>
+        <image-component 
+            tag="ftest13"
+            source="images/ftest13.png"
+            subtitle="Figure 59: PWM_STEP test 2 (PWM_STEP = 5)"
+          ></image-component>
+        <image-component 
+            tag="ftest14"
+            source="images/ftest14.png"
+            subtitle="Figure 60: PWM_STEP test 3 (PWM_STEP = 6)"
+          ></image-component>
+        <image-component 
+            tag="ftest15"
+            source="images/ftest15.png"
+            subtitle="Figure 61: PWM_STEP test 4 (PWM_STEP = 7)"
+          ></image-component>
+        <image-component 
+            tag="ftest16"
+            source="images/ftest16.png"
+            subtitle="Figure 62: PWM_STEP test 5 (PWM_STEP = 8)"
+          ></image-component>
+        <br/>
+        <p><b>Phase 4: Controller Authority (Tuning ‘LQR_SCALE_FACTOR’) results</b></p>
+        <image-component 
+            tag="ftest17"
+            source="images/ftest17.png"
+            subtitle=""
+          ></image-component>
+        <image-component 
+            tag="ftest18"
+            source="images/ftest18.png"
+            subtitle="Figure 63: LQR_SCALE_FACTOR test 1"
+          ></image-component>
+                <br/>
 
+        <image-component 
+            tag="ftest19"
+            source="images/ftest19.png"
+            subtitle=""
+          ></image-component>
+        <image-component 
+            tag="ftest20"
+            source="images/ftest20.png"
+            subtitle="Figure 64: LQR_SCALE_FACTOR test 2"
+          ></image-component>
+                <br/>
+
+        <image-component 
+            tag="ftest21"
+            source="images/ftest21.png"
+            subtitle=""
+          ></image-component>
+        <image-component 
+            tag="ftest22"
+            source="images/ftest22.png"
+            subtitle="Figure 65: LQR_SCALE_FACTOR test 3"
+          ></image-component>
+                <br/>
+
+        <image-component 
+            tag="ftest23"
+            source="images/ftest23.png"
+            subtitle=""
+          ></image-component>
+        <image-component 
+            tag="ftest24"
+            source="images/ftest24.png"
+            subtitle="Figure 66: LQR_SCALE_FACTOR test 4"
+          ></image-component>
+                <br/>
+
+        <image-component 
+            tag="ftest25"
+            source="images/ftest25.png"
+            subtitle=""
+          ></image-component>
+        <image-component 
+            tag="ftest26"
+            source="images/ftest26.png"
+            subtitle="Figure 67: LQR_SCALE_FACTOR test 5"
+          ></image-component>
+        <br/>
+        <image-component 
+            tag="ftest27"
+            source="images/ftest27.png"
+            subtitle=""
+          ></image-component>
+        <image-component 
+            tag="ftest28"
+            source="images/ftest28.png"
+            subtitle="Figure 68: LQR_SCALE_FACTOR test 6"
+          ></image-component>
+        <br/>     
+        <p><b>Phase 5: System Braking (Tuning ‘REVERSE_BRAKE_HOLD_MS’) results</b></p>
+        <image-component 
+            tag="100ms"
+            source="images/100ms.png"
+            subtitle="REVERSE_BRAKE_HOLD_MS = 100ms"
+          ></image-component>
+        <image-component 
+            tag="150ms"
+            source="images/150ms.png"
+            subtitle="REVERSE_BRAKE_HOLD_MS = 150ms"
+          ></image-component>
+        <br/>
+        <image-component 
+            tag="200ms"
+            source="images/200ms.png"
+            subtitle="REVERSE_BRAKE_HOLD_MS = 200ms"
+          ></image-component>
       </div>
       <br/>
 
@@ -2849,8 +3092,15 @@ The experimentally determined LQR_SCALE_FACTOR = 1.0 indicates that full theoret
             [16] “MPU-6000 and MPU-6050 Register Map and Descriptions Revision 4.0 MPU-6000/MPU-6050 Register Map and Descriptions,” 2012. Available: https://cdn.sparkfun.com/datasheets/Sensors/Accelerometers/RM-MPU-6000A.pdf
           </li>
           <li>
-            [17] “IMU Comparison - SlimeVR Docs,” Slimevr.dev, 2025. https://docs.slimevr.dev/diy/imu-comparison.html
+            [18] Jaka P. Sembiring, Ahmad Amirudin, Novia Utami Putri, Danur Wijayanto; Steering control of a self-balancing bicycle. AIP Conf. Proc. 9 April 2024; 3109 (1): 040001. https://doi.org/10.1063/5.0204905
           </li>
+          <li>
+            [19] Wang, Y., Bruzelius, F., Sjöberg, J. (2024). Gain-Scheduled Bicycle Balance Controller Based on System Identification. In: Mastinu, G., Braghin, F., Cheli, F., Corno, M., Savaresi, S.M. (eds) 16th International Symposium on Advanced Vehicle Control. AVEC 2024. Lecture Notes in Mechanical Engineering. Springer, Cham. https://doi.org/10.1007/978-3-031-70392-8_96
+          </li>
+          <li>
+            [20] N. C. Sanchez, L. A. Pastor and K. Larson, "Autonomous Bicycles: A New Approach To Bicycle-Sharing Systems," 2020 IEEE 23rd International Conference on Intelligent Transportation Systems (ITSC), Rhodes, Greece, 2020, pp. 1-6, doi: 10.1109/ITSC45102.2020.9294332.
+          </li>
+          
         </ul>
       </div>
 

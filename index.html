@@ -593,7 +593,8 @@
             For all models used, refer to appendix A.
           </p>
         </div>
-        <br />
+
+
 
         <!-- 4.2.1 IWP Model -->
         <div id="sub-section-4-2-1">
@@ -616,10 +617,11 @@
             subtitle="Equation 1: Mathematical model of system"></image-component>
 
         </div>
+        <br />
 
         <!-- 4.2.2 Linear Quadratic Regulator -->
         <div id="sub-section-4-2-2">
-          <h4>4.2.1 Linear Quadratic Regulator</h4>
+          <h4>4.2.2 Linear Quadratic Regulator</h4>
           <p>
             The Linear Quadratic Regulator (LQR) is an optimal state-feedback control strategy applicable to systems
             expressed in linear state-space form. Given a system of the form x'=Ax+Bu, LQR computes a feedback gain
@@ -642,6 +644,7 @@
             For full explanation refer to appendix A.
           </p>
         </div>
+        <br />
 
         <!-- 4.2.3 1st Prototype (RC-Bike) -->
         <div id="sub-section-4-2-3">
@@ -768,7 +771,8 @@
             The HL6SD hub motor was selected following substantial research, supervisor recommendation and immediate
             availability, with datasheet specifications confirming it met the initial torque requirements. Component
             testing validated effective bidirectional programmability, adequate rated torque output, compact dimensions,
-            and straightforward system integration, confirming the HL6SD for the final prototype.
+            and straightforward system integration, confirming the HL6SD for the final prototype.<br /><br />
+            For motor technical specifications, refer to Appendix D.
           </p>
 
           <image-component tag="FinalFig9" source="images/FinalFig9.png"
@@ -817,7 +821,8 @@
             The initial motor controller used was an MX25-DC, selected based on prior integration with the HL6SD by the
             project supervisor. While it interfaced adequately at low voltages, testing at higher voltages revealed
             erratic motor control: voltage spikes during direction changes produced jerky motion and insufficient
-            acceleration. The root cause was identified as its duty-cycle-based architecture that was using an open-loop
+            acceleration. <br /><br />
+            The root cause was identified as its duty-cycle-based architecture that was using an open-loop
             approach that maps PWM input directly to motor voltage and is inherently sensitive to supply voltage
             fluctuations.
           </p>
@@ -828,11 +833,13 @@
           <p>
             This prompted a switch to a torque-mode controller. Torque-mode controllers operate in a closed loop by
             mapping input commands to motor current, which is directly proportional to torque, and regulate current
-            internally to ensure stable output regardless of voltage variation. Sourcing research identified the
+            internally to ensure stable output regardless of voltage variation. <br /><br />Sourcing research identified
+            the
             AQMD6020BLS-E2F as a suitable option, and was thus procured and configured to replace the MX25-DC. Empirical
             testing confirmed improved motion precision: directional changes were sharper, PWM ramping was smoother, and
             the motor response was more consistent, even in open-loop duty-cycle mode. This validates the AQMD for the
-            final prototype and enables subsequent exploration of its torque-control mode.
+            final prototype and enables subsequent exploration of its torque-control mode. <br /><br />
+            For technical specifications of the motor controller, refer to Appendix D.
           </p>
 
           <image-component tag="FinalFig12" source="images/FinalFig12.png"
@@ -899,6 +906,7 @@
           <image-component tag="FinalTable5" source="images/FinalTable5.png"
             subtitle="Table 6: Comparison of Microcontrollers (MCUs)"></image-component>
         </div>
+        <br />
 
         <!-- 5.4.2 Sensor Integration -->
         <div id="sub-section-5-4-2">
@@ -912,6 +920,7 @@
           <image-component tag="FinalTable6" source="images/FinalTable6.png"
             subtitle="Table 7: Comparison of IMU Sensors<sup>[17]</sup>"></image-component>
         </div>
+        <br />
 
         <!-- 5.4.3 Firmware Development -->
         <div id="sub-section-5-4-3">
@@ -1053,6 +1062,7 @@
             final prototype as described in Section 5.
           </p>
         </div>
+        <br />
 
         <!-- 6.1 Objectives and Scope of Testing -->
         <div id="sub-section-6-header-1">
@@ -1087,6 +1097,7 @@
           </ol>
 
         </div>
+        <br />
 
         <!-- 6.2 Experimental Setup -->
         <div id="sub-section-6-header-2">
@@ -1170,7 +1181,8 @@
                 direction. Recorded as time lag between when u_cmd is first sent and omega reaches top speed in test
                 waveforms.</li>
               <li>Number of interruptions: the presence of warning messages that indicates faults (I2C warning, MPU6050
-                zero data warning) during the entire duration of testing.</li>
+                zero data warning) during the entire duration of testing. <br /><br />
+                NOTE: Interruptions are defined as both (I2C disruption + Reboot) and system crashes.</li>
               <li>Deceleration (rad s<sup>-2</sup>): the reduction in the bicycle’s angular velocity during tilt tests
                 can only be
                 due to counter-torque by the RW, hence a higher deceleration means stronger balancing effect.</li>
@@ -1179,6 +1191,8 @@
             <p>
               Binary outcomes, namely I2C bus crashes and overcurrent faults, were treated as hard failure conditions
               and used to define absolute operating boundaries rather than points on a continuous scale.
+              <br /><br />
+              For detailed test steps, refer to Appendix F.
             </p>
           </div>
           <br />
@@ -1196,32 +1210,17 @@
             <p>
               Identify a set of LQR weighting matrices Q and R that yields K-matrix gains capable of stabilising the
               bicycle without saturating the motor driver or inducing I2C bus faults.
-            </p>
-            <p><u>Initial values:</u></p>
-            <ol>
-              <li>LQR_SCALE_FACTOR = 1.0</li>
-              <li>PWM_STEP = 2</li>
-              <li>PWM_MIN_RUN = 1</li>
-            </ol>
 
-            <p><u>Steps:</u></p>
-            <ol>
-              <li>Set a conservative R value (1000) and the default Q matrix. Compute the K matrix offline in Python
-                using the control library and flash the gains to firmware. </li>
-              <li>Hold the bicycle upright near equilibrium and release it.</li>
-              <li>If the system is stable: decrease R by one order of magnitude and repeat from Step 2.</li>
-              <li>If overcurrent warnings or I2C bus crashes occur: the gains are too aggressive for the current
-                hardware limits. Revert to the previous R value and record it as the fault threshold.</li>
-              <li>Stop once the highest R (lowest gain) that produces observable corrective action and the lowest R
-                (highest gain) before faults occur have both been identified. Select the operating point with the best
-                balance of responsiveness and stability as the candidate K matrix for Phase 2 onwards.</li>
-            </ol>
+            </p>
+
+
+
             <br />
             <image-component tag="FinalTable7" source="images/FinalTable7.png"
               subtitle="Table 8: K-matrix gains (VaryR[0,0])"></image-component>
             <br />
 
-            <p><u>Steps:</u></p>
+            <p><u>Results:</u></p>
             <image-component tag="FinalTable8" source="images/FinalTable8.png"
               subtitle="Table 9: K-matrix test result"></image-component>
             <br />
@@ -1236,6 +1235,7 @@
             <p>
               Determine the minimum PWM duty below which the motor stalls rather than rotates, and set PWM_MIN_RUN to
               eliminate this deadband.
+
             </p>
             <p><u>Result</u></p>
             <p>PWM_MIN_RUN was determined to be unchanged below 1, steps and results can be found in Appendix F.</p>
@@ -1250,16 +1250,7 @@
               Find the maximum PWM slew rate the electrical system tolerates before inductive current transients during
               direction reversals crash the I2C bus.
             </p>
-            <p><u>Steps:</u></p>
-            <ol>
-              <li>Set LQR_SCALE_FACTOR to 1.0 so the controller demands aggressive movements. </li>
-              <li>Hold the bicycle and deliberately tilt it left and right quickly (5-10 degrees) to force the motor to
-                rapidly reverse direction. Do it for 5 consecutive reversals.</li>
-              <li>If the I2C bus crashes, decrease PWM_STEP by 1.</li>
-              <li>If the I2C stays stable: Increase PWM_STEP by 1 and repeat the shaking test.</li>
-              <li>Stop once the exact PWM_STEP that causes an I2C failure is found. Take the previous value for safety
-                margin.</li>
-            </ol>
+
 
             <p><u>Results</u></p>
             <image-component tag="FinalTable10" source="images/FinalTable10.png"
@@ -1276,16 +1267,7 @@
               Scale the LQR output voltage to provide sufficient corrective torque for active balancing, without
               exceeding the current limit or inducing high-frequency instability.
             </p>
-            <p><u>Steps:</u></p>
-            <ol>
-              <li>Keeping PWM_MIN_RUN and PWM_STEP at their new values, reset LQR_SCALE_FACTOR to 0.1. </li>
-              <li>Allow the bicycle to attempt to balance by momentarily letting go of it near equilibrium.</li>
-              <li>If the bicycle falls over: The controller is too weak. Increase by 0.1.</li>
-              <li>If the bicycle catches itself but falls: Increase slightly by 0.05.</li>
-              <li>If the controller detects overcurrent or I2C bus crash: Decrease by 0.05.</li>
-              <li>Validation: The optimal value is the highest possible number just before the bicycle starts vibrating
-                while standing still.</li>
-            </ol>
+
 
             <p><u>Results</u></p>
             <image-component tag="FinalTable11" source="images/FinalTable11.png"
@@ -1301,27 +1283,15 @@
               Find the minimum brake hold duration during motor direction reversals that still allows the motor to
               decelerate safely before receiving an opposing torque command. Too short a pulse risks overcurrent faults
               and I2C bus crashes when opposite drive is applied before the rotor has slowed; too long a pulse
-              introduces control lag that degrades balancing performance during rapid tilt corrections. Overcurrent was
-              identified as a greater threat due to it significantly increasing the likelihood of system failure, hence
-              this range of brake_hold duration values was selected to ascertain the optimal (simulated) brake
+              introduces control lag that degrades balancing performance during rapid tilt corrections. <br /><br />
+              Overcurrent was identified as a greater threat due to it significantly increasing the likelihood of system
+              failure, hence this range of brake_hold duration values was selected to ascertain the optimal (simulated)
+              brake
               performance while ensuring no overcurrent.
             </p>
-            <br />
-            <p><u>Steps:</u></p>
-            <ol>
-              <li>Set LQR_SCALE_FACTOR, PWM_MIN_RUN and PWM_STEP at their final values.</li>
-              <li>Start with REVERSE_BRAKE_HOLD_MS = 100. Hold the bicycle upright and deliberately apply 10 degree
-                tilts in quick alternation to force repeated direction reversals. Do it for 5 consecutive reversals.
-              </li>
-              <li>Watch the Serial monitor I2C warnings during the reversal window.</li>
-              <li>If no overcurrent and I2C warnings: decrease REVERSE_BRAKE_HOLD_MS by 50 ms and repeat.</li>
-              <li>If there is overcurrent warning or I2C bus crashes: Increase by 50 ms and accept the previous value.
-              </li>
-              <li>Stop condition: The final value is the lowest REVERSE_BRAKE_HOLD_MS where the motor consistently
-                brakes across 5 consecutive reversals without triggering overcurrent or crash I2C bus.</li>
-              <li>NOTE: Interruptions are defined as both (I2C disruption + Reboot) and system crashes.</li>
-            </ol>
-            <br />
+
+
+
             <p><u>Results</u></p>
             <image-component tag="FinalTable12" source="images/FinalTable12.png"
               subtitle="Table 12: REVERSE_BRAKE_HOLD_MS test results"></image-component>
@@ -2519,7 +2489,7 @@
                     <div id="appendix-b-state-space">
                       <h3>3. State Space of Dynamic System</h3>
                       <p>
-                        The state-space representation of the linear dynamics system can be written as</p><br />
+                        The state-space representation of the linear dynamics system can be written as</p>
                       <image-component tag="eqn4statespace" source="images/eqn4statespace.png"
                         subtitle="Equation 4: State-space representation [3]"></image-component>
 
@@ -2535,7 +2505,7 @@
                         velocity of pendulum (θ'), the angle of RW (ϕ), and the angular velocity of RW (ϕ'). The
                         state
                         vector of IWP system is written as</p>
-                      <br />
+
                       <image-component tag="eqn5IWP" source="images/eqn5IWP.png"
                         subtitle="Equation 5: IWP state vector [3]"></image-component>
 
@@ -3072,6 +3042,28 @@
                   <!-- Appendix F: Testing Data -->
                   <div id="appendix-f">
                     <h2>Appendix F: Testing Data</h2>
+                    <h3>Phase 1: K-matrix Gains test</h3>
+                    <p><u>Initial values:</u></p>
+                    <ol>
+                      <li>LQR_SCALE_FACTOR = 1.0</li>
+                      <li>PWM_STEP = 2</li>
+                      <li>PWM_MIN_RUN = 1</li>
+                    </ol>
+                    <p><u>Steps:</u></p>
+                    <ol>
+                      <li>Set a conservative R value (1000) and the default Q matrix. Compute the K matrix offline in
+                        Python
+                        using the control library and flash the gains to firmware. </li>
+                      <li>Hold the bicycle upright near equilibrium and release it.</li>
+                      <li>If the system is stable: decrease R by one order of magnitude and repeat from Step 2.</li>
+                      <li>If overcurrent warnings or I2C bus crashes occur: the gains are too aggressive for the current
+                        hardware limits. Revert to the previous R value and record it as the fault threshold.</li>
+                      <li>Stop once the highest R (lowest gain) that produces observable corrective action and the
+                        lowest R
+                        (highest gain) before faults occur have both been identified. Select the operating point with
+                        the best
+                        balance of responsiveness and stability as the candidate K matrix for Phase 2 onwards.</li>
+                    </ol>
                     <p><u>Phase 1: K-matrix Gains test results</u></p>
                     <image-component tag="f1" source="images/f1.png" subtitle=""></image-component>
                     <image-component tag="ftest2" source="images/ftest2.png"
@@ -3147,7 +3139,7 @@
                     <image-component tag="FinalTable10" source="images/FinalTable10.png"
                       subtitle="Table 19: Additional K-matrix test result"></image-component>
                     <br />
-                    <p><b>Phase 2: Tuning ‘PWM_MIN_RUN’</b></p>
+                    <h3>Phase 2: Tuning ‘PWM_MIN_RUN’</h3>
                     <p><u>Goal</u></p>
                     <p>Determine the minimum PWM duty below which the motor stalls rather than rotates, and set
                       PWM_MIN_RUN to eliminate this deadband.</p>
@@ -3173,7 +3165,22 @@
                     <image-component tag="pwm_min_run" source="images/pwm_min_run.png"
                       subtitle="Table 20: PWM_MIN_RUN test result"></image-component>
                     <br />
-                    <p><b>Phase 2: Tuning ‘PWM_MIN_RUN’</b></p>
+                    <h3>Phase 3: Finding the EMI Limit (Tuning ‘PWM_STEP’)</h3>
+
+                    <p><u>Steps:</u></p>
+                    <ol>
+                      <li>Set LQR_SCALE_FACTOR to 1.0 so the controller demands aggressive movements. </li>
+                      <li>Hold the bicycle and deliberately tilt it left and right quickly (5-10 degrees) to force the
+                        motor to
+                        rapidly reverse direction. Do it for 5 consecutive reversals.</li>
+                      <li>If the I2C bus crashes, decrease PWM_STEP by 1.</li>
+                      <li>If the I2C stays stable: Increase PWM_STEP by 1 and repeat the shaking test.</li>
+                      <li>Stop once the exact PWM_STEP that causes an I2C failure is found. Take the previous value
+                        for
+                        safety
+                        margin.</li>
+                    </ol>
+                    <p><u>Phase 3: PWM_STEP test results</u></p>
                     <image-component tag="ftest12" source="images/ftest12.png"
                       subtitle="Figure 67: PWM_STEP test 1 (PWM_STEP = 4)"></image-component>
                     <br />
@@ -3189,7 +3196,20 @@
                     <image-component tag="ftest16" source="images/ftest16.png"
                       subtitle="Figure 71: PWM_STEP test 5 (PWM_STEP = 8)"></image-component>
                     <br />
-                    <p><b>Phase 4: Controller Authority (Tuning ‘LQR_SCALE_FACTOR’) results</b></p>
+                    <h3>Phase 4: Controller Authority (Tuning ‘LQR_SCALE_FACTOR’)</h3>
+
+                    <p><u>Steps:</u></p>
+                    <ol>
+                      <li>Keeping PWM_MIN_RUN and PWM_STEP at their new values, reset LQR_SCALE_FACTOR to 0.1. </li>
+                      <li>Allow the bicycle to attempt to balance by momentarily letting go of it near equilibrium.</li>
+                      <li>If the bicycle falls over: The controller is too weak. Increase by 0.1.</li>
+                      <li>If the bicycle catches itself but falls: Increase slightly by 0.05.</li>
+                      <li>If the controller detects overcurrent or I2C bus crash: Decrease by 0.05.</li>
+                      <li>Validation: The optimal value is the highest possible number just before the bicycle starts
+                        vibrating
+                        while standing still.</li>
+                    </ol>
+                    <p><u>Phase 4: LQR_SCALE_FACTOR test results</u></p>
                     <image-component tag="ftest17" source="images/ftest17.png" subtitle=""></image-component>
                     <image-component tag="ftest18" source="images/ftest18.png"
                       subtitle="Figure 72: LQR_SCALE_FACTOR test 1"></image-component>
@@ -3223,7 +3243,27 @@
                     <image-component tag="ftest28" source="images/ftest28.png"
                       subtitle="Figure 77: LQR_SCALE_FACTOR test 6"></image-component>
                     <br />
-                    <p><b>Phase 5: System Braking (Tuning ‘REVERSE_BRAKE_HOLD_MS’) results</b></p>
+                    <h3>Phase 5: System Braking (Tuning ‘REVERSE_BRAKE_HOLD_MS’)</h3>
+
+                    <p><u>Steps:</u></p>
+                    <ol>
+                      <li>Set LQR_SCALE_FACTOR, PWM_MIN_RUN and PWM_STEP at their final values.</li>
+                      <li>Start with REVERSE_BRAKE_HOLD_MS = 100. Hold the bicycle upright and deliberately apply 10
+                        degree
+                        tilts in quick alternation to force repeated direction reversals. Do it for 5 consecutive
+                        reversals.
+                      </li>
+                      <li>Watch the Serial monitor I2C warnings during the reversal window.</li>
+                      <li>If no overcurrent and I2C warnings: decrease REVERSE_BRAKE_HOLD_MS by 50 ms and repeat.</li>
+                      <li>If there is overcurrent warning or I2C bus crashes: Increase by 50 ms and accept the previous
+                        value.
+                      </li>
+                      <li>Stop condition: The final value is the lowest REVERSE_BRAKE_HOLD_MS where the motor
+                        consistently
+                        brakes across 5 consecutive reversals without triggering overcurrent or crash I2C bus.</li>
+
+                    </ol>
+                    <p><u>Phase 5: REVERSE_BRAKE_HOLD_MS test results</u></p>
                     <image-component tag="100ms" source="images/100ms.png"
                       subtitle="Figure 78: REVERSE_BRAKE_HOLD_MS = 100ms"></image-component>
                     <br />

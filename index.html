@@ -842,6 +842,72 @@
           <image-component tag="FinalFig9" source="images/FinalFig9.png"
             subtitle="Figure 9: HL6SD Motor<sup>[9]</sup>"></image-component>
           <br />
+      <!-- 7.3.3 Trend 3: IMU and I2C Bus Lag Under Motor Excitation -->
+      <div id="sub-section-7-3-3">
+        <h4>7.3.3 Trend 3: IMU and I2C Bus Lag Under Motor Excitation</h4>
+        
+        <p><u>Observation:</u></p>
+        <p>
+          Increasing LQR_SCALE_FACTOR improved responsiveness and disturbance rejection monotonically across all tested values. However, at scale factors of 0.2, 0.8, and 1.0, reboot events were observed, reflecting the higher sustained currents and switching activity at elevated authority. No I2C bus crash occurred at any scale factor, making all reboot events recoverable.
+        </p>
+        
+        <p><u>Threshold:</u></p>
+        <p>
+          Fault-free operation was achieved at LQR_SCALE_FACTOR = 0.1, 0.4, and 0.6. The final operating point of 1.0 was selected for maximum control authority, accepting occasional reboots as tolerable. A scale factor of 0.6 remains a fault-free fallback at 65.5 rad s⁻² deceleration.
+        </p>
+        
+        <p><u>Implication:</u></p>
+        <p>
+          This demonstrates that control performance is not limited by the LQR design itself, but by the electrical constraints of the system. Higher control authority increases current demand and switching activity, which in turn amplifies EMI and transient effects. The selected parameters therefore represent the maximum achievable performance within the hardware limits (see Section 9.1.2 and Section 9.2).
+        </p>
+      </div>    
+      <br />
+          
+      <!-- 7.4 Comparison with Theoretical Predictions  -->
+      <div id="sub-section-7-header-4">
+        <h3>7.4 Comparison with Theoretical Predictions</h3>
+        <p>
+          The LQR design was derived from a linearised state-space model of the bicycle reaction wheel system under the assumptions of small-angle operation, a rigid frame, and unconstrained actuator authority. The following deviations from theoretical predictions were observed in practice.
+        </p>
+        
+        <image-component 
+          tag="theoryvspractice"
+          source="images/theoryvspractice.png"
+          subtitle="Table 13: Theory vs Practice"
+        ></image-component>
+      </div>
+        
+      <br />
+      <br />
+      <sl-divider></sl-divider>
+        
+
+      <!-------------------------------------------------------- SECTION 8 -------------------------------------------------------->  
+
+      <!-------------------------------------------------------- SECTION 8 -------------------------------------------------------->    
+      
+      <!-- SECTION 8. Fulfilment of Deliverables -->
+      <div id="section-header-8">
+        <h2>8. Fulfilment of Deliverables</h2>
+        <p>
+          This chapter identifies the key project deliverables to evaluate the overall success of the project. 
+        </p>
+      </div> 
+
+      <!-- 8.1 Intended Project Deliverables -->
+      <div id="sub-section-8-header-1">
+        <h3>8.1 Intended Project Deliverables</h3>
+        <p>
+          The intended project deliverable was to develop a full-scale prototype by implementing a flywheel mechanism on a bicycle frame to achieve self-balancing functionality at stationary. This involved the following milestones: 
+        </p>
+          
+        <ol>
+          <li>Design a working physical prototype for effectual testing of balancing flywheel mechanism.</li>
+          <li>Programming a HL6SD motor to achieve motion control necessary for self-balancing.</li>
+          <li>Determine the viability of a LQR control algorithm for implementing self-balancing firmware.</li>
+        </ol>
+      </div>
+      <br />
 
           <image-component tag="FinalTable3" source="images/FinalTable3.png"
             subtitle="Comparison of Hub-Motor Options<sup>[10]</sup>"></image-component>
@@ -1738,7 +1804,31 @@
 
             <!-------------------------------------------------------- SECTION 8 -------------------------------------------------------->
 
-            <!-------------------------------------------------------- SECTION 8 -------------------------------------------------------->
+        <!-- 1. LQR Computation -->
+        <div id="appendix-c-lqr-computation">
+          <h3>1. LQR Computation</h3>
+          <p>
+            The computation follows a structured sequence:
+          </p>
+          <ol>
+            <li>Definition of physical parameters</li>
+            <li>Construction of the state-space model</li>
+            <li>Controllability and Observability</li>
+            <li>Weight Selection and Gain Computation</li>
+            <li>Stability Verification and Control Authority</li>
+            <li>Deployment to ESP32</li>
+          </ol>
+          <br />
+          
+          <p><u>Definition of physical parameters</u></p>
+          <p>
+            The computation begins with the definition of all relevant physical parameters describing the system, forming the basis for deriving the system dynamics and directly influencing the resulting control gains.
+          </p>
+          <image-component 
+            tag="figure32"
+            source="images/figure32.png"
+            subtitle="Figure 32: Physical parameter definition"
+          ></image-component>
 
             <!-- SECTION 8. Fulfilment of Deliverables -->
             <div id="section-header-8">

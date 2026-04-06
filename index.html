@@ -1736,34 +1736,6 @@
             <sl-divider></sl-divider>
 
 
-            <!-------------------------------------------------------- SECTION 8 -------------------------------------------------------->
-
-        <!-- 1. LQR Computation -->
-        <div id="appendix-c-lqr-computation">
-          <h3>1. LQR Computation</h3>
-          <p>
-            The computation follows a structured sequence:
-          </p>
-          <ol>
-            <li>Definition of physical parameters</li>
-            <li>Construction of the state-space model</li>
-            <li>Controllability and Observability</li>
-            <li>Weight Selection and Gain Computation</li>
-            <li>Stability Verification and Control Authority</li>
-            <li>Deployment to ESP32</li>
-          </ol>
-          <br />
-          
-          <p><u>Definition of physical parameters</u></p>
-          <p>
-            The computation begins with the definition of all relevant physical parameters describing the system, forming the basis for deriving the system dynamics and directly influencing the resulting control gains.
-          </p>
-          <image-component 
-            tag="figure32"
-            source="images/figure32.png"
-            subtitle="Figure 32: Physical parameter definition"
-          ></image-component>
-
             <!-- SECTION 8. Fulfilment of Deliverables -->
             <div id="section-header-8">
               <h2>8. Fulfilment of Deliverables</h2>
@@ -2781,8 +2753,13 @@
                         control
                         gains.
                       </p>
-                      <image-component tag="FinalFig32" source="images/FinalFig32.png"
-                        subtitle="Figure 32: Physical parameter definition"></image-component>
+                      <br/>
+                      <image-component 
+                        tag="figure32"
+                        source="images/figure32.png"
+                        subtitle="Figure 32: Physical parameter definition"
+                      ></image-component>
+                     <br/>
 
                       <p><u>Construction of the state-space model</u></p>
                       <p>

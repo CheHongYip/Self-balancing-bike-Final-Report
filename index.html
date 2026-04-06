@@ -1178,6 +1178,7 @@
         <image-component 
           tag="6.2.1"
           source="images/6.2.1.png"
+          subtitle=""
         ></image-component>       
       </div>
       <br/>
@@ -1189,6 +1190,7 @@
         <image-component 
           tag="6.2.2"
           source="images/6.2.2.png"
+          subtitle=""
         ></image-component>   
       </div>
       <br/>
@@ -1200,6 +1202,7 @@
         <image-component 
           tag="6.2.3"
           source="images/6.2.3.png"
+          subtitle=""
         ></image-component>      
       </div>
       <br/>
@@ -1211,6 +1214,7 @@
         <image-component 
           tag="6.2.4"
           source="images/6.2.4.png"
+          subtitle=""
         ></image-component>
 
         <p>
@@ -1228,15 +1232,16 @@
         </p>
         
         <p>
-          Two evaluation criteria were defined:
+          Data were collected through direct physical observation and quantitative analysis by the monitoring of embedded system diagnostics during each tuning phase. Performance metrics were assessed across three dimensions:
         </p>
         <ol>
-          <li>Electrical safety (primary constraint): No overcurrent warnings, no I2C bus crashes, and operation within driver limits.</li>
-          <li>Control performance (secondary): Responsiveness to tilt, whether interruptions were present (I2C crash and overcurrent), and sufficient reaction wheel torque.</li>
+          <li>Responsiveness (s): the speed with which the reaction wheel reverses to counteract a change in lean direction. Recorded as time lag between when u_cmd is first sent and omega reaches top speed in test waveforms.</li>
+          <li>Number of interruptions: the presence of warning messages that indicates faults (I2C warning, MPU6050 zero data warning) during the entire duration of testing.</li>
+          <li>Deceleration (rad/s2): the reduction in the bicycle’s angular velocity during tilt tests can only be due to counter-torque by the reaction wheel, hence a higher deceleration means stronger balancing effect.</li>
         </ol>
         
         <p>
-          Testing was performed by manually applying controlled tilt disturbances (5-10 degrees). Rapid alternating tilts were used to force direction reversals, as these produce the highest current transients and EMI. This approach ensured that the final parameters represent the highest performance achievable without violating electrical constraints, resulting in a controller that is both effective and robust in real-world operation.
+          Binary outcomes, namely I2C bus crashes and overcurrent faults, were treated as hard failure conditions and used to define absolute operating boundaries rather than points on a continuous scale.
         </p>
       </div>
       <br/>
@@ -1250,6 +1255,26 @@
           <!-- 6.4.1 Phase 1: K-matrix Gains Test -->
           <div id="sub-section-6-4-1">
             <h4>6.4.1 Phase 1: K-matrix Gains Test</h4>
+            <p><u>Goal</u></p>
+            <p>
+              Identify a set of LQR weighting matrices Q and R that yields K-matrix gains capable of stabilising the bicycle without saturating the motor driver or inducing I2C bus faults.
+            </p>
+            <p><u>Initial values:</u></p>
+            <ol>
+              <li>LQR_SCALE_FACTOR = 1.0</li>
+              <li>PWM_STEP = 2</li>
+              <li>PWM_MIN_RUN = 1</li>
+            </ol>
+
+            <p><u>Steps:</u></p>
+            <ol>
+              <li>Set a conservative R value (1000) and the default Q matrix. Compute the K matrix offline in Python using the control library and flash the gains to firmware. </li>
+              <li>Hold the bicycle upright near equilibrium and release it.</li>
+              <li>If the system is stable: decrease R by one order of magnitude and repeat from Step 2.</li>
+              <li>If overcurrent warnings or I2C bus crashes occur: the gains are too aggressive for the current hardware limits. Revert to the previous R value and record it as the fault threshold.</li>
+              <li>Stop once the highest R (lowest gain) that produces observable corrective action and the lowest R (highest gain) before faults occur have both been identified. Select the operating point with the best balance of responsiveness and stability as the candidate K matrix for Phase 2 onwards.</li>
+            </ol>
+          
           </div>
           <br />
 

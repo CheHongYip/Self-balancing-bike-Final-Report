@@ -1473,15 +1473,15 @@
                 suggesting that current transients at low authority can still cause isolated faults. Reboots reappear at
                 0.8 and 1.0, reflecting the higher sustained currents at full authority.</p>
               <br />
-              <image-component tag="LQR_responsiveness" source="images/LQR_responsiveness.png"
+              <image-component tag="lqr_responsiveness" source="images/lqr_responsiveness.png"
                 subtitle="Figure 32: LQR_SCALE_FACTOR responsiveness chart"></image-component>
               <br />
 
-              <image-component tag="LQR_interruptions" source="images/LQR_interruptions.png"
+              <image-component tag="lqr_interruptions" source="images/lqr_interruptions.png"
                 subtitle="Figure 33: LQR_SCALE_FACTOR interruptions chart"></image-component>
               <br />
 
-              <image-component tag="LQR_deceleration" source="images/LQR_deceleration.png"
+              <image-component tag="lqr_deceleration" source="images/lqr_deceleration.png"
                 subtitle="Figure 34: LQR_SCALE_FACTOR deceleration chart"></image-component>
               <br />
 
@@ -1668,11 +1668,46 @@
             <sl-divider></sl-divider>
 
 
-            <!-------------------------------------------------------- SECTION 8 -------------------------------------------------------->
+            <!-- SECTION 8. Fulfilment of Deliverables -->
+            <div id="section-header-8">
+              <h2>8. Fulfilment of Deliverables</h2>
+              <p>
+                This chapter identifies the key project deliverables to evaluate the overall success of the project.
+              </p>
+            </div>
 
-            <!-- 1. LQR Computation -->
-            <div id="appendix-c-lqr-computation">
-              <h3>1. LQR Computation</h3>
+            <!-- 8.1 Intended Project Deliverables -->
+            <div id="sub-section-8-header-1">
+              <h3>8.1 Intended Project Deliverables</h3>
+              <p>
+                The intended project deliverable was to develop a full-scale prototype by implementing a RW
+                mechanism on a bicycle frame to achieve self-balancing functionality at stationary. This involved the
+                following milestones:
+              </p>
+
+              <ol>
+                <li>Design a working physical prototype for effectual testing of balancing RW mechanism.</li>
+                <li>Programming a HL6SD motor to achieve motion control necessary for self-balancing.</li>
+                <li>Determine the viability of a LQR control algorithm for implementing self-balancing firmware.</li>
+              </ol>
+            </div>
+            <br />
+
+            <!-- 8.2 Achieved Outcomes -->
+            <div id="sub-section-8-header-2">
+              <h3>8.2 Achieved Outcomes</h3>
+
+              <p>
+                As of the time of writing this report, the following project milestones have been achieved:
+              </p>
+              <ol>
+                <li>Successful design and implementation of a physical self-balancing prototype</li>
+                <li>Successful validation of LQR control algorithm suitability, including offline gain computation,
+                  firmware integration, and structured tuning phases</li>
+                <li>Confirmation that the RW generates meaningful corrective counter-torque at standstill, with peak
+                  deceleration of 79 rad s⁻², demonstrating that the physical operating principle is sound</li>
+              </ol>
+
               <p>
                 The computation follows a structured sequence:
               </p>
@@ -3274,10 +3309,13 @@
                       <p>
                         Week 7: Refining code
                       </p>
-                      <ol>
-                        <li>Added torque/tilt hysteresis functionality to code to minimise jitters during testing </li>
-                        <li>Confirmed 1st draft of final code program for system </li>
-                      </ol>
+                      <br/>
+                      <image-component 
+                        tag="figure32"
+                        source="images/figure32.png"
+                        subtitle="Figure 32: Physical parameter definition"
+                      ></image-component>
+                     <br/>
 
                       <p>
                         Week 8: Troubleshooting and Reaction-wheel Assembly

@@ -3111,10 +3111,9 @@
                       <ol>
                         <li>Holding the bicycle upright, slowly lean it back and forth to trigger small LQR corrections.
                         </li>
-                        <li>Observe motor for Responsiveness during change in direction, Non-Jerkiness at equilibrium
-                          and
-                          Strength.</li>
-                        <li>Gradually increase PWM_MIN_RUN by 10.</li>
+                        <li>Observe motor for rotation.</li>
+                        <li>If motor does not move, increase PWM_MIN_RUN by 10.</li>
+                        <li>If motor moves, reduce by 10.</li>
                         <li>Stop when the smallest tilt causes the motor to start rotating smoothly.</li>
                       </ol>
                       <br />

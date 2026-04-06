@@ -1,5 +1,7 @@
 .scroll-to-top {
-  position: sticky;
-  bottom: 8px;
-  left: calc(98% - 54px);
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
 }
+

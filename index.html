@@ -1274,29 +1274,121 @@
               <li>If overcurrent warnings or I2C bus crashes occur: the gains are too aggressive for the current hardware limits. Revert to the previous R value and record it as the fault threshold.</li>
               <li>Stop once the highest R (lowest gain) that produces observable corrective action and the lowest R (highest gain) before faults occur have both been identified. Select the operating point with the best balance of responsiveness and stability as the candidate K matrix for Phase 2 onwards.</li>
             </ol>
-          
+            <br/>
+            <image-component 
+              tag="FinalTable7"
+              source="images/FinalTable7.png"
+              subtitle="Table 7: K-matrix gains (VaryR[0,0])"
+            ></image-component>
+            <br/>
+            
+            <p><u>Steps:</u></p>
+            <image-component 
+              tag="FinalTable8"
+              source="images/FinalTable8.png"
+              subtitle="Table 7: K-matrix test result"
+            ></image-component>
+            <br/>
+            <p>Final: Q = [100 50 1 10], R = [800], K = [-1628.118868 -516.442280 -0.035355 -2.118065]</p>
           </div>
           <br />
 
-        <!-- 6.4.2 Phase 1: K-matrix Gains Test -->
-          <div id="sub-section-6-4-1">
-            <h4>6.4.1 Phase 1: K-matrix Gains Test</h4>
+        <!-- 6.4.2 Phase 2: -->
+          <div id="sub-section-6-4-2">
+            <h4>6.4.2 Phase 2: Tuning ‘PWM_MIN_RUN’</h4>
+            <p><u>Goal</u></p>
+            <p>
+              Determine the minimum PWM duty below which the motor stalls rather than rotates, and set PWM_MIN_RUN to eliminate this deadband.
+            </p>
+            <p><u>Result</u></p>
+            <p>PWM_MIN_RUN was determined to be unchanged below 1, steps and results can be found in Appendix F.</p>
+          </div>
+          <br/>
+
+        <!-- 6.4.3 Phase 3 -->
+          <div id="sub-section-6-4-3">
+            <h4>6.4.3 Phase 3: Finding the EMI Limit (Tuning ‘PWM_STEP’)</h4>
+            <p><u>Goal</u></p>
+            <p>
+Find the maximum PWM slew rate the electrical system tolerates before inductive current transients during direction reversals crash the I2C bus.
+            </p>
+            <p><u>Steps:</u></p>
+            <ol>
+              <li>Set LQR_SCALE_FACTOR to 1.0 so the controller demands aggressive movements. </li>
+              <li>Hold the bicycle and deliberately tilt it left and right quickly (5-10 degrees) to force the motor to rapidly reverse direction. Do it for 5 consecutive reversals.</li>
+              <li>If the I2C bus crashes, decrease PWM_STEP by 1.</li>
+              <li>If the I2C stays stable: Increase PWM_STEP by 1 and repeat the shaking test.</li>
+              <li>Stop once the exact PWM_STEP that causes an I2C failure is found. Take the previous value for safety margin.</li>
+            </ol>
+
+            <p><u>Results</u></p>
+            <image-component 
+              tag="FinalTable10"
+              source="images/FinalTable10.png"
+              subtitle="Table 9: PWM_STEP test results"
+            ></image-component>
+            <p>Final: PWM_STEP = 7</p>
+          <br/>
           </div>
 
-        <!-- 6.4.3 Phase 1: K-matrix Gains Test -->
-          <div id="sub-section-6-4-1">
-            <h4>6.4.1 Phase 1: K-matrix Gains Test</h4>
+        <!-- 6.4.4 Phase 4 -->
+          <div id="sub-section-6-4-4">
+            <h4>6.4.4 Phase 4: Controller Authority (Tuning ‘LQR_SCALE_FACTOR’)</h4>
+            <p><u>Goal</u></p>
+            <p>
+              Scale the LQR output voltage to provide sufficient corrective torque for active balancing, without exceeding the current limit or inducing high-frequency instability.
+            </p>
+            <p><u>Steps:</u></p>
+            <ol>
+              <li>Keeping PWM_MIN_RUN and PWM_STEP at their new values, reset LQR_SCALE_FACTOR to 0.1. </li>
+              <li>Allow the bicycle to attempt to balance by momentarily letting go of it near equilibrium.</li>
+              <li>If the bicycle falls over: The controller is too weak. Increase by 0.1.</li>
+              <li>If the bicycle catches itself but falls: Increase slightly by 0.05.</li>
+              <li>If the controller detects overcurrent or I2C bus crash: Decrease by 0.05.</li>
+              <li>Validation: The optimal value is the highest possible number just before the bicycle starts vibrating while standing still.</li>
+            </ol>
+
+            <p><u>Results</u></p>
+            <image-component 
+              tag="FinalTable11"
+              source="images/FinalTable11.png"
+              subtitle="Table 10: LQR_SCALE_FACTOR test results"
+            ></image-component>
+          <br/>
           </div>
 
-        <!-- 6.4.4 Phase 1: K-matrix Gains Test -->
+        <!-- 6.4.5 Phase 5 -->
           <div id="sub-section-6-4-1">
-            <h4>6.4.1 Phase 1: K-matrix Gains Test</h4>
-          </div>
+            <h4>6.4.5 Phase 5: Reversal Braking Timing (Tuning 'REVERSE_BRAKE_HOLD_MS')</h4>
+            <p><u>Goal</u></p>
+            <p>
+Find the minimum brake hold duration during motor direction reversals that still allows the motor to decelerate safely before receiving an opposing torque command. Too short a pulse risks overcurrent faults and I2C bus crashes when opposite drive is applied before the rotor has slowed; too long a pulse introduces control lag that degrades balancing performance during rapid tilt corrections. Overcurrent was identified as a greater threat due to it significantly increasing the likelihood of system failure, hence this range of brake_hold duration values was selected to ascertain the optimal (simulated) brake performance while ensuring no overcurrent. 
+            </p>
+                  <br />
+            <p><u>Steps:</u></p>
+            <ol>
+              <li>Set LQR_SCALE_FACTOR, PWM_MIN_RUN and PWM_STEP at their final values.</li>
+              <li>Start with REVERSE_BRAKE_HOLD_MS = 100. Hold the bicycle upright and deliberately apply 10 degree tilts in quick alternation to force repeated direction reversals. Do it for 5 consecutive reversals.</li>
+              <li>Watch the Serial monitor I2C warnings during the reversal window.</li>
+              <li>If no overcurrent and I2C warnings: decrease REVERSE_BRAKE_HOLD_MS by 50 ms and repeat.</li>
+              <li>If there is overcurrent warning or I2C bus crashes: Increase by 50 ms and accept the previous value.</li>
+              <li>Stop condition: The final value is the lowest REVERSE_BRAKE_HOLD_MS where the motor consistently brakes across 5 consecutive reversals without triggering overcurrent or crash I2C bus.</li>
+              <li>NOTE: Interruptions are defined as both (I2C disruption + Reboot) and system crashes.</li>
+            </ol>
+      <br />
+            <p><u>Results</u></p>
+            <image-component 
+              tag="FinalTable12"
+              source="images/FinalTable12.png"
+              subtitle="Table 11: REVERSE_BRAKE_HOLD_MS test results"
+            ></image-component>
+      <br />
+            <image-component 
+              tag="interruptions"
+              source="images/interruptions.png"
+              subtitle=""
+            ></image-component>
 
-        <!-- 6.4.5 Phase 1: K-matrix Gains Test -->
-          <div id="sub-section-6-4-1">
-            <h4>6.4.1 Phase 1: K-matrix Gains Test</h4>
-            <p><u>Overview</u></p>
           </div>
 
       <br />
@@ -1316,18 +1408,8 @@
       <!-- 7.1 Data Collection and Processing -->
       <div id="sub-section-7-header-1">
         <h3>7.1 Data Collection and Processing</h3>
-
         <p>
-          Data were collected through direct physical observation and qualitative scoring during each tuning phase, supplemented by the monitoring of embedded system diagnostics. Performance metrics were assessed using a standardised five-point Likert-type scale across three dimensions:
-        </p>
-        <ol>
-          <li>Responsiveness (change in direction): the speed and accuracy with which the reaction wheel reverses to counteract a change in lean direction.</li>
-          <li>Interruptions: the presence of warning messages that indicates faults (I2C warning, MPU6050 zero data warning), with a score of 5 indicating no warnings in serial output.</li>
-          <li>Reaction Wheel (RW) Strength: the effective torque output available to resist gravitational disturbances.</li>
-        </ol>
-
-        <p>
-          This scoring methodology was selected because continuous sensor logging of torque, angular velocity, and bus timing was not available in the current hardware configuration. The qualitative scores therefore serve as the primary performance indicators. Binary outcomes, namely I2C bus crashes and overcurrent faults, were treated as hard failure conditions and used to define absolute operating boundaries rather than points on a continuous scale.
+          Performance data were collected by monitoring the serial output of the ESP32-S3 during each trial. The embedded firmware streamed five channels at each control loop iteration: timestamp, pendulum angle (θ, degrees), angular velocity from the MPU6050 IMU (rad/s), LQR control command (u_cmd), and reaction wheel speed (ω, rad/s). These data were copied directly from the serial monitor and pasted into Excel for further analysis.
         </p>
       </div>
       <br/>
@@ -1337,13 +1419,13 @@
         <h3>7.2 System Performance Analysis and Evaluation</h3>
 
       <!-- 7.2.1 Tuned Parameter Summary -->
-      <div id="sub-section-6-4-1">
-        <h4>7.1.1 Rationale of Equipment</h4>
+      <div id="sub-section-7-2-1">
+        <h4>7.2.1 Tuned Parameter Summary</h4>
         
         <image-component 
-          tag="FinalFig26"
-          source="images/FinalFig26.png"
-          subtitle="Figure 26: Experimental Setup"
+          tag="7.2.1"
+          source="images/7.2.1.png"
+          subtitle="Table 12: Summary of tuned parameters"
         ></image-component>
       </div>
       <br />
@@ -1352,22 +1434,38 @@
       <div id="sub-section-7-2-2">
         <h4>7.2.2  Phase 1: LQR Gain Matrix (K-Matrix) Selection</h4>
         <p>
-          The LQR gain matrix K was computed offline using a LQR Gain Computation solver on python, with the resulting feedback gains qp, qp_d, qr, and qr_d derived analytically from the bicycle’s physical parameters and the chosen Q and R weighting matrices. These computed gains are reported directly as generated by the solver without further post-processing.
+          Four Q/R combinations were evaluated by varying R[0,0] from 1000 down to 100 while holding Q fixed at [100 50 1 10]. The results are in Table 8.
         </p>
         <p>
-          Combination 1 (Rejected): Gains are large in magnitude. At LQR_SCALE_FACTOR = 0.1 even at minor angles the motor frequently exceeded the continuous rating and produced inductive current spikes that crashed the I2C bus.
+          Responsiveness improved monotonically as R decreased (K gains increased), falling from 1.6 s at R = 1000 to 1.4 s at R = 100. This is physically expected since higher gains command larger corrective voltages for a given state error, accelerating the reaction wheel more aggressively. Deceleration followed the same trend, rising from 60.3 rad s⁻² at R = 1000 to 71.5 rad s⁻² at R = 100, confirming that stronger gains translate directly into greater counter-torque output.
+        </p>
+
+        <image-component 
+          tag="responsiveness"
+          source="images/responsiveness.png"
+          subtitle="Figure 27: K-matrix Responsiveness chart"
+        ></image-component>
+
+        <image-component 
+          tag="Kinterruptions"
+          source="images/Kinterruptions.png"
+          subtitle="Figure 28:  K-matrix Interruptions chart"
+        ></image-component>
+
+        <image-component 
+          tag="Deceleration"
+          source="images/Deceleration.png"
+          subtitle="Figure 29:  K-matrix Deceleration chart"
+        ></image-component>
+
+        <p>
+However, the fault record reveals a clear reliability boundary. R = 1000 and R = 800 both produced zero interruptions. Reducing R to 500 resulted in one reboot event, indicating that the associated current transients were approaching the motor driver’s tolerance threshold. At R = 100 an I2C bus crash occurred, representing a hard failure that renders the gains operationally unusable regardless of their control performance.
         </p>
         <p>
-          Combination 2 (Rejected): Aggressive penalisation of input voltage reduces gains substantially. Balancing torque was insufficient to hold the bicycle upright against even minor tilts.
+The operating point R = 800 was therefore selected. It achieves a responsiveness of 1.5 s and a deceleration of 64.5 rad s⁻² giving a modest reduction from the highest-gain case, while maintaining a completely clean fault record across the trial. 
         </p>
         <p>
-          Combination 3 (Rejected): Marginal improvement in control authority over Combination 2. Torque output remained borderline under real-world perturbations. Conditionally accepted for further tuning.
-        </p>
-        <p>
-          Combination 4 (Accepted): Gains provide noticeably stronger and more responsive correction, while remaining below the threshold that produced EMI failures in Combination 1.
-        </p>
-        <p>
-          The absolute wheel angle state qr was bypassed during testing by substituting a constant zero in place of the tracked value. This was a deliberate simplification: independently tracking qr with a washout filter would break the mathematical relationship d/dt qr = ω assumed by the LQR derivation, risking an unstable coupling. Since the associated gain K02 is small in magnitude relative to K00 and K01, the omission has a negligible practical effect on balancing performance.
+The corresponding gain vector is K = [−1628.118868, −516.442280, −0.035355, −2.118065].
         </p>
       </div>
       <br />
@@ -1376,10 +1474,10 @@
       <div id="sub-section-7-2-3">
         <h4>7.2.3  Phase 2: Motor Deadband Elimination (PWM_MIN_RUN)</h4>
         <p>
-          The objective of this phase was to identify the minimum PWM duty cycle at which the motor transitions from a stalled state to smooth rotation by sweeping PWM_MIN_RUN from 20 down to 0.001, thereby eliminating the static friction deadband. The motor rotated freely at every tested duty cycle, including values as low as 0.001, indicating that the AQMD driver exhibits no measurable stiction threshold at the configured 2 kHz PWM frequency. 
+          Phase 2 sought to identify the minimum PWM duty cycle below which the motor stalls rather than rotates, so that PWM_MIN_RUN could be set to eliminate this deadband. Testing confirmed that the motor responds to a duty cycle of 1 with no evidence of stalling. PWM_MIN_RUN was therefore retained at its initial value of 1, and no corrective adjustment was required.
         </p>
         <p>
-          Consequently, PWM_MIN_RUN has negligible influence on motor behaviour in this configuration and the phase did not yield actionable tuning data. The value of 0.001 was retained as a near-zero default.
+          The absence of a significant deadband is attributable to the low static friction of the BLDC motor-and-driver combination used in this prototype. Full details of the test procedure and observations are provided in Appendix F.
         </p>
       </div>
       <br />
@@ -1387,59 +1485,104 @@
       <!-- 7.2.4 Phase 3: EMI Threshold Identification (PWM_STEP) -->
       <div id="sub-section-7-2-4">
         <h4>7.2.4 Phase 3: EMI Threshold Identification (PWM_STEP)</h4>
+        <p>
+          PWM_STEP controls the maximum change in PWM duty cycle applied per firmware cycle, effectively setting the slew rate of the motor drive signal. Rapid direction reversals generate inductive current transients on the power rails, and beyond a threshold slew rate these transients couple into the I2C bus and cause communication failures with the MPU6050.
+        </p>
+        <p>
+          Five values were tested by forcing five consecutive rapid direction reversals at each setting (Table 10, Section 6.4.3). Responsiveness improved with each increment: from 1.0 s at PWM_STEP = 4 to 0.7 s at PWM_STEP = 7 and 8. However, reliability degraded above PWM_STEP = 5. At PWM_STEP = 6 a single reboot occurred; at PWM_STEP = 7 a reboot recurred; at PWM_STEP = 8 the I2C bus crashed outright on the final reversal.
+        </p>
+
         <image-component 
-          tag="FinalFig27"
-          source="images/FinalFig27.png"
-          subtitle="Figure 27: PWM_STEP chart"
+          tag="step_responsiveness"
+          source="images/step_responsiveness.png"
+          subtitle="Figure 30: K-matrix Responsiveness chart"
         ></image-component>
-        
-        <p>
-          The experimental results demonstrate a clear trade-off between actuator responsiveness and electrical system stability. Increasing PWM_STEP improves motor torque response and overall system reactivity; however, it also amplifies inductive current transients, leading to increased electromagnetic interference. This interference exhibits a nonlinear escalation, culminating in a complete I2C communication failure at PWM_STEP = 8.
-        </p>
-        <p>
-          Although PWM_STEP = 7 yields the highest performance scores, it operates too close to the identified EMI failure boundary, making it unsuitable for reliable operation. PWM_STEP = 6 provides an optimal compromise, delivering strong responsiveness and torque output while maintaining a safe margin from instability. This selection ensures robust operation under varying real-world conditions, where electrical noise susceptibility may fluctuate.
-        </p>
+
+        <image-component 
+          tag="step_interruptions"
+          source="images/step_interruptions.png"
+          subtitle="Figure 31:  K-matrix Interruptions chart"
+        ></image-component>
+
+        <p>The crash at PWM_STEP = 8 establishes the hard EMI boundary. PWM_STEP = 7 is selected as the operating value as it delivers the best responsiveness achievable (0.7 s) before the bus crash threshold, while accepting the reboot event as an occasional but non-fatal fault. The one-step margin below the crash value provides protection against variability in load conditions and power-supply transients during real operation.</p>  
       </div>
       <br />  
 
       <!-- 7.2.5 Phase 4: Controller Authority (LQR_SCALE_FACTOR) -->
       <div id="sub-section-7-2-5">
         <h4>7.2.5 Phase 4: Controller Authority (LQR_SCALE_FACTOR)</h4>
+        <p>LQR_SCALE_FACTOR is a scalar multiplier applied to the full LQR output voltage before it is converted to a PWM duty cycle. It acts as a gain scheduling parameter that decouples the theoretical LQR output from the physical authority actually commanded to the motor driver, providing a practical means to limit peak current demand without modifying the underlying K matrix.</p>
+        <p>Six scale factors from 0.1 to 1.0 were tested with PWM_STEP = 7 and PWM_MIN_RUN = 1 fixed. The results (Table 11, Section 6.4.3) show a consistent inverse relationship between scale factor and responsiveness: as authority increases from 0.1 to 1.0, response time falls from 1.2 s to 0.7 s. Deceleration rises steeply at lower scale factors and begins to plateau above 0.6, growing from 16.1 rad s⁻² at 0.1 to 79 rad s⁻² at 1.0.</p>
+        <p>The interruption pattern is non-monotonic. A reboot occurred at scale factor 0.2 but not at 0.4 or 0.6, suggesting that current transients at low authority can still cause isolated faults. Reboots reappear at 0.8 and 1.0, reflecting the higher sustained currents at full authority.</p>
+        <br/>
         <image-component 
-          tag="FinalFig28"
-          source="images/FinalFig28.png"
-          subtitle="Figure 28: LQR_SCALE_FACTOR chart"
+          tag="LQR_responsiveness"
+          source="images/LQR_responsiveness.png"
+          subtitle="Figure 32: LQR_SCALE_FACTOR responsiveness chart"
         ></image-component>
-        
+        <br/>
+
+        <image-component 
+          tag="LQR_interruptions"
+          source="images/LQR_interruptions.png"
+          subtitle="Figure 33: LQR_SCALE_FACTOR interruptions chart"
+        ></image-component>
+        <br/>
+
+        <image-component 
+          tag="LQR_deceleration"
+          source="images/LQR_deceleration.png"
+          subtitle="Figure 34: LQR_SCALE_FACTOR deceleration chart"
+        ></image-component>
+              <br/>
+  
         <p>
-          The experimental results demonstrate that increasing the LQR_SCALE_FACTOR enhances controller authority, resulting in improved responsiveness and stronger corrective torque. However, this increase also amplifies current demand and high-frequency system dynamics, leading to reduced stability and eventual overcurrent failure.
+          LQR_SCALE_FACTOR = 1.0 was selected as the operating point. It provides the highest deceleration and fastest response achievable within the hardware envelope. The reboot events observed at this setting are single occurrences that do not constitute an I2C bus crash and are recoverable by the firmware watchdog. 
         </p>
-        <p>
-          At low scale factors (0.1 to 0.15), the controller lacks sufficient authority to stabilize the bicycle. As the scale factor increases to 0.2 to 0.3, the system enters an effective operating region where the controller can successfully counter disturbances while maintaining stable operation. Beyond this point, further increases yield minimal improvements in responsiveness but significantly degrade stability, with oscillatory behavior observed prior to complete failure at 0.6.
-        </p>
-        <p>
-          The selected value of 0.3 represents the optimal balance, providing the highest achievable control authority without inducing instability or exceeding hardware limits. This aligns with the validation criterion of selecting the maximum gain just below the onset of oscillatory behavior, ensuring both effective balancing performance and robust operation.
-        </p> 
       </div>
       <br />
         
       <!-- 7.2.6  Phase 5: Reversal Braking Timing (REVERSE_BRAKE_HOLD_MS) -->
       <div id="sub-section-7-2-6">
-        <h4>7.2.4 Phase 5: Reversal Braking Timing (REVERSE_BRAKE_HOLD_MS)</h4>
+        <h4>7.2.4 Phase 5: System Stability (REVERSE_BRAKE_HOLD_MS)</h4>
         <image-component 
-          tag="FinalFig29"
-          source="images/FinalFig29.png"
-          subtitle="Figure 29: REVERSE_BRAKE_HOLD_MS chart"
+          tag="100ms"
+          source="images/100ms.png"
+          subtitle="Figure 35: REVERSE_BRAKE_HOLD_MS = 100ms"
         ></image-component>
+        <br/>
+
+         <image-component 
+          tag="150ms"
+          source="images/150ms.png"
+          subtitle="Figure 36: REVERSE_BRAKE_HOLD_MS = 150ms"
+        ></image-component>
+        <br/>
+
+         <image-component 
+          tag="200ms"
+          source="images/200ms.png"
+          subtitle="Figure 37: REVERSE_BRAKE_HOLD_MS = 200ms"
+        ></image-component>
+        <br/>
         
         <p>
-          The results demonstrate a clear trade-off between electrical safety during motor direction reversals and overall control responsiveness. Short brake hold durations (100-150 ms) result in high responsiveness but insufficient deceleration of the motor rotor, leading to significant current spikes, overcurrent risk, and I2C instability. Increasing the hold duration improves system stability by allowing the rotor to slow sufficiently before reverse torque is applied.
+          The results demonstrate a clear trade-off between electrical safety during motor direction reversals and overall control responsiveness. Shorter brake hold durations (<100 ms) result in high responsiveness but insufficient deceleration of the motor rotor, leading to significant current spikes, overcurrent risk, and I2C instability, which caused the system to fail extremely prematurely. Increasing the hold duration was identified as a means to improve system stability by allowing the rotor to slow sufficiently before reverse torque is applied.
         </p>
         <p>
-          A transition region is observed at 200-250 ms, where partial improvement in stability is achieved but consistent safe operation is not guaranteed. At 300 ms, the system reaches the minimum hold duration that ensures reliable braking across repeated reversals without triggering overcurrent or communication failures. Further increases beyond this point yield minimal additional stability benefits while unnecessarily degrading responsiveness due to increased control dead time.
+          A transition region is observed at 100-150 ms, where partial improvement in stability is achieved but consistent safe operation is not guaranteed. At this range, ~1 overcurrent interruption was observed per test. Beyond 200 ms, the system reaches the minimum hold duration that ensures reliable braking across repeated reversals without triggering overcurrent or communication failures. This yielded minimal additional stability benefits while unnecessarily degrading responsiveness due to increased control dead time.
         </p>
         <p>
-          Therefore, 300 ms is selected as the optimal value, as it represents the lowest duration that satisfies the safety requirement while preserving as much responsiveness as possible. This aligns directly with the objective of minimizing reversal delay without compromising electrical and system stability.
+          Further analysis to ascertain response degradation as a result of increased brake_hold duration was then conducted by obtaining the correlation coefficient of the u_cmd and omega waveforms in each test, which indicates the time-lag between the waveforms corresponding to responsiveness. Results indicate that there is an inverse relation between system responsiveness and stability. 
+        </p>
+
+        <ol>
+          <li>REVERSE_HOLD_BRAKE_MS = 100ms: Correlation-Coefficient: 0.805847</li>
+          <li>REVERSE_HOLD_BRAKE_MS = 150ms: Correlation-Coefficient: 0.800191</li>
+          <li>REVERSE_HOLD_BRAKE_MS = 200ms: Correlation-Coefficient: 0.782760</li>
+        </ol>
+        <p>
+          Therefore, 200 ms is selected as the optimal value (in concert with the already-established optimal parameter values), as it represents the lowest duration that satisfies the safety requirement whilst preserving as much responsiveness as possible. This aligns directly with the objective of minimizing reversal delay without compromising electrical and system stability.
         </p>
       </div>
       <br />
@@ -1458,17 +1601,17 @@
         
         <p><u>Observation:</u></p>
         <p>
-          Replaced STM32 with ESP32-S3. 
+          At low brake hold durations (REVERSE_BRAKE_HOLD_MS ≤ 200 ms) and moderate-to-high controller authority (LQR_SCALE_FACTOR ≥ 0.2), repeated overcurrent warnings were observed during rapid alternating tilt tests, leading to imminent system failures.
         </p>
         
         <p><u>Threshold:</u></p>
         <p>
-          Replaced STM32 with ESP32-S3. 
+          Stable operation was consistently achieved at REVERSE_BRAKE_HOLD_MS ≥ 200 ms, where reversals were completed reliably without overcurrent faults while retaining maximum possible responsiveness. 
         </p>
         
         <p><u>Implication:</u></p>
         <p>
-          Replaced STM32 with ESP32-S3. 
+          This behaviour indicates that reversals were initiated before sufficient rotor deceleration, resulting in transient current spikes. Increasing brake hold duration reduces this effect by allowing energy dissipation prior to reversal (mechanism discussed in Section 9.2.2). However, this applies a minute distortion to the LQR control sequence, causing the measured motor output waveform to slightly lag the motor command waveform, reducing system response intervals. 
         </p>
       </div>    
       <br />
@@ -1479,17 +1622,29 @@
         
         <p><u>Observation:</u></p>
         <p>
-          Replaced STM32 with ESP32-S3. 
+          At higher PWM slew rates (PWM_STEP ≥ 8) and elevated controller aggressiveness, the system exhibited:
         </p>
+        <ol>
+          <li>Repeatable I2C bus crashes during direction reversals</li>
+          <li>Gradual drift in θ_deg under sustained motor excitation</li>
+          <li>Increased I2C latency preceding failure</li>
+        </ol>
         
         <p><u>Threshold:</u></p>
         <p>
-          Replaced STM32 with ESP32-S3. 
+          A sharp transition was observed between stable operation at PWM_STEP ≤ 7 and consistent failure at PWM_STEP = 8. PWM_STEP = 7 was selected as the operating value, representing the highest slew rate before the hard crash boundary.
         </p>
         
         <p><u>Implication:</u></p>
         <p>
-          Replaced STM32 with ESP32-S3. 
+          These observations indicate a clear EMI threshold governed by current slew rate rather than absolute current magnitude. The degradation manifests in two forms:
+        </p>
+        <ol>
+          <li>Hard failure: Complete I2C bus lock-up</li>
+          <li>Soft failure: Accumulated IMU drift leading to divergence of the estimated tilt</li>
+        </ol>
+       <p>
+          Both behaviours are consistent with EMI coupling into the I2C lines, corrupting sensor data and propagating through the control loop (see Section 9.2.1).
         </p>
       </div>    
       <br />
@@ -1500,17 +1655,17 @@
         
         <p><u>Observation:</u></p>
         <p>
-          Replaced STM32 with ESP32-S3. 
+          Increasing LQR_SCALE_FACTOR improved responsiveness and disturbance rejection monotonically across all tested values. However, at scale factors of 0.2, 0.8, and 1.0, reboot events were observed, reflecting the higher sustained currents and switching activity at elevated authority. No I2C bus crash occurred at any scale factor, making all reboot events recoverable.
         </p>
         
         <p><u>Threshold:</u></p>
         <p>
-          Replaced STM32 with ESP32-S3. 
+          Fault-free operation was achieved at LQR_SCALE_FACTOR = 0.1, 0.4, and 0.6. The final operating point of 1.0 was selected for maximum control authority, accepting occasional reboots as tolerable. A scale factor of 0.6 remains a fault-free fallback at 65.5 rad s⁻² deceleration.
         </p>
         
         <p><u>Implication:</u></p>
         <p>
-          Replaced STM32 with ESP32-S3. 
+          This demonstrates that control performance is not limited by the LQR design itself, but by the electrical constraints of the system. Higher control authority increases current demand and switching activity, which in turn amplifies EMI and transient effects. The selected parameters therefore represent the maximum achievable performance within the hardware limits (see Section 9.1.2 and Section 9.2).
         </p>
       </div>    
       <br />
@@ -1525,7 +1680,7 @@
         <image-component 
           tag="7.4"
           source="images/7.4.png"
-          subtitle="Table XX: Theory vs Practice"
+          subtitle="Table 13: Theory vs Practice"
         ></image-component>
       </div>
         
@@ -1602,45 +1757,15 @@
       <!-- 9. Limitations and Recommendations for Future Work -->
       <div id="section-header-9">
         <h2>9. Limitations and Recommendations for Future Work</h2>
-        <p>
-          This chapter identifies the principal limitations of the current prototype and experimental methodology, documents the technical challenges encountered during development and testing, and outlines recommendations for addressing these limitations in future improvements.
-        </p>
       </div>
 
       <!-- 9.1 Identified Limitations and Justifications -->
       <div id="sub-section-9-header-1">
         <h3>9.1 Identified Limitations and Justifications</h3>
 
-        <!-- 9.1.1 Absence of Quantitative Data Logging -->
+        <!-- 9.1.1  -->
         <div id="sub-section-9-1-1">
-          <h4>9.1.1 Absence of Quantitative Data Logging</h4>
-          <p>
-            Throughout the five tuning phases described in Section 6, performance assessment relied exclusively on qualitative Likert-type scores and binary fault indicators (I2C bus crashes and overcurrent warnings) read from the microcontroller’s serial output. No automated logging of the system’s continuous state variables (lean angle, angular rate, reaction wheel speed, control output, or PWM duty) was implemented.
-          </p>
-
-          <p><u>Consequences:</u></p>
-          <ol>
-            <li>Limited resolution in optimisation:
-              Performance metrics such as Responsiveness and Reaction Wheel Strength saturated across key parameter ranges (e.g. LQR_SCALE_FACTOR = 0.2–0.4), reducing optimisation to identifying failure thresholds rather than enabling data-driven tuning.
-            </li>
-            <li>Inability to analyse transient behaviour:
-              Critical events such as rotor speed at reversal, current spike magnitude, and correlation between PWM commands and I2C faults could not be directly measured, limiting analysis of EMI and overcurrent phenomena.
-            </li>
-            <li>Reduced reproducibility and validation capability:
-              The absence of time-series data prevents direct comparison with simulation results and limits reuse of experimental data for parameter identification.
-            </li>
-          </ol>
-
-          <p><u>Justification:</u></p>
-          <p>
-            Implementing a reliable high-rate logging system (USB, SD card, or wireless) would have required additional development effort for buffering, synchronisation, and post-processing. Given that the primary objective was POC stabilisation rather than full system characterisation, qualitative evaluation was deemed sufficient to identify safe operating regions.
-          </p>  
-        </div>
-        <br />
-
-        <!-- 9.1.2 Simplified Dynamic Model -->
-        <div id="sub-section-9-1-2">
-          <h4>9.1.2 Simplified Dynamic Model</h4>
+          <h4>9.1.1 Simplified Dynamic Model</h4>
           <p>
             The LQR controller was designed using a linearised reaction wheel inverted pendulum (RWIP) model with simplifying assumptions: point-mass approximation, small-angle linearisation, and ideal actuator behaviour.
           </p>
@@ -1648,26 +1773,26 @@
           <p><u>Consequences:</u></p>
           <ol>
             <li>Parameter mismatch with the physical system:
-              The distributed mass of the bicycle introduces deviations in centre-of-mass location and inertia, resulting in steady-state lean bias and requiring empirical correction.
+The distributed mass of the bicycle introduces deviations in centre-of-mass location and inertia, resulting in steady-state lean bias and requiring empirical correction.
             </li>
             <li>Reduced accuracy under large disturbances:
-              For tilt angles of 5–10 degrees, the small-angle approximation introduces non-negligible error, leading to underestimation of gravitational torque and discrepancies in required control effort.
+For tilt angles of 5–10 degrees, the small-angle approximation introduces non-negligible error, leading to underestimation of gravitational torque and discrepancies in required control effort.
             </li>
             <li>Implicit compensation through gain scaling:
-              The experimentally determined LQR_SCALE_FACTOR = 0.3 compensates not only for actuator limits but also for modelling inaccuracies, effectively acting as a lumped correction factor.
+The experimentally determined LQR_SCALE_FACTOR = 1.0 indicates that full theoretical gain authority was applied. However, the associated reboot events at this setting suggest the hardware was operating at its electrical ceiling. The scale factor therefore did not serve as an attenuation mechanism for modelling error in this case; instead, modelling inaccuracies were absorbed implicitly through the empirical tuning of PWM_STEP and REVERSE_BRAKE_HOLD_MS, which constrain actuator behaviour in ways the linear model does not capture.
             </li>
           </ol>
 
           <p><u>Justification:</u></p>
           <p>
             A simplified point-mass model was adopted because full physical characterisation of the bicycle including experimental determination of the centre-of-mass location and rotational inertia tensor via pendulum swing tests or force-plate measurement was outside the project scope. The linearised RWIP formulation is well-established in the literature as a tractable starting point for reaction wheel balance control, and its gains are known to provide adequate closed-loop stability within reasonable margins even when the physical parameters are only approximately known. The results confirm that stability is ultimately constrained by electrical and actuator limits, not solely by model fidelity.
-          </p>
+          </p>  
         </div>
-        <br />      
+        <br />
 
-        <!-- 9.1.3 Reaction Wheel Moment of Inertia -->
-        <div id="sub-section-9-1-3">
-          <h4>9.1.3 Reaction Wheel Moment of Inertia</h4>
+        <!-- 9.1.2  -->
+        <div id="sub-section-9-1-2">
+          <h4>9.1.2 Reaction Wheel Moment of Inertia</h4>
           <p>
             The reaction wheel used for this prototype has limited radius and mass, resulting in a relatively low moment of inertia.
           </p>
@@ -1686,8 +1811,7 @@
           <p>
             The reaction wheel dimensions were selected based on availability and weight constraints imposed by the bicycle frame geometry. Additionally, the limitation was not fully captured in the design phase, as theoretical calculations did not account for sustained high-torque demand under LQR control. Despite this, proof-of-concept was achieved within a constrained operating envelope through parameter tuning.
           </p>
-         </div>
-      </div> 
+        </div>   
         
       <br />
 
@@ -1727,8 +1851,8 @@
 
           <p>The practical consequences were:</p>
           <ol>
-            <li>Overcurrent faults at the motor controller were observed during every test session involving rapid direction reversals, most acutely during Phase 1 (R = 10 gains) and Phase 3 (PWM_STEP ≥8). The motor, selected for a rated current exceeding values reported in online implementations, nonetheless produced transient current spikes during high-dI/dt switching events that exceeded the driver’s protection threshold.</li>
-            <li>The 300 ms brake hold introduced in Phase 5 partially addresses this by allowing the rotor to decelerate below REVERSE_ZERO_OMEGA before the opposing drive is applied, reducing back-EMF at the moment of current reversal. However this introduces a corresponding control dead time that degrades balancing performance under large disturbances.</li>
+            <li>Overcurrent faults were observed during test sessions involving rapid direction reversals, most acutely at higher PWM_STEP values and elevated controller authority. The motor, selected for a rated current exceeding values reported in online implementations, nonetheless produced transient current spikes during high-dI/dt switching events that exceeded the driver's protection threshold. The empirical finding that the I²C bus failed before the motor at PWM_STEP = 8 suggests the sensor subsystem was the more sensitive component, and that overcurrent protection was activating concurrently with the I²C disruptions.</li>
+            <li>The 200 ms brake hold introduced in Phase 5 partially addresses this by allowing the rotor to decelerate below REVERSE_ZERO_OMEGA before the opposing drive is applied, reducing back-EMF at the moment of current reversal. However this introduces a corresponding control dead time that degrades balancing performance under large disturbances.</li>
           </ol>
 
           <p>
@@ -1772,20 +1896,10 @@
       <!-- 9.3 Recommended Improvements -->
       <div id="sub-section-9-header-3">
         <h3>9.3 Recommended Improvements</h3>
-
-        <!-- 9.3.1 Dedicated serial data logger -->
-        <div id="sub-section-9-3-1">
-          <h4>9.3.1 Dedicated serial data logger</h4>
-          <p>
-            Implement a real-time logging pipeline (e.g. via USB CDC or SD card) that records theta_deg, omega_motor, u, pwm, brake state, and I2C fault flags at every control tick (10 ms). This enables quantitative analysis of transient response, stable-region mapping, and reproducible comparison across tuning iterations.
-          </p> 
-        </div>
         
-        <br />
-
-        <!-- 9.3.2 Hardware EMC mitigation -->
-        <div id="sub-section-9-3-2">
-          <h4>9.3.2 Hardware EMC mitigation</h4>
+        <!-- 9.3.1 Hardware EMC mitigation -->
+        <div id="sub-section-9-3-1">
+          <h4>9.3.1 Hardware EMC mitigation</h4>
           <p>
             Methods:
           </p>
@@ -1795,17 +1909,17 @@
             <li>Route I2C harness ≥50 mm from power wiring and use shielded twisted-pair for SDA/SCL.</li>
           </ol>
           <p>
-            Eliminates the inductive coupling failure mode that capped LQR_SCALE_FACTOR at 0.3 and necessitated the 300 ms brake hold, directly improving achievable balancing performance.
+            Eliminating the inductive coupling failure mode would remove the PWM_STEP ceiling at 7 and reduce the need for the 200 ms brake hold, directly increasing achievable control bandwidth and balancing performance. With EMC mitigation in place, higher LQR_SCALE_FACTOR values could be sustained without the reboot events observed at the current operating point.
           </p>
         </div>
         
         <br />     
 
-        <!-- 9.3.3 Refined system identification -->
-        <div id="sub-section-9-3-3">
-          <h4>9.3.3 Refined system identification</h4>
+        <!-- 9.3.2 Refined system identification -->
+        <div id="sub-section-9-3-2">
+          <h4>9.3.2 Refined system identification</h4>
           <p>
-            Methods:
+            Method:
           </p>
           <ol>
             <li>Measure motor Kt, Ke, R, and L directly via locked-rotor and back-EMF tests.</li>
@@ -1816,17 +1930,17 @@
           </p>
         </div>
 
-        <!-- 9.3.4 Higher-fidelity dynamic model -->
-        <div id="sub-section-9-3-4">
-          <h4>9.3.4 Higher-fidelity dynamic model</h4>
+        <!-- 9.3.3 Higher-fidelity dynamic model -->
+        <div id="sub-section-9-3-3">
+          <h4>9.3.3 Higher-fidelity dynamic model</h4>
           <p>
             Extend the linearised RWIP model to include wheel gyroscopic precession, frame flexibility (or verify rigidity assumption), and actuator dynamics (motor electrical time constant, driver dead time). This closes the gap between theoretical LQR predictions and observed closed-loop behaviour, particularly the unmodelled 300 ms reversal dead time and the gain authority reduction.
           </p>
         </div>
         
-        <!-- 9.3.5 Full-state observer (Kalman filter) -->
-        <div id="sub-section-9-3-5">
-          <h4>9.2.4 Incomplete Motor Characterisation</h4>
+        <!-- 9.3.4 Full-state observer (Kalman filter) -->
+        <div id="sub-section-9-3-4">
+          <h4>9.3.4 Incomplete Motor Characterisation</h4>
           <p>
             Replace the complementary filter with a discrete-time Kalman filter incorporating the motor current as a measurement input to detect and reject EMI-induced outliers.
           </p>
@@ -1835,17 +1949,17 @@
           </p>
         </div>
 
-        <!-- 9.3.6 ESP32 upload reliability fix -->
-        <div id="sub-section-9-3-6">
-          <h4>9.3.6 ESP32 upload reliability fix</h4>
+        <!-- 9.3.5 ESP32 upload reliability fix -->
+        <div id="sub-section-9-3-5">
+          <h4>9.3.5 ESP32 upload reliability fix</h4>
           <p>
             Add a power isolation switch or MOSFET on the motor driver supply that can be de-energised before firmware uploads, or use the ESP32-S3’s USB-OTG port with the motor supply disconnected. Removes the upload failure mode caused by residual PWM line current during programming, reducing development iteration time.
           </p>
         </div>  
 
-        <!-- 9.3.7 Reaction wheel redesign -->
-        <div id="sub-section-9-3-7">
-          <h4>9.3.7 Reaction wheel redesign</h4>
+        <!-- 9.3.6 Reaction wheel redesign -->
+        <div id="sub-section-9-3-6">
+          <h4>9.3.6 Reaction wheel redesign</h4>
           <p>
             Replace the current wheel with one of larger radius and higher rim mass to increase the moment of inertia. Concentrate mass at the periphery (e.g. a heavy rim with lightweight spokes) to maximise I for a given total weight. Re-validate the RWIP model parameters after the change.
           </p>
@@ -1854,31 +1968,6 @@
           </p>
         </div>   
       </div>
-
-      <br />     
-        
-      <!-- 9.4 Future Development Opportunities -->
-      <div id="sub-section-9-header-4">
-        <h3>9.4 Future Development Opportunities</h3>
-
-        <!-- 9.4.1 Lateral Steering and Forward Propulsion -->
-        <div id="sub-section-9-4-1">
-          <h4>9.4.1 Lateral Steering and Forward Propulsion</h4>
-          <p>
-            The current prototype operates exclusively in the lateral balancing plane, with no mechanism for controlled forward motion or steering. A practical self-balancing bicycle needs to account for forward velocity and directional changes which introduces other variables such as yaw. Re-deriving the state-space model to include forward velocity as a state variable and extending the LQR to a full lateral-longitudinal control law would be the logical next step.
-          </p> 
-        </div>
-        <br />
-
-        <!-- 9.4.2  Nonlinear and Adaptive Control -->
-        <div id="sub-section-9-4-2">
-          <h3>9.4.2 Nonlinear and Adaptive Control</h3>
-          <p>
-            The current LQR design is valid only in a small margin about the vertical equilibrium. For operation at larger lean angles, a nonlinear control strategy would provide more robust stability guarantees. Candidate approaches include linear parameter-varying (LPV) control, in which a family of LQR controllers is synthesised at different operating points and interpolated online, or model predictive control (MPC), which explicitly handles actuator constraints, including the reversal dead time and current limits, within the optimisation. An adaptive variant that updates model parameters in real time as system characteristics change with sustained load and battery state of charge would also further improve performance consistency.
-          </p>
-        </div>
-      </div>
-
         
       <br />
       <br />
@@ -1889,9 +1978,6 @@
       <!-- 10. Impact and Visibility. -->
       <div id="section-header-10">
         <h2>10. Impact and Visibility.</h2>
-        <p>
-          This chapter concludes this report and gives a final review of the overall project. 
-        </p>
       </div>
       <br />
 
@@ -1972,7 +2058,7 @@
               </p>
 
               <image-component tag="image48" source="images/image48.png"
-                subtitle="Table 1: PTW accident impact speeds[7]</sup>"></image-component>
+                subtitle="Table 14: PTW accident impact speeds[7]</sup>"></image-component>
 
 
             </div>
@@ -2043,7 +2129,7 @@
 
 
               <image-component tag="image23" source="images/image23.png"
-                subtitle="Figure 6: Current low-speed stability solutions"></image-component>
+                subtitle="Figure 38: Current low-speed stability solutions"></image-component>
 
 
               <p><u>1. Enhanced ABS</u></p>
@@ -2097,7 +2183,7 @@
 
 
               <image-component tag="image10" source="images/image10.png"
-                subtitle="Table 2: Self-balancing bike market players"></image-component>
+                subtitle="Table 15: Self-balancing bike market players"></image-component>
 
 
               <p>
@@ -2117,7 +2203,7 @@
                 response, well-damped control, compact and safe integration.
               </p>
               <image-component tag="image19" source="images/image19.png"
-                subtitle="Table 3: Selection table"></image-component>
+                subtitle="Table 16: Selection table"></image-component>
             </div>
         
           </div>
@@ -2140,7 +2226,7 @@
           </p>
 
           <image-component tag="fig7larger" source="images/fig7larger.png"
-            subtitle="Figure 30: Inverted pendulum model of a bike<sup>[2]</sup>"></image-component>
+            subtitle="Figure 39: Inverted pendulum model of a bike<sup>[2]</sup>"></image-component>
         </div>
         <br />
 
@@ -2148,7 +2234,7 @@
         <div id="appendix-b-motor-model">
           <h3>2. DC Motor Model</h3>
           <image-component tag="fig8" source="images/fig8.png"
-            subtitle="Figure 31: DC motor model<sup>[36]</sup>"></image-component>
+            subtitle="Figure 40: DC motor model<sup>[36]</sup>"></image-component>
           <br />
 
           <p>
@@ -2185,10 +2271,10 @@
             approximations are
           </p>
           <image-component tag="matrix_a" source="images/matrix_a.png"
-            subtitle="Equation 6: A matrix [3]"></image-component>
+            subtitle="Equation 6: A matrix<sup>[3]</sup>"></image-component>
           <br />
           <image-component tag="matrix_b" source="images/matrix_b.png"
-            subtitle="Equation 7: B matrix [3]"></image-component>
+            subtitle="Equation 7: B matrix<sup>[3]</sup>"></image-component>
         </div>
         <br />
         
@@ -2378,13 +2464,13 @@
           <image-component 
             tag="A and B matrices"
             source="images/A and B matrices.png"
-            subtitle="Equation XX: A and B matrices"
+            subtitle="Equation 12: A and B matrices"
           ></image-component>
 
           <image-component 
             tag="FinalFig33"
             source="images/FinalFig33.png"
-            subtitle="Figure 33: A, B and c<sub>m</sub>​ in code"
+            subtitle="Figure 42: A, B and c<sub>m</sub>​ in code"
           ></image-component>
 
           <p>
@@ -2394,13 +2480,13 @@
           <image-component 
             tag="FinalFig34"
             source="images/FinalFig34.png"
-            subtitle="Figure 34: State matrix entries"
+            subtitle="Figure 43: State matrix entries"
           ></image-component>
 
           <image-component 
             tag="FinalFig35"
             source="images/FinalFig35.png"
-            subtitle="Figure 35: State matrices A and B"
+            subtitle="Figure 44: State matrices A and B"
           ></image-component>
 
           <p>
@@ -2414,15 +2500,16 @@
           <image-component 
             tag="FinalFig36"
             source="images/FinalFig36.png"
-            subtitle="Figure 36: Controllability check"
+            subtitle="Figure 45: Controllability check"
           ></image-component>
           <br/>
           <image-component 
             tag="FinalFig37"
             source="images/FinalFig37.png"
-            subtitle="Figure 37: Observability check"
+            subtitle="Figure 46: Observability check"
           ></image-component>
           <br/>
+          <p>A controllability rank of 4 confirms all states can be driven by V<sub>in</sub>​. The observability check uses C = [1 0 0 0, 0 1 0 0], reflecting that only lean angle and lean rate are measured directly by the IMU while the wheel states are not directly sensed. If controllability fails, the script raises a fatal error and aborts, preventing deployment of an invalid gain vector.</p>
 
           <p><u>Weight Selection and Gain Computation</u></p>
           <p>
@@ -2431,7 +2518,7 @@
           <image-component 
             tag="FinalFig38"
             source="images/FinalFig38.png"
-            subtitle="Figure 38: Q and R matrices"
+            subtitle="Figure 47: Q and R matrices"
           ></image-component>
           <br/>
           <p>
@@ -2444,7 +2531,7 @@
           <image-component 
             tag="FinalFig39"
             source="images/FinalFig39.png"
-            subtitle="Figure 39: Gain matrix"
+            subtitle="Figure 48: Gain matrix"
           ></image-component>
           <p>
             which solves the ARE and returns the optimal gain row vector K=[<sub>00</sub>,  K<sub>01</sub>,  K<sub>02</sub>,  K<sub>03</sub>], the solution matrix S, and the closed-loop eigenvalues E. Each gain represents the contribution of its respective state to the control input. The resulting control law is implemented as a linear combination of the system states.
@@ -2457,7 +2544,7 @@
           <image-component 
             tag="FinalFig40"
             source="images/FinalFig40.png"
-            subtitle="Figure 40: Condition check"
+            subtitle="Figure 49: Condition check"
           ></image-component>
           <br/>
           <p>
@@ -2472,7 +2559,7 @@
           <image-component 
             tag="FinalFig41"
             source="images/FinalFig41.png"
-            subtitle="Figure 41: Terminal output for K matrix gains"
+            subtitle="Figure 50: Terminal output for K matrix gains"
           ></image-component>
           <br/>
           <p>
@@ -2481,7 +2568,7 @@
           <image-component 
             tag="FinalFig42"
             source="images/FinalFig42.png"
-            subtitle="Figure 42: Control equation"
+            subtitle="Figure 51: Control equation"
           ></image-component>
           <p>
             This equation generates the motor command required to stabilise the system based on current state measurements, and will be explained in further detail in the next section.
@@ -2553,7 +2640,7 @@
 
         <p><u>Code Summary: </u></p>
         <p>
-          The overall control software for the flywheel balancing module is organized as a layered real-time closed-loop system. The ESP32-S3 microcontroller acquires body tilt and tilt-rate information from an MPU6050 IMU and flywheel rotational speed from hall sensors embedded in the HL6SD motor. These measured states are filtered and validated before being passed to an LQR-based controller, which computes the motor effort required to oppose the bicycle’s lean. The computed command is then translated into PWM, direction, and braking signals for the AQMD6020BLS motor controller through a dedicated actuator-management layer that handles reversal braking, PWM ramping, and safety cutoffs. Additional I²C recovery and IMU fault-handling routines improve robustness under motor-induced electrical disturbance. Collectively, these software sections enable the flywheel to generate reaction torque in the correct direction and with sufficient speed to help restore the bicycle toward upright equilibrium. For more detailed explanations, refer to Appendix D. 
+          The overall control software for the flywheel balancing module is organized as a layered real-time closed-loop system. The ESP32-S3 microcontroller acquires body tilt and tilt-rate information from an MPU6050 IMU and flywheel rotational speed from hall sensors embedded in the HL6SD motor. These measured states are filtered and validated before being passed to an LQR-based controller, which computes the motor effort required to oppose the bicycle’s lean. The computed command is then translated into PWM, direction, and braking signals for the AQMD6020BLS motor controller through a dedicated actuator-management layer that handles reversal braking, PWM ramping, and safety cutoffs. Additional I²C recovery and IMU fault-handling routines improve robustness under motor-induced electrical disturbance. Collectively, these software sections enable the flywheel to generate reaction torque in the correct direction and with sufficient speed to help restore the bicycle toward upright equilibrium. 
         </p>
       </div>
       <br/>
@@ -2562,6 +2649,8 @@
       <!-- Appendix F: Testing Data -->
       <div id="appendix-f">
         <h2>Appendix F: Testing Data</h2>
+        <p><u>Phase 1: K-matrix Gains test results</u></p>
+
       </div>
       <br/>
 

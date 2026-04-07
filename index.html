@@ -713,7 +713,7 @@
           <p>
             To function effectively within the operating range of ±1 to 20 degrees of lateral tilt, the RW must
             generate sufficient torque to overcome the frame's lateral tilt forces. Preliminary torque calculations (see
-            Appendix A) established a gross motor torque requirement of 12.35 Nm, which informed all subsequent
+            Appendix A) established a gross motor torque requirement of 10.7 Nm, which informed all subsequent
             component selection decisions.
           </p>
         </div>
@@ -2663,10 +2663,8 @@
                       <h4>Calculations</h4>
                       <p>
                         <u>Body inertia about lean pivot</u><br />
-                        I1<sub>pivot</sub> = I1<sub>cm</sub> + m1L1² = 1.15m1L1² + m1L1² = 1.15 × 12 × 0.52² +
-                        12 ×
-                        0.52² =
-                        6.983 kgm²
+                        I1<sub>pivot</sub> = I1<sub>cm</sub> = 1.15m1L1² = 1.15 × 12 × 0.52² =
+                        3.732 kgm²
                       </p>
 
                       <p>
@@ -2676,7 +2674,7 @@
 
                       <p>
                         <u>Combined system inertia</u><br />
-                        I<sub>total</sub> = I1<sub>pivot</sub> + I2<sub>pivot</sub> = 6.983 + 0.273 = 7.256
+                        I<sub>total</sub> = I1<sub>pivot</sub> + I2<sub>pivot</sub> = 3.732 + 0.273 = 4.005
                         kgm²
                       </p>
 
@@ -2712,13 +2710,13 @@
 
                       <p>
                         <u>Active recovery (θp'' = −0.50 rad/s²)</u><br />
-                        I<sub>total</sub>θp'' = −7.256 × (−0.50) = +3.628 Nm<br />
-                        τ<sub>rw</sub> = τ<sub>grav</sub> − dpθp' − I<sub>total</sub> p'' = 6.283 + 3.628 = 9.90 Nm
+                        I<sub>total</sub>θp'' = −4.005 × (−0.50) = +2.002 Nm<br />
+                        τ<sub>rw</sub> = τ<sub>grav</sub> − dpθp' − I<sub>total</sub> p'' = 6.283 + 2.002 = 8.285 Nm
                       </p>
 
                       <p>
                         <u>Gross Motor Torque</u><br />
-                        τ<sub>motor gross</sub> = τ<sub>rw_net</sub> + Bωr = 9.90 + 0.049 × 50 = 12.35 Nm
+                        τ<sub>motor gross</sub> = τ<sub>rw_net</sub> + Bωr = 8.285 + 0.049 × 50 = 10.735 Nm
                       </p>
                     </div>
                   </div>

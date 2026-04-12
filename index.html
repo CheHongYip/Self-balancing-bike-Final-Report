@@ -960,7 +960,7 @@
           <p>
             The LQR computation process is implemented through a Python script that generates the optimal feedback gain
             matrix for the controller. The script translates physical system parameters into a mathematical model,
-            validates system properties, computes the optimal gains, and verifies stability.
+            validates system properties, computes the s, and verifies stability.
           </p>
           <p>
             For full explanation refer to Appendix B.
@@ -2541,7 +2541,7 @@
                       <h3>4. Linear Quadratic Regulator</h3>
 
                   
-                      <image-component tag="Linear-Quadratic-Regulator-LQR-design-flowchart.png" source="Linear-Quadratic-Regulator-LQR-design-flowchart.png"
+                      <image-component tag="Linear-Quadratic-Regulator-LQR-design-flowchart.png" source="images/Linear-Quadratic-Regulator-LQR-design-flowchart.png"
                         subtitle="Figure 81: LQR flowchart"></image-component>
                       <br />
 
@@ -2574,7 +2574,7 @@
                       <h4>Optimal Gain</h4>
                       <p>
                         The optimal feedback gain is given by</p>
-                      <br />
+                      
                       <p style="text-align: center;">
                         K<sub>LQR</sub> = R<sup>-1</sup>(B<sup>T</sup>S + N<sup>T</sup>)<br />
                         Equation 9: Feedback gain [3]

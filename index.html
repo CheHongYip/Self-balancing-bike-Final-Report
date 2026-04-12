@@ -349,7 +349,7 @@
           </sl-tree-item>
         </sl-tree-item>
         <sl-tree-item>
-          <a href="#appendix-a">Appendix A: Problem, Value proposition and concept selection.</a>
+          <a href="#appendix-a">: Problem, Value proposition and concept selection.</a>
         </sl-tree-item>
         <sl-tree-item expanded>
           <a href="#appendix-b">Appendix B: Mathematical Derivations</a>
@@ -595,7 +595,7 @@
         <div id="sub-section-4-header-2">
           <h3>4.2 Design Solution</h3>
           <p>
-            For all models used, refer to appendix A.
+            For all models used, refer to appendix B.
           </p>
         </div>
 
@@ -646,7 +646,7 @@
             subtitle="Figure 6: Closed-loop system with LQR"></image-component>
 
           <p>
-            For full explanation refer to appendix A.
+            For full explanation refer to appendix B.
           </p>
         </div>
         <br />
@@ -713,7 +713,7 @@
           <p>
             To function effectively within the operating range of ±1 to 20 degrees of lateral tilt, the RW must
             generate sufficient torque to overcome the frame's lateral tilt forces. Preliminary torque calculations (see
-            Appendix A) established a gross motor torque requirement of 10.7 Nm, which informed all subsequent
+            Appendix B) established a gross motor torque requirement of 10.7 Nm, which informed all subsequent
             component selection decisions.
           </p>
         </div>
@@ -748,7 +748,7 @@
           <p>
             The prototype is built around a robust full-scale bicycle frame measuring 1.09 × 0.97 m (L × H), weighing 12
             kg with a centre of gravity at 0.52 m. These specifications were used to derive the torque requirements
-            detailed in Appendix A.
+            detailed in Appendix B.
           </p>
 
           <image-component tag="FinalFig8" source="images/FinalFig8.png"
@@ -2540,6 +2540,11 @@
                     <div id="appendix-b-lqr">
                       <h3>4. Linear Quadratic Regulator</h3>
 
+                  
+                      <image-component tag="Linear-Quadratic-Regulator-LQR-design-flowchart" source="Linear-Quadratic-Regulator-LQR-design-flowchart.png"
+                        subtitle="Figure 81: LQR flowchart"></image-component>
+                      <br />
+
                       <h4>Cost Function</h4>
                       <p>
                         The controller is designed by minimising the infinite-horizon quadratic cost functional
@@ -2568,22 +2573,25 @@
 
                       <h4>Optimal Gain</h4>
                       <p>
-                        The optimal feedback gain is given by<br />
+                        The optimal feedback gain is given by</p>
+                      <br />
+                      <p style="text-align: center;">
                         K<sub>LQR</sub> = R<sup>-1</sup>(B<sup>T</sup>S + N<sup>T</sup>)<br />
                         Equation 9: Feedback gain [3]
                       </p>
                       <p>
                         where S is the unique positive definite solution to the Algebraic Riccati Equation
-                        (ARE):<br />
+                        (ARE):</p>
+                      <br />
+                      <p style="text-align: center;">
                         A<sup>T</sup>S + SA − (SB + N)R<sup>-1</sup>(B<sup>T</sup>S + N<sup>T</sup>) + Q = 0<br />
                         Equation 10: ARE [3]
                       </p>
                       <p>
                         Since the state and input penalties in this system are independent, the cross-weighting term
-                        is
-                        set to
-                        N = 0,
-                        which simplifies the ARE to<br />
+                        is set to N = 0, which simplifies the ARE to </p>
+                        <br />
+                      <p style="text-align: center;">
                         A<sup>T</sup>S + SA − SBR<sup>-1</sup>B<sup>T</sup>S + Q = 0<br />
                         Equation 11: Simplified ARE
                       </p>
